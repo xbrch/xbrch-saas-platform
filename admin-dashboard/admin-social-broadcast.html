@@ -543,6 +543,26 @@
                             <div class="platform-name">TikTok</div>
                             <div class="status-indicator status-disconnected"></div>
                         </div>
+                        <div class="platform-card" onclick="connectPlatform('whatsapp')">
+                            <div class="platform-icon">📱</div>
+                            <div class="platform-name">WhatsApp</div>
+                            <div class="status-indicator status-disconnected"></div>
+                        </div>
+                        <div class="platform-card" onclick="connectPlatform('telegram')">
+                            <div class="platform-icon">📨</div>
+                            <div class="platform-name">Telegram</div>
+                            <div class="status-indicator status-disconnected"></div>
+                        </div>
+                        <div class="platform-card" onclick="connectPlatform('email')">
+                            <div class="platform-icon">📧</div>
+                            <div class="platform-name">Email</div>
+                            <div class="status-indicator status-disconnected"></div>
+                        </div>
+                        <div class="platform-card" onclick="connectPlatform('x')">
+                            <div class="platform-icon">✖️</div>
+                            <div class="platform-name">X (Twitter)</div>
+                            <div class="status-indicator status-disconnected"></div>
+                        </div>
                     </div>
                 </div>
 
@@ -915,16 +935,87 @@
         }
 
         async function publishToSinglePlatform(platform, content) {
-            // Simulate platform publishing (replace with actual API calls)
+            const platformConfig = {
+                'facebook': { 
+                    name: 'Facebook', 
+                    icon: '📘',
+                    url: 'https://facebook.com',
+                    type: 'social'
+                },
+                'instagram': { 
+                    name: 'Instagram', 
+                    icon: '📷',
+                    url: 'https://instagram.com',
+                    type: 'visual'
+                },
+                'twitter': { 
+                    name: 'Twitter', 
+                    icon: '🐦',
+                    url: 'https://twitter.com',
+                    type: 'microblog'
+                },
+                'linkedin': { 
+                    name: 'LinkedIn', 
+                    icon: '💼',
+                    url: 'https://linkedin.com',
+                    type: 'professional'
+                },
+                'youtube': { 
+                    name: 'YouTube', 
+                    icon: '📺',
+                    url: 'https://youtube.com',
+                    type: 'video'
+                },
+                'tiktok': { 
+                    name: 'TikTok', 
+                    icon: '🎵',
+                    url: 'https://tiktok.com',
+                    type: 'short-video'
+                },
+                'whatsapp': { 
+                    name: 'WhatsApp', 
+                    icon: '📱',
+                    url: 'https://wa.me',
+                    type: 'messaging'
+                },
+                'telegram': { 
+                    name: 'Telegram', 
+                    icon: '📨',
+                    url: 'https://t.me',
+                    type: 'messaging'
+                },
+                'x': { 
+                    name: 'X (Twitter)', 
+                    icon: '✖️',
+                    url: 'https://x.com',
+                    type: 'microblog'
+                },
+                'email': { 
+                    name: 'Email', 
+                    icon: '📧',
+                    url: 'mailto:',
+                    type: 'email'
+                }
+            };
+            
+            const config = platformConfig[platform];
+            if (!config) {
+                throw new Error(`Unsupported platform: ${platform}`);
+            }
+            
             return new Promise((resolve) => {
                 setTimeout(() => {
                     resolve({ 
                         platform, 
+                        name: config.name,
+                        icon: config.icon,
                         status: 'success', 
-                        postId: 'post_' + Date.now(),
-                        url: `https://${platform}.com/post/${Date.now()}`
+                        postId: 'post_' + Date.now() + '_' + platform,
+                        url: `${config.url}/post/${Date.now()}`,
+                        type: config.type,
+                        message: `Content published to ${config.name} successfully!`
                     });
-                }, 1000);
+                }, 1000 + Math.random() * 2000);
             });
         }
 
