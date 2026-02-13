@@ -1486,18 +1486,27 @@
 
         // Business Creation Functions
         function showAddBusinessForm() {
+            console.log('Showing add business form...');
             document.getElementById('add-business-form').style.display = 'block';
             document.getElementById('bulk-import-section').style.display = 'none';
             clearBusinessForm();
         }
 
         function hideAddBusinessForm() {
+            console.log('Hiding add business form...');
             document.getElementById('add-business-form').style.display = 'none';
         }
 
         function clearBusinessForm() {
-            document.getElementById('business-creation-form').reset();
-            document.getElementById('welcome-email-toggle').classList.add('active');
+            console.log('Clearing business form...');
+            document.getElementById('business-name').value = '';
+            document.getElementById('business-email').value = '';
+            document.getElementById('contact-person').value = '';
+            document.getElementById('phone-number').value = '';
+            document.getElementById('business-category').value = '';
+            document.getElementById('business-size').value = '';
+            document.getElementById('business-address').value = '';
+            document.getElementById('business-description').value = '';
         }
 
         function previewBusiness() {
@@ -1505,11 +1514,7 @@
                 name: document.getElementById('business-name').value,
                 email: document.getElementById('business-email').value,
                 contact: document.getElementById('contact-person').value,
-                phone: document.getElementById('phone-number').value,
                 category: document.getElementById('business-category').value,
-                size: document.getElementById('business-size').value,
-                address: document.getElementById('business-address').value,
-                description: document.getElementById('business-description').value,
                 status: document.getElementById('initial-status').value
             };
             
@@ -1517,6 +1522,8 @@
         }
 
         async function createBusiness() {
+            console.log('Create Business button clicked!');
+            
             const businessData = {
                 name: document.getElementById('business-name').value,
                 email: document.getElementById('business-email').value,
@@ -1530,11 +1537,15 @@
                 sendWelcomeEmail: document.getElementById('welcome-email-toggle').classList.contains('active')
             };
             
+            console.log('Business data:', businessData);
+            
             // Validation
             if (!businessData.name || !businessData.email || !businessData.contact || !businessData.category) {
                 alert('Please fill in all required fields.');
                 return;
             }
+            
+            console.log('Validation passed, creating business...');
             
             try {
                 // Create Supabase user account
@@ -1553,6 +1564,8 @@
                 });
                 
                 if (error) throw error;
+                
+                console.log('User created successfully:', data);
                 
                 // Create business profile
                 const businessProfile = {
