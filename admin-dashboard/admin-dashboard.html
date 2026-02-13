@@ -1317,8 +1317,8 @@
         </main>
     </div>
 
-    <script src="security-config.js"></script>
-    <script src="admin-security.js"></script>
+    <script src="../security/security-config.js"></script>
+    <script src="../security/admin-security.js"></script>
     <script>
         // Initialize security and check authentication
         document.addEventListener('DOMContentLoaded', () => {
@@ -1337,6 +1337,32 @@
                     }
                 }
             }, 100);
+            
+            // Add navigation event handlers
+            document.querySelectorAll('.nav-item').forEach(item => {
+                item.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    const href = item.getAttribute('href');
+                    if (href && href.startsWith('#')) {
+                        const sectionId = href.substring(1);
+                        showSection(sectionId);
+                    }
+                });
+            });
+            
+            // Load initial business data
+            loadBusinesses();
+            loadPendingApprovals();
+            
+            // Set up file upload for CSV
+            const csvUploadBtn = document.getElementById('csv-upload-btn');
+            const csvInput = document.getElementById('csv-input');
+            
+            if (csvUploadBtn && csvInput) {
+                csvUploadBtn.addEventListener('click', () => {
+                    csvInput.click();
+                });
+            }
         });
 
         function updateDashboardWithUserInfo(userInfo) {
@@ -1452,21 +1478,6 @@
                 activeNavItem.classList.add('active');
             }
         }
-
-        // Add navigation event listeners
-        document.addEventListener('DOMContentLoaded', () => {
-            // Add click handlers to navigation items
-            document.querySelectorAll('.nav-item').forEach(item => {
-                item.addEventListener('click', (e) => {
-                    e.preventDefault();
-                    const href = item.getAttribute('href');
-                    if (href && href.startsWith('#')) {
-                        const sectionId = href.substring(1);
-                        showSection(sectionId);
-                    }
-                });
-            });
-        });
 
         // Business Creation Functions
         function showAddBusinessForm() {
@@ -1935,54 +1946,6 @@
                 });
             }
         });
-            
-            // Update page title and subtitle
-            const pageTitle = document.querySelector('.page-title');
-            const pageSubtitle = document.querySelector('.page-subtitle');
-            if (pageTitle) pageTitle.textContent = t.dashboard;
-            if (pageSubtitle) pageSubtitle.textContent = 'Manage your broadcast wall and monitor performance';
-            
-            // Update stat cards
-            const statLabels = document.querySelectorAll('.stat-label');
-            if (statLabels[0]) statLabels[0].textContent = t.totalUpdates;
-            if (statLabels[1]) statLabels[1].textContent = t.totalProducts;
-            if (statLabels[2]) statLabels[2].textContent = t.totalOrders;
-            if (statLabels[3]) statLabels[3].textContent = t.totalRevenue;
-            
-            // Update table headers
-            const tableHeaders = document.querySelectorAll('th');
-            tableHeaders.forEach(header => {
-                const text = header.textContent;
-                if (text.includes('Activity')) header.textContent = t.recentActivity;
-                if (text.includes('Update')) header.textContent = t.totalUpdates;
-                if (text.includes('Customer')) header.textContent = t.totalOrders;
-            });
-            
-            // Update navigation
-            const navLinks = document.querySelectorAll('.nav-item span');
-            navLinks.forEach(link => {
-                const text = link.textContent;
-                if (text.includes('Dashboard')) link.textContent = t.dashboard;
-                if (text.includes('Updates')) link.textContent = t.totalUpdates;
-                if (text.includes('Products')) link.textContent = t.totalProducts;
-                if (text.includes('Orders')) link.textContent = t.totalOrders;
-                if (text.includes('Settings')) link.textContent = t.settings;
-                if (text.includes('Analytics')) link.textContent = t.analytics;
-                if (text.includes('Profile')) link.textContent = t.profile;
-                if (text.includes('Logout')) link.textContent = t.logout;
-            });
-            
-            // Update buttons
-            const buttons = document.querySelectorAll('.btn span');
-            buttons.forEach(btn => {
-                const text = btn.textContent;
-                if (text.includes('Create Update')) btn.textContent = t.createUpdate;
-                if (text.includes('Add Product')) btn.textContent = t.addProduct;
-                if (text.includes('View Orders')) btn.textContent = t.viewOrders;
-            });
-            
-            console.log('Language updated to:', currentLang);
-        }
         
         // ============================================
         // 🔌 SUPABASE CONFIGURATION
