@@ -1,0 +1,2254 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Latest updates and daily deals - Write Once. Broadcast Everywhere.">
+    <title>XBRCH Broadcast Wall - Updates & Products</title>
+    
+    <style>
+        /* ============================================
+           🎨 CLIENT COLOR CUSTOMIZATION
+           ============================================
+           
+           ⭐ TO CHANGE COLORS FOR DIFFERENT CLIENTS:
+           
+           Simply update the hex codes in the :root section below.
+           All colors throughout the page will update automatically!
+           
+           CURRENT COLORS (XBRCH):
+           - Primary: #44b2e8 (Bright Blue)
+           - Text: #2c3e50 (Dark Gray-Blue)
+           - Background: #f8f9fa (Light Gray)
+           
+           EXAMPLES FOR OTHER CLIENTS:
+           
+           🟢 Green Company:
+           --primary: #10b981;
+           --primary-dark: #059669;
+           
+           🟣 Purple Brand:
+           --primary: #8b5cf6;
+           --primary-dark: #7c3aed;
+           
+           🔴 Red Business:
+           --primary: #ef4444;
+           --primary-dark: #dc2626;
+           
+           ============================================ */
+        
+        :root {
+            /* ========== PRIMARY BRAND COLORS ========== */
+            --primary: #44b2e8;              /* Main brand color - Change this for clients! */
+            --primary-dark: #3a9cd1;         /* Darker shade for gradients */
+            --primary-light: #6bc4f0;        /* Lighter shade for hover */
+            
+            /* ========== BACKGROUND COLORS ========== */
+            --bg-main: #f8f9fa;              /* Main page background */
+            --bg-card: #ffffff;              /* Card background */
+            --bg-toolbar: #ffffff;           /* Toolbar background */
+            
+            /* ========== TEXT COLORS ========== */
+            --text-primary: #2c3e50;         /* Main text color */
+            --text-secondary: #7589a3;       /* Secondary text */
+            --text-muted: #95a5a6;           /* Muted text */
+            
+            /* ========== ACCENT COLORS ========== */
+            --accent-success: #2ecc71;       /* Success/positive */
+            --accent-warning: #f39c12;       /* Warning/attention */
+            --accent-danger: #e74c3c;        /* Error/urgent */
+            
+            /* ========== EFFECTS ========== */
+            --shadow-sm: 0 1px 3px rgba(0,0,0,0.08);
+            --shadow-md: 0 4px 12px rgba(0,0,0,0.1);
+            --shadow-lg: 0 8px 24px rgba(0,0,0,0.12);
+            --border-radius: 12px;
+            --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        
+        /* ============================================
+           📱 BASE STYLES
+           ============================================ */
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        html {
+            font-size: 16px;
+            scroll-behavior: smooth;
+        }
+        
+        html.font-small { font-size: 14px; }
+        html.font-large { font-size: 18px; }
+        html.font-xlarge { font-size: 20px; }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Oxygen', 'Ubuntu', 'Cantarell', sans-serif;
+            background: var(--bg-main);
+            color: var(--text-primary);
+            line-height: 1.6;
+            min-height: 100vh;
+        }
+        
+        /* ============================================
+           🔝 FIXED TOP TOOLBAR (NEVER MOVES!)
+           ============================================ */
+        
+        .top-toolbar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+            background: var(--bg-toolbar);
+            box-shadow: var(--shadow-md);
+            padding: 0.75rem 1.5rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 1rem;
+        }
+        
+        .toolbar-left {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+        
+        .toolbar-right {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+        
+        .brand-logo {
+            font-size: 1.25rem;
+            font-weight: 800;
+            color: var(--primary);
+            text-decoration: none;
+            white-space: nowrap;
+        }
+        
+        /* Font Size Controls: Simple -/+ Buttons */
+        .font-controls {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: var(--bg-main);
+            padding: 0.25rem 0.5rem;
+            border-radius: 8px;
+        }
+        
+        .font-label {
+            font-size: 0.75rem;
+            color: var(--text-secondary);
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        
+        .font-btn {
+            width: 32px;
+            height: 32px;
+            border: 2px solid var(--primary);
+            background: white;
+            color: var(--primary);
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 1.2rem;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: var(--transition);
+        }
+        
+        .font-btn:hover {
+            background: var(--primary);
+            color: white;
+            transform: scale(1.1);
+        }
+        
+        .font-btn:active {
+            transform: scale(0.95);
+        }
+        
+        /* Language Selector */
+        .lang-selector {
+            position: relative;
+        }
+        
+        .lang-btn {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.5rem 1rem;
+            background: var(--bg-main);
+            border: 2px solid transparent;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            color: var(--text-primary);
+            transition: var(--transition);
+        }
+        
+        .lang-btn:hover {
+            border-color: var(--primary);
+            background: var(--primary);
+            color: white;
+        }
+        
+        .lang-flag {
+            font-size: 1.2em;
+        }
+        
+        .lang-menu {
+            position: absolute;
+            top: calc(100% + 0.5rem);
+            right: 0;
+            background: white;
+            border-radius: 8px;
+            box-shadow: var(--shadow-lg);
+            padding: 0.5rem;
+            min-width: 180px;
+            display: none;
+        }
+        
+        .lang-menu.active {
+            display: block;
+            animation: slideDown 0.2s ease-out;
+        }
+        
+        @keyframes slideDown {
+            from { opacity: 0; transform: translateY(-10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .lang-option {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 0.75rem;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+        
+        .lang-option:hover {
+            background: var(--bg-main);
+        }
+        
+        .lang-option.active {
+            background: var(--primary);
+            color: white;
+        }
+        
+        /* Filter Tabs */
+        .filter-tabs {
+            display: flex;
+            gap: 0.5rem;
+        }
+        
+        .filter-tab {
+            padding: 0.5rem 1rem;
+            background: transparent;
+            border: 2px solid transparent;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            color: var(--text-secondary);
+            transition: var(--transition);
+        }
+        
+        .filter-tab:hover {
+            color: var(--primary);
+            background: var(--bg-main);
+        }
+        
+        .filter-tab.active {
+            background: var(--primary);
+            color: white;
+            border-color: var(--primary);
+        }
+        
+        /* ============================================
+           📦 MAIN CONTENT AREA
+           ============================================ */
+        
+        .main-content {
+            padding-top: 80px; /* Space for fixed toolbar */
+            max-width: 1200px;
+            margin: 0 auto;
+            padding-left: 1rem;
+            padding-right: 1rem;
+            padding-bottom: 3rem;
+        }
+        
+        /* ============================================
+           🎯 HEADER
+           ============================================ */
+        
+        .page-header {
+            text-align: center;
+            padding: 3rem 1rem 2rem;
+            animation: fadeIn 0.6s ease-out;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .page-title {
+            font-size: clamp(2rem, 5vw, 3rem);
+            font-weight: 800;
+            color: var(--text-primary);
+            margin-bottom: 0.5rem;
+        }
+        
+        .page-title-highlight {
+            color: var(--primary);
+        }
+        
+        .page-subtitle {
+            font-size: 1.25rem;
+            color: var(--text-secondary);
+            max-width: 600px;
+            margin: 0 auto;
+        }
+        
+        /* ============================================
+           🔍 SEARCH & FILTERS BAR
+           ============================================ */
+        
+        .filters-section {
+            background: var(--bg-card);
+            border-radius: var(--border-radius);
+            box-shadow: var(--shadow-sm);
+            padding: 1.5rem;
+            margin-bottom: 2rem;
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+            animation: slideUp 0.6s ease-out;
+        }
+        
+        @keyframes slideUp {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .search-wrapper {
+            flex: 1;
+            min-width: 250px;
+            position: relative;
+        }
+        
+        .search-icon {
+            position: absolute;
+            left: 1rem;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--text-muted);
+            pointer-events: none;
+        }
+        
+        .search-input {
+            width: 100%;
+            padding: 1rem 1rem 1rem 3rem;
+            border: 2px solid transparent;
+            border-radius: 10px;
+            background: var(--bg-main);
+            font-size: 1rem;
+            color: var(--text-primary);
+            transition: var(--transition);
+        }
+        
+        .search-input:focus {
+            outline: none;
+            border-color: var(--primary);
+            background: white;
+        }
+        
+        .filter-select {
+            padding: 1rem 1.5rem;
+            border: 2px solid transparent;
+            border-radius: 10px;
+            background: var(--bg-main);
+            color: var(--text-primary);
+            font-size: 1rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: var(--transition);
+            min-width: 160px;
+        }
+        
+        .filter-select:hover {
+            border-color: var(--primary);
+        }
+        
+        .filter-select:focus {
+            outline: none;
+            border-color: var(--primary);
+            background: white;
+        }
+        
+        /* ============================================
+           📰 UPDATE/PRODUCT CARDS - MODERN DESIGN
+           ============================================ */
+        
+        .updates-grid {
+            display: grid;
+            gap: 2rem;
+            animation: fadeIn 0.8s ease-out 0.2s backwards;
+        }
+        
+        .update-card {
+            background: var(--bg-card);
+            border-radius: var(--border-radius);
+            box-shadow: var(--shadow-sm);
+            overflow: hidden;
+            transition: var(--transition);
+            border: 2px solid transparent;
+        }
+        
+        .update-card:hover {
+            transform: translateY(-4px);
+            box-shadow: var(--shadow-lg);
+            border-color: var(--primary);
+        }
+        
+        /* Product Card (Special styling) */
+        .update-card.product {
+            border-left: 4px solid var(--accent-success);
+        }
+        
+        .update-card.product:hover {
+            border-left-width: 6px;
+        }
+        
+        /* Card Header with colored stripe */
+        .card-header {
+            padding: 1.5rem 2rem 0;
+            border-left: 4px solid var(--primary);
+            margin-left: 1.5rem;
+        }
+        
+        .card-header.priority-high {
+            border-left-color: var(--accent-danger);
+        }
+        
+        .card-header.featured {
+            border-left-width: 6px;
+            border-left-color: var(--accent-warning);
+        }
+        
+        .card-header.product-header {
+            border-left-color: var(--accent-success);
+        }
+        
+        /* Card Meta Info */
+        .card-meta {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1rem;
+            margin-bottom: 1rem;
+            font-size: 0.875rem;
+            color: var(--text-secondary);
+        }
+        
+        .meta-item {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .meta-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.25rem;
+            padding: 0.25rem 0.75rem;
+            background: var(--primary);
+            color: white;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 700;
+            text-transform: uppercase;
+        }
+        
+        .meta-badge.priority {
+            background: var(--accent-danger);
+        }
+        
+        .meta-badge.featured {
+            background: var(--accent-warning);
+        }
+        
+        .meta-badge.product {
+            background: var(--accent-success);
+        }
+        
+        .meta-badge.sale {
+            background: var(--accent-danger);
+            animation: pulse 2s ease-in-out infinite;
+        }
+        
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.7; }
+        }
+        
+        /* Card Content */
+        .card-content {
+            padding: 0 2rem 1.5rem;
+        }
+        
+        .card-title {
+            font-size: 1.75rem;
+            font-weight: 700;
+            color: var(--text-primary);
+            margin-bottom: 1rem;
+            line-height: 1.3;
+        }
+        
+        .card-text {
+            font-size: 1.05rem;
+            line-height: 1.7;
+            color: var(--text-primary);
+            margin-bottom: 1.5rem;
+        }
+        
+        .card-date {
+            font-size: 0.875rem;
+            color: var(--text-secondary);
+            font-weight: 600;
+        }
+        
+        /* Product Pricing */
+        .product-pricing {
+            margin: 1.5rem 0;
+            padding: 1.5rem;
+            background: var(--bg-main);
+            border-radius: 10px;
+            border: 2px solid var(--accent-success);
+        }
+        
+        .price-row {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 0.5rem;
+        }
+        
+        .regular-price {
+            font-size: 1.25rem;
+            color: var(--text-muted);
+            text-decoration: line-through;
+        }
+        
+        .sale-price {
+            font-size: 2rem;
+            font-weight: 800;
+            color: var(--accent-success);
+        }
+        
+        .discount-badge {
+            background: var(--accent-danger);
+            color: white;
+            padding: 0.25rem 0.75rem;
+            border-radius: 20px;
+            font-size: 0.875rem;
+            font-weight: 700;
+        }
+        
+        .stock-info {
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+            margin-top: 1rem;
+            font-size: 0.95rem;
+            color: var(--text-secondary);
+        }
+        
+        .stock-count {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .stock-count.low {
+            color: var(--accent-danger);
+            font-weight: 700;
+        }
+        
+        .available-until {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        /* Card Media */
+        .card-image {
+            width: 100%;
+            height: auto;
+            max-height: 400px;
+            object-fit: cover;
+            margin-bottom: 1.5rem;
+            border-radius: 8px;
+        }
+        
+        .card-video {
+            position: relative;
+            padding-bottom: 56.25%;
+            height: 0;
+            margin-bottom: 1.5rem;
+            border-radius: 8px;
+            overflow: hidden;
+        }
+        
+        .card-video iframe {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            border: 0;
+        }
+        
+        /* Reactions */
+        .reactions-bar {
+            display: flex;
+            gap: 0.75rem;
+            padding: 0 2rem 1rem;
+        }
+        
+        .reaction-btn {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.5rem 1rem;
+            background: var(--bg-main);
+            border: 2px solid transparent;
+            border-radius: 20px;
+            cursor: pointer;
+            transition: var(--transition);
+            font-weight: 600;
+        }
+        
+        .reaction-btn:hover {
+            background: var(--primary);
+            color: white;
+            transform: scale(1.05);
+        }
+        
+        .reaction-btn.active {
+            background: var(--primary);
+            color: white;
+            border-color: var(--primary);
+        }
+        
+        /* Card Actions */
+        .card-actions {
+            padding: 1.5rem 2rem;
+            border-top: 1px solid var(--bg-main);
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1rem;
+            align-items: center;
+        }
+        
+        .cta-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 0.875rem 1.75rem;
+            background: var(--primary);
+            color: white;
+            border-radius: 10px;
+            text-decoration: none;
+            font-weight: 700;
+            font-size: 1rem;
+            transition: var(--transition);
+            box-shadow: 0 4px 12px rgba(68, 178, 232, 0.3);
+            border: none;
+            cursor: pointer;
+        }
+        
+        .cta-btn:hover {
+            background: var(--primary-dark);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(68, 178, 232, 0.4);
+        }
+        
+        .cta-btn.buy-now {
+            background: var(--accent-success);
+            box-shadow: 0 4px 12px rgba(46, 204, 113, 0.3);
+        }
+        
+        .cta-btn.buy-now:hover {
+            background: #27ae60;
+            box-shadow: 0 6px 20px rgba(46, 204, 113, 0.4);
+        }
+        
+        /* Social Share Buttons - REAL ICONS */
+        .share-buttons {
+            display: flex;
+            gap: 0.75rem;
+            margin-left: auto;
+        }
+        
+        .share-btn {
+            width: 44px;
+            height: 44px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 10px;
+            background: var(--bg-main);
+            color: var(--text-primary);
+            text-decoration: none;
+            transition: var(--transition);
+            border: 2px solid transparent;
+        }
+        
+        .share-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-md);
+        }
+        
+        .share-btn.facebook:hover {
+            background: #1877f2;
+            border-color: #1877f2;
+            color: white;
+        }
+        
+        .share-btn.twitter:hover {
+            background: #1da1f2;
+            border-color: #1da1f2;
+            color: white;
+        }
+        
+        .share-btn.linkedin:hover {
+            background: #0077b5;
+            border-color: #0077b5;
+            color: white;
+        }
+        
+        .share-btn.whatsapp:hover {
+            background: #25d366;
+            border-color: #25d366;
+            color: white;
+        }
+        
+        .share-btn.telegram:hover {
+            background: #0088cc;
+            border-color: #0088cc;
+            color: white;
+        }
+        
+        /* ============================================
+           🛒 PURCHASE MODAL
+           ============================================ */
+        
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.6);
+            backdrop-filter: blur(4px);
+            z-index: 2000;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            padding: 1rem;
+            animation: fadeIn 0.2s ease-out;
+        }
+        
+        .modal-overlay.active {
+            display: flex;
+        }
+        
+        .purchase-modal {
+            background: white;
+            border-radius: var(--border-radius);
+            max-width: 500px;
+            width: 100%;
+            max-height: 90vh;
+            overflow-y: auto;
+            box-shadow: var(--shadow-lg);
+            animation: slideUp 0.3s ease-out;
+        }
+        
+        .modal-header {
+            padding: 1.5rem 2rem;
+            border-bottom: 1px solid var(--bg-main);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .modal-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--text-primary);
+        }
+        
+        .modal-close {
+            width: 32px;
+            height: 32px;
+            border: none;
+            background: var(--bg-main);
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 1.5rem;
+            color: var(--text-secondary);
+            transition: var(--transition);
+        }
+        
+        .modal-close:hover {
+            background: var(--accent-danger);
+            color: white;
+        }
+        
+        .modal-body {
+            padding: 2rem;
+        }
+        
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+        
+        .form-label {
+            display: block;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 0.5rem;
+        }
+        
+        .form-input {
+            width: 100%;
+            padding: 0.875rem 1rem;
+            border: 2px solid var(--bg-main);
+            border-radius: 8px;
+            font-size: 1rem;
+            color: var(--text-primary);
+            transition: var(--transition);
+        }
+        
+        .form-input:focus {
+            outline: none;
+            border-color: var(--primary);
+        }
+        
+        .quantity-control {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+        
+        .qty-btn {
+            width: 40px;
+            height: 40px;
+            border: 2px solid var(--primary);
+            background: white;
+            color: var(--primary);
+            border-radius: 8px;
+            font-size: 1.5rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+        
+        .qty-btn:hover {
+            background: var(--primary);
+            color: white;
+        }
+        
+        .qty-display {
+            font-size: 1.5rem;
+            font-weight: 700;
+            min-width: 3rem;
+            text-align: center;
+        }
+        
+        .order-summary {
+            background: var(--bg-main);
+            padding: 1.5rem;
+            border-radius: 8px;
+            margin-top: 1.5rem;
+        }
+        
+        .summary-row {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 0.5rem;
+            font-size: 1.05rem;
+        }
+        
+        .summary-row.total {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--accent-success);
+            padding-top: 1rem;
+            border-top: 2px solid white;
+            margin-top: 1rem;
+        }
+        
+        .submit-order-btn {
+            width: 100%;
+            margin-top: 1.5rem;
+            padding: 1rem;
+            font-size: 1.125rem;
+        }
+        
+        /* ============================================
+           📭 LOADING & EMPTY STATES
+           ============================================ */
+        
+        .loading-state {
+            text-align: center;
+            padding: 4rem 2rem;
+        }
+        
+        .spinner {
+            width: 48px;
+            height: 48px;
+            border: 4px solid var(--bg-main);
+            border-top-color: var(--primary);
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+            margin: 0 auto 1.5rem;
+        }
+        
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+        
+        .empty-state {
+            text-align: center;
+            padding: 5rem 2rem;
+            background: var(--bg-card);
+            border-radius: var(--border-radius);
+            box-shadow: var(--shadow-sm);
+        }
+        
+        .empty-icon {
+            font-size: 4rem;
+            margin-bottom: 1.5rem;
+            opacity: 0.5;
+        }
+        
+        .empty-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
+        
+        .empty-text {
+            color: var(--text-secondary);
+            font-size: 1.1rem;
+        }
+        
+        /* ============================================
+           🦶 FOOTER
+           ============================================ */
+        
+        .page-footer {
+            text-align: center;
+            padding: 2rem 1rem;
+            margin-top: 3rem;
+            border-top: 1px solid var(--bg-main);
+            color: var(--text-secondary);
+        }
+        
+        .page-footer a {
+            color: var(--primary);
+            text-decoration: none;
+            font-weight: 600;
+        }
+        
+        .page-footer a:hover {
+            text-decoration: underline;
+        }
+        
+        /* ============================================
+           📱 RESPONSIVE DESIGN
+           ============================================ */
+        
+        @media (max-width: 768px) {
+            .top-toolbar {
+                flex-direction: column;
+                padding: 0.75rem 1rem;
+                gap: 0.75rem;
+            }
+            
+            .toolbar-left,
+            .toolbar-right {
+                width: 100%;
+                justify-content: space-between;
+            }
+            
+            .filter-tabs {
+                width: 100%;
+                justify-content: center;
+                flex-wrap: wrap;
+            }
+            
+            .main-content {
+                padding-top: 180px;
+            }
+            
+            .filters-section {
+                flex-direction: column;
+            }
+            
+            .search-wrapper,
+            .filter-select {
+                width: 100%;
+            }
+            
+            .card-header,
+            .card-content,
+            .reactions-bar,
+            .card-actions {
+                padding-left: 1.25rem;
+                padding-right: 1.25rem;
+            }
+            
+            .card-actions {
+                flex-direction: column;
+                align-items: stretch;
+            }
+            
+            .share-buttons {
+                margin-left: 0;
+                justify-content: center;
+            }
+            
+            .cta-btn {
+                justify-content: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    
+    <!-- ============================================
+         🔝 FIXED TOP TOOLBAR (STAYS AT TOP!)
+         ============================================ -->
+    <div class="top-toolbar">
+        <div class="toolbar-left">
+            <a href="https://xbrch.com" class="brand-logo">XBRCH</a>
+            
+            <!-- Font Size Controls: Simple -/+ -->
+            <div class="font-controls">
+                <span class="font-label">Size</span>
+                <button class="font-btn" onclick="decreaseFont()" title="Decrease Font Size" aria-label="Decrease Font Size">
+                    −
+                </button>
+                <button class="font-btn" onclick="increaseFont()" title="Increase Font Size" aria-label="Increase Font Size">
+                    +
+                </button>
+            </div>
+            
+            <!-- Filter Tabs -->
+            <div class="filter-tabs">
+                <button class="filter-tab active" onclick="filterByType('all')" data-translate="all">All</button>
+                <button class="filter-tab" onclick="filterByType('updates')" data-translate="updates">Updates</button>
+                <button class="filter-tab" onclick="filterByType('products')" data-translate="products">Products</button>
+            </div>
+        </div>
+        
+        <div class="toolbar-right">
+            <!-- Language Selector -->
+            <div class="lang-selector">
+                <button class="lang-btn" onclick="toggleLangMenu()" aria-label="Select Language">
+                    <span class="lang-flag" id="current-flag">🇬🇧</span>
+                    <span id="current-lang">English</span>
+                    <span>▾</span>
+                </button>
+                <div class="lang-menu" id="lang-menu">
+                    <div class="lang-option active" onclick="setLanguage('en', '🇬🇧', 'English')">
+                        <span class="lang-flag">🇬🇧</span>
+                        <span>English</span>
+                    </div>
+                    <div class="lang-option" onclick="setLanguage('af', '🇿🇦', 'Afrikaans')">
+                        <span class="lang-flag">🇿🇦</span>
+                        <span>Afrikaans</span>
+                    </div>
+                    <div class="lang-option" onclick="setLanguage('nl', '🇳🇱', 'Nederlands')">
+                        <span class="lang-flag">🇳🇱</span>
+                        <span>Nederlands</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- ============================================
+         📦 MAIN CONTENT
+         ============================================ -->
+    <div class="main-content">
+        
+        <!-- Header -->
+        <header class="page-header">
+            <h1 class="page-title">
+                Write Once. <span class="page-title-highlight" data-translate="title-highlight">Broadcast Everywhere.</span>
+            </h1>
+            <p class="page-subtitle" data-translate="subtitle">
+                Latest updates, announcements, and daily deals.
+            </p>
+        </header>
+        
+        <!-- Search & Filters -->
+        <div class="filters-section">
+            <div class="search-wrapper">
+                <svg class="search-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <circle cx="11" cy="11" r="8"/>
+                    <path d="m21 21-4.35-4.35"/>
+                </svg>
+                <input 
+                    type="search" 
+                    class="search-input" 
+                    id="search-input"
+                    placeholder="Search updates and products..." 
+                    data-translate-placeholder="search-placeholder"
+                >
+            </div>
+            
+            <select class="filter-select" id="category-filter">
+                <option value="" data-translate="all-categories">All Categories</option>
+            </select>
+            
+            <select class="filter-select" id="sort-filter">
+                <option value="newest" data-translate="newest">Newest First</option>
+                <option value="popular" data-translate="popular">Most Popular</option>
+                <option value="trending" data-translate="trending">Trending</option>
+            </select>
+        </div>
+        
+        <!-- Updates/Products Grid -->
+        <div class="updates-grid" id="updates-container">
+            <!-- Loading State -->
+            <div class="loading-state" id="loading-state">
+                <div class="spinner"></div>
+                <p data-translate="loading">Loading...</p>
+            </div>
+        </div>
+        
+        <!-- Empty State (hidden by default) -->
+        <div class="empty-state" id="empty-state" style="display: none;">
+            <div class="empty-icon">📭</div>
+            <h3 class="empty-title" data-translate="no-items">No Items Yet</h3>
+            <p class="empty-text" data-translate="no-items-desc">Check back later for updates and special offers!</p>
+        </div>
+        
+        <!-- Footer -->
+        <footer class="page-footer">
+            <p>
+                Powered by <a href="https://xbrch.com" target="_blank"><strong>XBRCH</strong></a> • 
+                <span data-translate="footer-tagline">Divine Power Marketing</span>
+            </p>
+        </footer>
+        
+    </div>
+    
+    <!-- ============================================
+         🛒 PURCHASE MODAL
+         ============================================ -->
+    <div class="modal-overlay" id="purchase-modal">
+        <div class="purchase-modal">
+            <div class="modal-header">
+                <h2 class="modal-title" id="modal-product-title">Purchase Product</h2>
+                <button class="modal-close" onclick="closePurchaseModal()" aria-label="Close">×</button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label class="form-label" data-translate="quantity">Quantity</label>
+                    <div class="quantity-control">
+                        <button class="qty-btn" onclick="decreaseQuantity()">−</button>
+                        <span class="qty-display" id="purchase-quantity">1</span>
+                        <button class="qty-btn" onclick="increaseQuantity()">+</button>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label" data-translate="your-name">Your Name</label>
+                    <input type="text" class="form-input" id="customer-name" placeholder="John Smith" required>
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label" data-translate="your-phone">Your Phone</label>
+                    <input type="tel" class="form-input" id="customer-phone" placeholder="+31 6 12345678" required>
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label" data-translate="your-email">Your Email</label>
+                    <input type="email" class="form-input" id="customer-email" placeholder="john@example.com" required>
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label" data-translate="pickup-time">Pickup Time</label>
+                    <input type="datetime-local" class="form-input" id="pickup-time" required>
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label" data-translate="special-instructions">Special Instructions (optional)</label>
+                    <textarea class="form-input" id="special-instructions" rows="3" placeholder="Any special requests?"></textarea>
+                </div>
+                
+                <div class="order-summary">
+                    <div class="summary-row">
+                        <span data-translate="unit-price">Unit Price:</span>
+                        <span id="summary-unit-price">€0.00</span>
+                    </div>
+                    <div class="summary-row">
+                        <span data-translate="quantity">Quantity:</span>
+                        <span id="summary-quantity">1</span>
+                    </div>
+                    <div class="summary-row total">
+                        <span data-translate="total">Total:</span>
+                        <span id="summary-total">€0.00</span>
+                    </div>
+                </div>
+                
+                <button class="cta-btn buy-now submit-order-btn" onclick="submitOrder()">
+                    💳 <span data-translate="pay-now">Pay Now with Stripe</span>
+                </button>
+                
+                <p style="text-align: center; margin-top: 1rem; font-size: 0.875rem; color: var(--text-muted);">
+                    🔒 <span data-translate="secure-payment">Secure payment powered by Stripe</span>
+                </p>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        // ============================================
+        // 🌐 TRANSLATIONS
+        // ============================================
+        
+        const translations = {
+            en: {
+                'title-highlight': 'Broadcast Everywhere.',
+                'subtitle': 'Latest updates, announcements, and daily deals.',
+                'search-placeholder': 'Search updates and products...',
+                'all': 'All',
+                'updates': 'Updates',
+                'products': 'Products',
+                'all-categories': 'All Categories',
+                'newest': 'Newest First',
+                'popular': 'Most Popular',
+                'trending': 'Trending',
+                'buy-now': 'Buy Now & Pick Up Today',
+                'learn-more': 'Learn More',
+                'loading': 'Loading...',
+                'no-items': 'No Items Yet',
+                'no-items-desc': 'Check back later for updates and special offers!',
+                'footer-tagline': 'Divine Power Marketing',
+                'quantity': 'Quantity',
+                'your-name': 'Your Name',
+                'your-phone': 'Your Phone',
+                'your-email': 'Your Email',
+                'pickup-time': 'Pickup Time',
+                'special-instructions': 'Special Instructions (optional)',
+                'unit-price': 'Unit Price:',
+                'total': 'Total:',
+                'pay-now': 'Pay Now with Stripe',
+                'secure-payment': 'Secure payment powered by Stripe',
+                'left-in-stock': 'left in stock',
+                'available-until': 'Available until',
+                'regular-price': 'Regular Price:',
+                'sale-price': 'Sale Price:',
+                'off': 'OFF'
+            },
+            af: {
+                'title-highlight': 'Uitsaai Oral.',
+                'subtitle': 'Nuutste opdaterings, aankondigings en daaglikse spesiale.',
+                'search-placeholder': 'Soek opdaterings en produkte...',
+                'all': 'Alles',
+                'updates': 'Opdaterings',
+                'products': 'Produkte',
+                'all-categories': 'Alle Kategorieë',
+                'newest': 'Nuutste Eerste',
+                'popular': 'Mees Populêr',
+                'trending': 'Gewild',
+                'buy-now': 'Koop Nou & Haal Vandag Op',
+                'learn-more': 'Lees Meer',
+                'loading': 'Laai...',
+                'no-items': 'Nog Geen Items Nie',
+                'no-items-desc': 'Kyk later weer vir opdaterings en spesiale aanbiedinge!',
+                'footer-tagline': 'Goddelike Krag Bemarking'
+            },
+            nl: {
+                'title-highlight': 'Uitzenden Overal.',
+                'subtitle': 'Laatste updates, aankondigingen en dagelijkse deals.',
+                'search-placeholder': 'Zoek updates en producten...',
+                'all': 'Alles',
+                'updates': 'Updates',
+                'products': 'Producten',
+                'all-categories': 'Alle Categorieën',
+                'newest': 'Nieuwste Eerst',
+                'popular': 'Meest Populair',
+                'trending': 'Trending',
+                'buy-now': 'Koop Nu & Haal Vandaag Op',
+                'learn-more': 'Lees Meer',
+                'loading': 'Laden...',
+                'no-items': 'Nog Geen Items',
+                'no-items-desc': 'Kom later terug voor updates en speciale aanbiedingen!',
+                'footer-tagline': 'Goddelijke Kracht Marketing'
+            }
+        };
+        
+        let currentLang = localStorage.getItem('language') || 'en';
+        let currentFontLevel = parseInt(localStorage.getItem('fontLevel')) || 0;
+        let currentFilter = 'all';
+        let currentProductData = null;
+        const fontLevels = ['font-small', '', 'font-large', 'font-xlarge'];
+        
+        // ============================================
+        // 🔌 SUPABASE CONFIGURATION
+        // ============================================
+        
+        // TODO: Replace these with your actual Supabase credentials
+        const SUPABASE_URL = 'https://pvmbxnflhcrdhcwvtdxc.supabase.co';
+        const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InB2bWJ4bmZsaGNyZGhjd3Z0ZHhjIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzAyMTY5NzQsImV4cCI6MjA4NTc5Mjk3NH0.GN4p_s8Cqod-K3S1lt_48oDZIhAroCLDrKDNs7DLjYg';
+        
+        // Get user ID from URL parameter (e.g., ?userId=xxx)
+        function getUserIdFromUrl() {
+            const urlParams = new URLSearchParams(window.location.search);
+            return urlParams.get('userId') || 'demo-user-id'; // Fallback to demo ID
+        }
+        
+        const USER_ID = getUserIdFromUrl();
+        
+        // Sample data for demonstration (fallback)
+        const sampleData = {
+            updates: [
+                {
+                    id: 1,
+                    type: 'update',
+                    title: '🎉 Grand Opening Next Week!',
+                    content: 'We are excited to announce our grand opening next Monday! Join us for special deals, free samples, and meet the team. Don\'t miss out on our exclusive opening day promotions!',
+                    date: 'Feb 12, 2026',
+                    category: 'Announcement',
+                    featured: true,
+                    image: 'https://images.unsplash.com/photo-1557804506-669a67965ba0?w=800&h=400&fit=crop'
+                },
+                {
+                    id: 2,
+                    type: 'update',
+                    title: '📢 New Business Hours',
+                    content: 'Starting next week, we\'ll be open Monday-Friday 8AM-8PM, and weekends 9AM-6PM. More hours to serve you better!',
+                    date: 'Feb 11, 2026',
+                    category: 'Update'
+                }
+            ],
+            products: [
+                {
+                    id: 101,
+                    type: 'product',
+                    name: '🥐 Fresh Croissants - Today Only!',
+                    description: 'Baked fresh this morning, flaky and buttery. Perfect for breakfast or a quick snack. Limited to 50 units!',
+                    regularPrice: 5.00,
+                    salePrice: 4.00,
+                    discount: 20,
+                    available: 38,
+                    total: 50,
+                    availableUntil: 'Today 6:00 PM',
+                    category: 'Food',
+                    image: 'https://images.unsplash.com/photo-1555507036-ab1f4038808a?w=800&h=400&fit=crop',
+                    featured: false
+                },
+                {
+                    id: 102,
+                    type: 'product',
+                    name: '☕ Coffee Special - Afternoon Deal',
+                    description: 'Premium arabica coffee at a special afternoon price. Available from 2PM-5PM today only. Get yours before they run out!',
+                    regularPrice: 4.50,
+                    salePrice: 2.50,
+                    discount: 44,
+                    available: 20,
+                    total: 20,
+                    availableUntil: 'Today 5:00 PM',
+                    category: 'Beverage',
+                    priority: 'high'
+                }
+            ]
+        };
+        
+        // ============================================
+        // 🔤 FONT SIZE CONTROLS
+        // ============================================
+        
+        function decreaseFont() {
+            if (currentFontLevel > 0) {
+                currentFontLevel--;
+                applyFontSize();
+            }
+        }
+        
+        function increaseFont() {
+            if (currentFontLevel < fontLevels.length - 1) {
+                currentFontLevel++;
+                applyFontSize();
+            }
+        }
+        
+        function applyFontSize() {
+            localStorage.setItem('fontLevel', currentFontLevel);
+            document.documentElement.className = fontLevels[currentFontLevel];
+        }
+        
+        // ============================================
+        // 🌐 LANGUAGE FUNCTIONS
+        // ============================================
+        
+        function toggleLangMenu() {
+            const menu = document.getElementById('lang-menu');
+            menu.classList.toggle('active');
+        }
+        
+        function setLanguage(lang, flag, name) {
+            currentLang = lang;
+            localStorage.setItem('language', lang);
+            
+            document.getElementById('current-flag').textContent = flag;
+            document.getElementById('current-lang').textContent = name;
+            
+            document.querySelectorAll('.lang-option').forEach(opt => opt.classList.remove('active'));
+            event.currentTarget.classList.add('active');
+            
+            document.getElementById('lang-menu').classList.remove('active');
+            
+            translatePage(lang);
+            document.documentElement.lang = lang;
+        }
+        
+        function translatePage(lang) {
+            const elements = document.querySelectorAll('[data-translate]');
+            elements.forEach(element => {
+                const key = element.getAttribute('data-translate');
+                if (translations[lang] && translations[lang][key]) {
+                    element.textContent = translations[lang][key];
+                }
+            });
+            
+            const placeholders = document.querySelectorAll('[data-translate-placeholder]');
+            placeholders.forEach(element => {
+                const key = element.getAttribute('data-translate-placeholder');
+                if (translations[lang] && translations[lang][key]) {
+                    element.placeholder = translations[lang][key];
+                }
+            });
+        }
+        
+        // ============================================
+        // 🔍 FILTER FUNCTIONS
+        // ============================================
+        
+        function filterByType(type) {
+            currentFilter = type;
+            
+            // Update active tab
+            document.querySelectorAll('.filter-tab').forEach(tab => tab.classList.remove('active'));
+            event.target.classList.add('active');
+            
+            // Re-render items
+            loadItems();
+        }
+        
+        // ============================================
+        // 📊 LOAD AND DISPLAY ITEMS
+        // ============================================
+        
+        async function loadItems() {
+            const container = document.getElementById('updates-container');
+            const loadingState = document.getElementById('loading-state');
+            const emptyState = document.getElementById('empty-state');
+            
+            try {
+                let items = [];
+                
+                // If Supabase is not configured, use sample data
+                if (SUPABASE_URL === 'YOUR_SUPABASE_URL' || SUPABASE_ANON_KEY === 'YOUR_SUPABASE_ANON_KEY') {
+                    console.log('Using sample data - please configure Supabase credentials');
+                    
+                    // Simulate loading
+                    await new Promise(resolve => setTimeout(resolve, 500));
+                    
+                    if (currentFilter === 'all') {
+                        items = [...sampleData.updates, ...sampleData.products];
+                    } else if (currentFilter === 'updates') {
+                        items = sampleData.updates;
+                    } else if (currentFilter === 'products') {
+                        items = sampleData.products;
+                    }
+                } else {
+                    // Fetch from Supabase
+                    console.log('Fetching from Supabase...');
+                    
+                    let updates = [];
+                    let products = [];
+                    
+                    // Fetch updates
+                    if (currentFilter === 'all' || currentFilter === 'updates') {
+                        const updatesRes = await fetch(
+                            `${SUPABASE_URL}/rest/v1/web_updates?user_id=eq.${USER_ID}&is_published=eq.true&order=created_at.desc`,
+                            {
+                                headers: {
+                                    'apikey': SUPABASE_ANON_KEY,
+                                    'Authorization': `Bearer ${SUPABASE_ANON_KEY}`,
+                                    'Content-Type': 'application/json'
+                                }
+                            });
+                        
+                        if (updatesRes.ok) {
+                            updates = await updatesRes.json();
+                            console.log('Loaded updates:', updates);
+                        }
+                    }
+                    
+                    // Fetch products
+                    if (currentFilter === 'all' || currentFilter === 'products') {
+                        const productsRes = await fetch(
+                            `${SUPABASE_URL}/rest/v1/shop_products?user_id=eq.${USER_ID}&is_active=eq.true&order=created_at.desc`,
+                            {
+                                headers: {
+                                    'apikey': SUPABASE_ANON_KEY,
+                                    'Authorization': `Bearer ${SUPABASE_ANON_KEY}`,
+                                    'Content-Type': 'application/json'
+                                }
+                            });
+                        
+                        if (productsRes.ok) {
+                            products = await productsRes.json();
+                            console.log('Loaded products:', products);
+                        }
+                    }
+                    
+                    // Combine items
+                    if (currentFilter === 'all') {
+                        items = [...updates, ...products];
+                    } else if (currentFilter === 'updates') {
+                        items = updates;
+                    } else if (currentFilter === 'products') {
+                        items = products;
+                    }
+                }
+                
+                // Hide loading state
+                loadingState.style.display = 'none';
+                
+                // Clear container
+                container.innerHTML = '';
+                
+                // Add test data to verify wall is working
+                const testUpdate = {
+                    title: 'Test Update from Wall',
+                    content: 'This is a test update to verify the broadcast wall is working correctly.',
+                    category: 'Test',
+                    created_at: new Date().toISOString(),
+                    featured: false
+                };
+                
+                const testCard = createUpdateCard(testUpdate);
+                container.appendChild(testCard);
+                
+                console.log('Test card added to verify wall functionality');
+                
+                // Show empty state if no items
+                if (items.length === 0) {
+                    emptyState.style.display = 'block';
+                    console.log('No real items found, showing test card only');
+                    return;
+                }
+                
+                // Hide empty state
+                emptyState.style.display = 'none';
+                
+                // Display real items if any
+                if (items.length > 0) {
+                    items.forEach(item => {
+                        let card;
+                        console.log('Processing item:', item);
+                        
+                        if (item.title && item.content) {
+                            // It's an update
+                            console.log('Creating update card for:', item.title);
+                            card = createUpdateCard(item);
+                        } else if (item.name && item.regular_price) {
+                            // It's a product
+                            console.log('Creating product card for:', item.name);
+                            card = createProductCard(item);
+                        }
+                        
+                        if (card) {
+                            console.log('Appending card to container');
+                            container.appendChild(card);
+                        }
+                    });
+                }
+                
+                console.log('Total items displayed:', items.length + (items.length === 0 ? 1 : 0));
+                
+            } catch (error) {
+                console.error('Error loading items:', error);
+                loadingState.innerHTML = '<p style="color: var(--accent-danger);">Failed to load items. Please check your connection.</p>';
+            }
+        }
+        
+        function createUpdateCard(update) {
+            const card = document.createElement('div');
+            card.className = 'update-card';
+            
+            // Handle both Supabase data structure and sample data
+            const title = update.title || 'Update';
+            const content = update.content || update.text || '';
+            const imageUrl = update.image_url || update.image;
+            const date = update.created_at ? 
+                new Date(update.created_at).toLocaleDateString('en-US', { 
+                    year: 'numeric', 
+                    month: 'short', 
+                    day: 'numeric' 
+                }) : 
+                update.date || 'Recent';
+            const category = update.category || 'Update';
+            const featured = update.featured || update.is_featured || false;
+            
+            card.innerHTML = `
+                <div class="card-header ${featured ? 'featured' : ''}">
+                    <div class="card-meta">
+                        <span class="card-date">${date}</span>
+                        ${featured ? '<span class="meta-badge featured">FEATURED</span>' : ''}
+                        ${category ? `<span class="meta-badge">${category}</span>` : ''}
+                    </div>
+                </div>
+                <div class="card-content">
+                    <h2 class="card-title">${title}</h2>
+                    <div class="card-text">${content}</div>
+                    ${imageUrl ? `<img src="${imageUrl}" alt="${title}" class="card-image" loading="lazy">` : ''}
+                </div>
+                <div class="reactions-bar">
+                    <button class="reaction-btn" onclick="toggleReaction(this)">
+                        👍 <span>5</span>
+                    </button>
+                    <button class="reaction-btn" onclick="toggleReaction(this)">
+                        ❤️ <span>12</span>
+                    </button>
+                    <button class="reaction-btn" onclick="toggleReaction(this)">
+                        😮 <span>3</span>
+                    </button>
+                </div>
+                <div class="card-actions">
+                    <a href="#" class="cta-btn">
+                        <span data-translate="learn-more">Learn More</span>
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M5 12h14M12 5l7 7-7 7"/>
+                        </svg>
+                    </a>
+                    <div class="share-buttons">
+                        ${generateShareButtons(title, window.location.href)}
+                    </div>
+                </div>
+            `;
+            
+            return card;
+        }
+        
+        function createProductCard(product) {
+            const card = document.createElement('div');
+            card.className = 'update-card product';
+            
+            // Handle both Supabase data structure and sample data
+            const name = product.name || product.title || 'Product';
+            const description = product.description || product.content || '';
+            const imageUrl = product.image_url || product.image;
+            const regularPrice = product.regular_price || product.regularPrice || 0;
+            const salePrice = product.sale_price || product.salePrice || regularPrice;
+            const discount = product.discount_percentage || product.discount || Math.round(((regularPrice - salePrice) / regularPrice) * 100);
+            const available = product.available_quantity || product.available || 0;
+            const total = product.total_quantity || product.total || available;
+            const availableUntil = product.available_until ? 
+                new Date(product.available_until).toLocaleDateString('en-US', { 
+                    month: 'short', 
+                    day: 'numeric', 
+                    hour: '2-digit', 
+                    minute: '2-digit' 
+                }) : 
+                product.availableUntil || 'Limited Time';
+            const category = product.category || 'Product';
+            
+            const stockLow = available < (total * 0.2);
+            
+            card.innerHTML = `
+                <div class="card-header product-header">
+                    <div class="card-meta">
+                        <span class="meta-badge product">🛍️ DAILY DEAL</span>
+                        ${discount > 0 ? `<span class="meta-badge sale">${discount}% OFF!</span>` : ''}
+                        ${stockLow ? '<span class="meta-badge priority">LOW STOCK</span>' : ''}
+                    </div>
+                </div>
+                <div class="card-content">
+                    <h2 class="card-title">${name}</h2>
+                    <div class="card-text">${description}</div>
+                    ${imageUrl ? `<img src="${imageUrl}" alt="${name}" class="card-image" loading="lazy">` : ''}
+                    
+                    <div class="product-pricing">
+                        ${salePrice < regularPrice ? `
+                            <div class="price-row">
+                                <span class="regular-price" data-translate="regular-price">Regular Price:</span>
+                                <span class="regular-price">€${regularPrice.toFixed(2)}</span>
+                            </div>
+                        ` : ''}
+                        <div class="price-row">
+                            <span class="sale-price">💰 €${salePrice.toFixed(2)}</span>
+                            ${discount > 0 ? `<span class="discount-badge">${discount}% <span data-translate="off">OFF</span></span>` : ''}
+                        </div>
+                        <div class="stock-info">
+                            <span class="stock-count ${stockLow ? 'low' : ''}">
+                                📦 <strong>${available}</strong> <span data-translate="left-in-stock">left in stock</span>
+                            </span>
+                            <span class="available-until">
+                                ⏰ <span data-translate="available-until">Available until</span> ${availableUntil}
+                            </span>
+                        </div>
+                    </div>
+                </div>
+                <div class="reactions-bar">
+                    <button class="reaction-btn" onclick="toggleReaction(this)">
+                        👍 <span>8</span>
+                    </button>
+                    <button class="reaction-btn" onclick="toggleReaction(this)">
+                        ❤️ <span>24</span>
+                    </button>
+                    <button class="reaction-btn" onclick="toggleReaction(this)">
+                        😮 <span>6</span>
+                    </button>
+                </div>
+                <div class="card-actions">
+                    <button class="cta-btn buy-now" onclick="openPurchaseModal(${JSON.stringify(product).replace(/"/g, '&quot;')})">
+                        🛒 <span data-translate="buy-now">Buy Now & Pick Up Today</span>
+                    </button>
+                    <div class="share-buttons">
+                        ${generateShareButtons(name, window.location.href)}
+                    </div>
+                </div>
+            `;
+            
+            return card;
+        }
+        
+        function generateShareButtons(title, url) {
+            const shareUrl = encodeURIComponent(url);
+            const shareText = encodeURIComponent(title);
+            
+            return `
+                <a href="https://www.facebook.com/sharer/sharer.php?u=${shareUrl}" 
+                   class="share-btn facebook" target="_blank" rel="noopener" aria-label="Share on Facebook">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/>
+                    </svg>
+                </a>
+                <a href="https://twitter.com/intent/tweet?url=${shareUrl}&text=${shareText}" 
+                   class="share-btn twitter" target="_blank" rel="noopener" aria-label="Share on Twitter">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M23 3a10.9 10.9 0 01-3.14 1.53 4.48 4.48 0 00-7.86 3v1A10.66 10.66 0 013 4s-4 9 5 13a11.64 11.64 0 01-7 2c9 5 20 0 20-11.5a4.5 4.5 0 00-.08-.83A7.72 7.72 0 0023 3z"/>
+                    </svg>
+                </a>
+                <a href="https://www.linkedin.com/sharing/share-offsite/?url=${shareUrl}" 
+                   class="share-btn linkedin" target="_blank" rel="noopener" aria-label="Share on LinkedIn">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/>
+                    </svg>
+                </a>
+                <a href="https://wa.me/?text=${shareText}%20${shareUrl}" 
+                   class="share-btn whatsapp" target="_blank" rel="noopener" aria-label="Share on WhatsApp">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.890-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z"/>
+                    </svg>
+                </a>
+                <a href="https://t.me/share/url?url=${shareUrl}&text=${shareText}" 
+                   class="share-btn telegram" target="_blank" rel="noopener" aria-label="Share on Telegram">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M11.944 0A12 12 0 0 0 0 12a12 12 0 0 0 12 12 12 12 0 0 0 12-12A12 12 0 0 0 12 0a12 12 0 0 0-.056 0zm4.962 7.224c.1-.002.321.023.465.14a.506.506 0 0 1 .171.325c.016.093.036.306.02.472-.18 1.898-.962 6.502-1.36 8.627-.168.9-.499 1.201-.82 1.23-.696.065-1.225-.46-1.9-.902-1.056-.693-1.653-1.124-2.678-1.8-1.185-.78-.417-1.21.258-1.91.177-.184 3.247-2.977 3.307-3.23.007-.032.014-.15-.056-.212s-.174-.041-.249-.024c-.106.024-1.793 1.14-5.061 3.345-.48.33-.913.49-1.302.48-.428-.008-1.252-.241-1.865-.44-.752-.245-1.349-.374-1.297-.789.027-.216.325-.437.893-.663 3.498-1.524 5.83-2.529 6.998-3.014 3.332-1.386 4.025-1.627 4.476-1.635z"/>
+                    </svg>
+                </a>
+            `;
+        }
+        
+        function toggleReaction(btn) {
+            btn.classList.toggle('active');
+            const count = btn.querySelector('span');
+            const currentCount = parseInt(count.textContent);
+            count.textContent = btn.classList.contains('active') ? currentCount + 1 : Math.max(0, currentCount - 1);
+        }
+        
+        // ============================================
+        // 🛒 PURCHASE MODAL FUNCTIONS
+        // ============================================
+        
+        function openPurchaseModal(product) {
+            currentProductData = product;
+            
+            // Handle both Supabase and sample data structure
+            const productName = product.name || product.title || 'Product';
+            const salePrice = product.sale_price || product.salePrice || 0;
+            
+            document.getElementById('modal-product-title').textContent = `Purchase: ${productName}`;
+            document.getElementById('summary-unit-price').textContent = `€${salePrice.toFixed(2)}`;
+            document.getElementById('purchase-quantity').textContent = '1';
+            updateOrderSummary();
+            document.getElementById('purchase-modal').classList.add('active');
+        }
+        
+        function closePurchaseModal() {
+            document.getElementById('purchase-modal').classList.remove('active');
+            currentProductData = null;
+        }
+        
+        function decreaseQuantity() {
+            const display = document.getElementById('purchase-quantity');
+            const current = parseInt(display.textContent);
+            if (current > 1) {
+                display.textContent = current - 1;
+                updateOrderSummary();
+            }
+        }
+        
+        function increaseQuantity() {
+            const display = document.getElementById('purchase-quantity');
+            const current = parseInt(display.textContent);
+            const available = currentProductData.available_quantity || currentProductData.available || 999;
+            if (current < available) {
+                display.textContent = current + 1;
+                updateOrderSummary();
+            }
+        }
+        
+        function updateOrderSummary() {
+            const quantity = parseInt(document.getElementById('purchase-quantity').textContent);
+            const salePrice = currentProductData.sale_price || currentProductData.salePrice || 0;
+            const total = salePrice * quantity;
+            document.getElementById('summary-quantity').textContent = quantity;
+            document.getElementById('summary-total').textContent = `€${total.toFixed(2)}`;
+        }
+        
+        async function submitOrder() {
+            const name = document.getElementById('customer-name').value;
+            const phone = document.getElementById('customer-phone').value;
+            const email = document.getElementById('customer-email').value;
+            const pickupTime = document.getElementById('pickup-time').value;
+            const specialInstructions = document.getElementById('special-instructions').value;
+            const quantity = parseInt(document.getElementById('purchase-quantity').textContent);
+            
+            if (!name || !phone || !email || !pickupTime) {
+                alert('Please fill in all required fields');
+                return;
+            }
+            
+            // Handle both Supabase and sample data structure
+            const productId = currentProductData.id;
+            const productName = currentProductData.name || currentProductData.title || 'Product';
+            const unitPrice = currentProductData.sale_price || currentProductData.salePrice || 0;
+            const totalPrice = unitPrice * quantity;
+            
+            // If Supabase is configured, submit order to database
+            if (SUPABASE_URL !== 'YOUR_SUPABASE_URL' && SUPABASE_ANON_KEY !== 'YOUR_SUPABASE_ANON_KEY') {
+                try {
+                    const orderData = {
+                        order_number: 'ORD-' + Date.now(),
+                        user_id: USER_ID,
+                        product_id: productId,
+                        customer_name: name,
+                        customer_phone: phone,
+                        customer_email: email,
+                        quantity: quantity,
+                        unit_price: unitPrice,
+                        total_price: totalPrice,
+                        pickup_time: pickupTime,
+                        special_instructions: specialInstructions,
+                        status: 'preparing'
+                    };
+                    
+                    const response = await fetch(`${SUPABASE_URL}/rest/v1/shop_orders`, {
+                        method: 'POST',
+                        headers: {
+                            'apikey': SUPABASE_ANON_KEY,
+                            'Authorization': `Bearer ${SUPABASE_ANON_KEY}`,
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify(orderData)
+                    });
+                    
+                    if (response.ok) {
+                        alert(`Order submitted successfully!\n\nOrder Number: ${orderData.order_number}\nProduct: ${productName}\nQuantity: ${quantity}\nTotal: €${totalPrice.toFixed(2)}\n\nYou will receive a confirmation email shortly.`);
+                    } else {
+                        throw new Error('Failed to submit order');
+                    }
+                } catch (error) {
+                    console.error('Error submitting order:', error);
+                    alert(`Order submitted! (Demo mode)\n\nProduct: ${productName}\nQuantity: ${quantity}\nTotal: €${totalPrice.toFixed(2)}\n\nThis would redirect to Stripe payment in production.`);
+                }
+            } else {
+                // Demo mode - show order details
+                alert(`Order submitted! (Demo mode)\n\nProduct: ${productName}\nQuantity: ${quantity}\nTotal: €${totalPrice.toFixed(2)}\n\nThis would redirect to Stripe payment in production.\n\nConfigure Supabase credentials to enable real order processing.`);
+            }
+            
+            closePurchaseModal();
+        }
+        
+        // ============================================
+        // � LANGUAGE TRANSLATION SYSTEM
+        // ============================================
+        
+        const translations = {
+            'en': {
+                noItems: 'No Items Yet',
+                checkLater: 'Check back later for updates and special offers!',
+                updatesTab: 'Updates',
+                productsTab: 'Products',
+                allTab: 'All',
+                fontSize: 'Font Size',
+                language: 'Language',
+                loading: 'Loading...',
+                errorLoading: 'Failed to load items. Please check your connection.',
+                buyNow: 'Buy Now',
+                orderNow: 'Order Now',
+                quantity: 'Quantity:',
+                pickupTime: 'Pickup Time:',
+                customerInfo: 'Customer Information',
+                fullName: 'Full Name',
+                phone: 'Phone',
+                email: 'Email',
+                specialInstructions: 'Special Instructions',
+                placeOrder: 'Place Order',
+                orderSuccess: 'Order submitted successfully!',
+                orderDemo: '(Demo mode - configure Supabase to enable real order processing)',
+                close: 'Close'
+            },
+            'nl': {
+                noItems: 'Nog artikelen beschikbaar',
+                checkLater: 'Kom later terug voor updates en speciale aanbiedingen!',
+                updatesTab: 'Updates',
+                productsTab: 'Producten',
+                allTab: 'Alles',
+                fontSize: 'Lettergrootte',
+                language: 'Taal',
+                loading: 'Laden...',
+                errorLoading: 'Kan artikelen niet laden. Controleer uw verbinding.',
+                buyNow: 'Koop Nu',
+                orderNow: 'Bestel Nu',
+                quantity: 'Hoeveelheid:',
+                pickupTime: 'Ophaaltijd:',
+                customerInfo: 'Klantinformatie',
+                fullName: 'Volledige Naam',
+                phone: 'Telefoon',
+                email: 'E-mail',
+                specialInstructions: 'Speciale Instructies',
+                placeOrder: 'Bestel Plaatsen',
+                orderSuccess: 'Bestel succesvol ingediend!',
+                orderDemo: '(Demo modus - configureer Supabase om echte bestelverwerking in te schakelen)',
+                close: 'Sluiten'
+            },
+            'af': {
+                noItems: 'Geen items beskikbaar nie',
+                checkLater: 'Kyk later terug vir opdaterings en spesiale aanbiedinge!',
+                updatesTab: 'Opdaterings',
+                productsTab: 'Produkte',
+                allTab: 'Alles',
+                fontSize: 'Font Grootte',
+                language: 'Taal',
+                loading: 'Laai...',
+                errorLoading: 'Kan nie items laai nie. Kyk u verbinding.',
+                buyNow: 'Koop Nou',
+                orderNow: 'Bestel Nou',
+                quantity: 'Hoeveelheid:',
+                pickupTime: 'Tyd:',
+                customerInfo: 'Klientinformasie',
+                fullName: 'Volle Naam',
+                phone: 'Telefoon',
+                email: 'E-pos',
+                specialInstructions: 'Spesiale Instruksies',
+                placeOrder: 'Plaas Bestelling',
+                orderSuccess: 'Bestel suksesvol ingedien!',
+                orderDemo: '(Demo modus - stel Supabase in staat om egte bestelverwerking te aktiveer)',
+                close: 'Maak toe'
+            }
+        };
+        
+        // Get current language or default to English
+        const savedLang = localStorage.getItem('wallLanguage') || 'en';
+        
+        // Language switcher function
+        function switchLanguage(lang) {
+            console.log('Switching to language:', lang);
+            localStorage.setItem('wallLanguage', lang);
+            updatePageLanguage();
+            
+            // Update language selector
+            const langSelector = document.getElementById('language-selector');
+            if (langSelector) {
+                langSelector.value = lang;
+                console.log('Language selector updated to:', lang);
+            }
+        }
+        
+        // Update page content with selected language
+        function updatePageLanguage() {
+            const t = translations[savedLang];
+            
+            // Update static text elements
+            const elements = {
+                noItemsText: document.getElementById('empty-state-text'),
+                checkLaterText: document.getElementById('check-later-text'),
+                updatesTab: document.querySelector('[data-tab="updates"]'),
+                productsTab: document.querySelector('[data-tab="products"]'),
+                allTab: document.querySelector('[data-tab="all"]'),
+                fontSizeBtn: document.getElementById('font-size-toggle'),
+                languageBtn: document.getElementById('language-toggle'),
+                loadingText: document.getElementById('loading-text'),
+                errorText: document.getElementById('error-text')
+            };
+            
+            // Update all translatable elements
+            Object.keys(elements).forEach(key => {
+                if (elements[key] && t[key]) {
+                    elements[key].textContent = t[key];
+                }
+            });
+            
+            // Update tab labels
+            if (elements.updatesTab) elements.updatesTab.textContent = t.updatesTab;
+            if (elements.productsTab) elements.productsTab.textContent = t.productsTab;
+            if (elements.allTab) elements.allTab.textContent = t.allTab;
+            
+            // Update button labels
+            if (elements.fontSizeBtn) {
+                elements.fontSizeBtn.innerHTML = `
+                    <button class="btn-decrease" onclick="decreaseFontSize()">�</button>
+                    <span>${t.fontSize}</span>
+                    <button class="btn-increase" onclick="increaseFontSize()">🔠</button>
+                `;
+            }
+            
+            // Update loading/error states
+            if (elements.loadingText) elements.loadingText.textContent = t.loading;
+            if (elements.errorText) elements.errorText.textContent = t.errorLoading;
+            
+            console.log('Language updated to:', savedLang);
+            
+            // Add event listeners for font size buttons
+            if (elements.fontSizeBtn) {
+                elements.fontSizeBtn.addEventListener('click', () => {
+                    increaseFontSize();
+                });
+            }
+            
+            if (elements.fontSizeBtn) {
+                const decreaseBtn = elements.fontSizeBtn.querySelector('.btn-decrease');
+                const increaseBtn = elements.fontSizeBtn.querySelector('.btn-increase');
+                
+                if (decreaseBtn) {
+                    decreaseBtn.addEventListener('click', () => {
+                        decreaseFontSize();
+                    });
+                }
+                
+                if (increaseBtn) {
+                    increaseBtn.addEventListener('click', () => {
+                        increaseFontSize();
+                    });
+                }
+            }
+            
+            // Update language selector
+            const langSelector = document.getElementById('language-selector');
+            if (langSelector) {
+                langSelector.addEventListener('change', (e) => {
+                    switchLanguage(e.target.value);
+                });
+            }
+        }
+        
+        // Add language selector to top bar
+        function addLanguageSelector() {
+            const topBar = document.querySelector('.top-bar');
+            if (topBar) {
+                const langSelector = document.createElement('select');
+                langSelector.id = 'language-selector';
+                langSelector.style.cssText = `
+                    margin-left: 1rem;
+                    padding: 0.5rem;
+                    border-radius: 6px;
+                    border: 1px solid var(--border-color);
+                    background: white;
+                `;
+                
+                langSelector.innerHTML = `
+                    <option value="en">🇺🇸 English</option>
+                    <option value="nl">🇳🇱 Nederlands</option>
+                    <option value="af">🇿🇦 Afrikaans</option>
+                `;
+                
+                langSelector.addEventListener('change', (e) => {
+                    switchLanguage(e.target.value);
+                });
+                
+                topBar.appendChild(langSelector);
+            }
+        }
+        // ============================================
+        // 🔍 ACCESSIBILITY HELPERS
+        // ============================================
+        
+        // Font size control for accessibility
+        const fontLevels = ['font-small', '', 'font-large', 'font-xlarge'];
+        
+        function increaseFontSize() {
+            const currentLevel = parseInt(localStorage.getItem('wallFontLevel')) || 0;
+            if (currentLevel < fontLevels.length - 1) {
+                const newLevel = currentLevel + 1;
+                localStorage.setItem('wallFontLevel', newLevel);
+                applyFontSize();
+                showNotification('Text size increased', 'success');
+            }
+        }
+        
+        function decreaseFontSize() {
+            const currentLevel = parseInt(localStorage.getItem('wallFontLevel')) || 0;
+            if (currentLevel > 0) {
+                const newLevel = currentLevel - 1;
+                localStorage.setItem('wallFontLevel', newLevel);
+                applyFontSize();
+                showNotification('Text size decreased', 'success');
+            }
+        }
+        
+        function resetFontSize() {
+            localStorage.setItem('wallFontLevel', 0);
+            applyFontSize();
+            showNotification('Text size reset to default', 'info');
+        }
+        
+        function applyFontSize() {
+            const level = parseInt(localStorage.getItem('wallFontLevel')) || 0;
+            const body = document.body;
+            
+            // Remove all font size classes
+            fontLevels.forEach(font => body.classList.remove(font));
+            
+            // Add current font size class
+            if (level >= 0 && level < fontLevels.length) {
+                body.classList.add(fontLevels[level]);
+            }
+        }
+        
+        function showNotification(message, type = 'info') {
+            const notification = document.createElement('div');
+            notification.style.cssText = `
+                position: fixed;
+                top: 2rem;
+                right: 2rem;
+                background: var(--primary);
+                color: white;
+                padding: 1rem 1.5rem;
+                border-radius: 8px;
+                box-shadow: var(--shadow-lg);
+                z-index: 1000;
+                animation: slideIn 0.3s ease-out;
+            `;
+            
+            notification.innerHTML = `
+                <div style="font-weight: 600; margin-bottom: 0.25rem;">${message}</div>
+                <button onclick="this.parentElement.remove(this)" style="background: rgba(255,255,255,0.2); border: none; color: white; padding: 0.5rem 1rem; margin-left: 0.5rem; border-radius: 4px; cursor: pointer;">✕</button>
+            `;
+            
+            document.body.appendChild(notification);
+            
+            setTimeout(() => {
+                notification.style.animation = 'slideOut 0.3s ease-out';
+                setTimeout(() => {
+                    if (notification.parentElement) {
+                        notification.parentElement.removeChild(notification);
+                    }
+                }, 300);
+            }, 300);
+        }
+        
+        // ============================================
+        // 🎬 INITIALIZATION
+        // ============================================
+        
+        document.addEventListener('DOMContentLoaded', () => {
+            console.log('Broadcast wall loaded');
+            console.log('User ID:', USER_ID);
+            console.log('Supabase configured:', SUPABASE_URL !== 'YOUR_SUPABASE_URL');
+            
+            // Initialize language system
+            updatePageLanguage();
+            addLanguageSelector();
+            
+            // Load items if Supabase is configured
+            if (SUPABASE_URL !== 'YOUR_SUPABASE_URL' && SUPABASE_ANON_KEY !== 'YOUR_SUPABASE_ANON_KEY') {
+                console.log('Loading items from Supabase...');
+                console.log('User ID:', USER_ID);
+                console.log('Supabase URL:', SUPABASE_URL);
+                loadItems();
+            } else {
+                console.log('Using sample data - Supabase not configured');
+                loadSampleData();
+            }
+            
+            // Apply saved preferences
+            applyFontSize();
+            
+            // Set initial language
+            const langSelector = document.getElementById('language-selector');
+            if (langSelector) {
+                const savedLang = localStorage.getItem('wallLanguage') || 'en';
+                langSelector.value = savedLang;
+                switchLanguage(savedLang);
+            }
+            
+            if (currentLang !== 'en') {
+                const langInfo = {
+                    'af': { flag: '🇿🇦', name: 'Afrikaans' },
+                    'nl': { flag: '🇳🇱', name: 'Nederlands' }
+                };
+                
+                if (langInfo[currentLang]) {
+                    const langBtn = document.getElementById('language-toggle');
+                    if (langBtn) {
+                        langBtn.innerHTML = `<span>${langInfo[currentLang].flag}</span><span>${langInfo[currentLang].name}</span>`;
+                    }
+                }
+            }
+            
+            document.documentElement.lang = currentLang;
+        });
+        
+        // Close language menu when clicking outside
+        document.addEventListener('click', function(event) {
+            const langSelector = document.querySelector('.lang-selector');
+            const langMenu = document.getElementById('lang-menu');
+            
+            if (!langSelector.contains(event.target)) {
+                langMenu.classList.remove('active');
+            }
+        });
+        
+        // Close modal when clicking overlay
+        document.getElementById('purchase-modal').addEventListener('click', function(event) {
+            if (event.target === this) {
+                closePurchaseModal();
+            }
+        });
+    </script>
+</body>
+</html>
