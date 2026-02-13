@@ -203,87 +203,128 @@
             color: var(--text-secondary);
             font-size: 0.9rem;
         }
+
+        .language-controls {
+            margin-bottom: 1rem;
+        }
+
+        .language-controls select {
+            padding: 0.5rem;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            font-size: 1rem;
+        }
+
+        .font-controls {
+            margin-top: 0.5rem;
+        }
+
+        .font-btn {
+            padding: 0.25rem 0.5rem;
+            border: none;
+            border-radius: 8px;
+            font-size: 1rem;
+            cursor: pointer;
+        }
+
+        .font-btn:hover {
+            background: var(--primary-light);
+        }
     </style>
 </head>
 <body>
     <div class="registration-container">
+        <!-- Language and Font Controls -->
+        <div class="language-controls">
+            <select id="language-selector" onchange="switchLanguage(this.value)">
+                <option value="en">🇺🇸 English</option>
+                <option value="nl">🇳🇱 Nederlands</option>
+                <option value="af">🇿🇦 Afrikaans</option>
+            </select>
+            <div class="font-controls">
+                <button onclick="decreaseFontSize()" class="font-btn" title="Decrease font size">A-</button>
+                <button onclick="resetFontSize()" class="font-btn" title="Reset font size">A</button>
+                <button onclick="increaseFontSize()" class="font-btn" title="Increase font size">A+</button>
+            </div>
+        </div>
+
         <div class="logo">
-            <h1>XBRCH Admin</h1>
-            <p>Business Registration Portal</p>
+            <h1 data-translate="registration-title">XBRCH Admin</h1>
+            <p data-translate="registration-subtitle">Business Registration Portal</p>
         </div>
 
         <div id="notification" class="notification"></div>
 
         <div class="pricing-info">
-            <h3>🎯 Start Your Free Trial</h3>
-            <p>Get instant access to admin dashboard, broadcast wall, and embeddable widgets for your website.</p>
+            <h3 data-translate="trial-title">🎯 Start Your Free Trial</h3>
+            <p data-translate="trial-description">Get instant access to admin dashboard, broadcast wall, and embeddable widgets for your website.</p>
         </div>
 
         <form id="registrationForm">
             <div class="form-group">
-                <label for="businessName">Business Name *</label>
+                <label for="businessName" data-translate="business-name-label">Business Name *</label>
                 <input type="text" id="businessName" name="businessName" required>
             </div>
 
             <div class="form-group">
-                <label for="businessType">Business Type *</label>
+                <label for="businessType" data-translate="business-type-label">Business Type *</label>
                 <select id="businessType" name="businessType" required>
-                    <option value="">Select business type</option>
-                    <option value="retail">Retail Store</option>
-                    <option value="restaurant">Restaurant</option>
-                    <option value="service">Service Provider</option>
-                    <option value="ecommerce">E-commerce</option>
-                    <option value="other">Other</option>
+                    <option value="" data-translate="select-business-type">Select business type</option>
+                    <option value="retail" data-translate="retail-store">Retail Store</option>
+                    <option value="restaurant" data-translate="restaurant">Restaurant</option>
+                    <option value="service" data-translate="service-provider">Service Provider</option>
+                    <option value="ecommerce" data-translate="ecommerce">E-commerce</option>
+                    <option value="other" data-translate="other">Other</option>
                 </select>
             </div>
 
             <div class="form-group">
-                <label for="website">Website URL</label>
+                <label for="website" data-translate="website-url-label">Website URL</label>
                 <input type="url" id="website" name="website" placeholder="https://yourwebsite.com">
             </div>
 
             <div class="form-group">
-                <label for="contactName">Contact Person *</label>
+                <label for="contactName" data-translate="contact-person-label">Contact Person *</label>
                 <input type="text" id="contactName" name="contactName" required>
             </div>
 
             <div class="form-group">
-                <label for="email">Email Address *</label>
+                <label for="email" data-translate="email-label">Email Address *</label>
                 <input type="email" id="email" name="email" required>
             </div>
 
             <div class="form-group">
-                <label for="phone">Phone Number</label>
+                <label for="phone" data-translate="phone-label">Phone Number</label>
                 <input type="tel" id="phone" name="phone">
             </div>
 
             <div class="form-group">
-                <label for="password">Password *</label>
+                <label for="password" data-translate="password-label">Password *</label>
                 <input type="password" id="password" name="password" required minlength="8">
             </div>
 
             <div class="form-group">
-                <label for="confirmPassword">Confirm Password *</label>
+                <label for="confirmPassword" data-translate="confirm-password-label">Confirm Password *</label>
                 <input type="password" id="confirmPassword" name="confirmPassword" required minlength="8">
             </div>
 
             <div class="form-group">
-                <label for="description">Business Description</label>
-                <textarea id="description" name="description" placeholder="Tell us about your business..."></textarea>
+                <label for="description" data-translate="business-description-label">Business Description</label>
+                <textarea id="description" name="description" data-translate="business-description-placeholder" placeholder="Tell us about your business..."></textarea>
             </div>
 
             <button type="submit" class="btn" id="registerBtn">
-                Create Business Account
+                <span data-translate="create-business-account">Create Business Account</span>
             </button>
 
             <div class="loading" id="loading">
                 <div class="spinner"></div>
-                <p>Creating your account...</p>
+                <p data-translate="creating-account">Creating your account...</p>
             </div>
         </form>
 
         <div class="login-link">
-            <p>Already have an account? <a href="admin-login.html">Sign In</a></p>
+            <p data-translate="already-have-account">Already have an account?</p> <a href="admin-login.html" data-translate="sign-in-link">Sign In</a>
         </div>
     </div>
 
@@ -622,6 +663,178 @@
         // Initialize Supabase
         const { createClient } = supabase;
         const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+        // ============================================
+        // 🌍 TRANSLATION SYSTEM
+        // ============================================
+        
+        const translations = {
+            'en': {
+                'registration-title': 'XBRCH Admin',
+                'registration-subtitle': 'Business Registration Portal',
+                'trial-title': '🎯 Start Your Free Trial',
+                'trial-description': 'Get instant access to admin dashboard, broadcast wall, and embeddable widgets for your website.',
+                'business-name-label': 'Business Name',
+                'business-type-label': 'Business Type',
+                'select-business-type': 'Select business type',
+                'retail-store': 'Retail Store',
+                'restaurant': 'Restaurant',
+                'service-provider': 'Service Provider',
+                'ecommerce': 'E-commerce',
+                'other': 'Other',
+                'website-url-label': 'Website URL',
+                'contact-person-label': 'Contact Person',
+                'email-label': 'Email Address',
+                'phone-label': 'Phone Number',
+                'password-label': 'Password',
+                'confirm-password-label': 'Confirm Password',
+                'business-description-label': 'Business Description',
+                'business-description-placeholder': 'Tell us about your business...',
+                'create-business-account': 'Create Business Account',
+                'creating-account': 'Creating your account...',
+                'already-have-account': 'Already have an account?',
+                'sign-in-link': 'Sign In'
+            },
+            'nl': {
+                'registration-title': 'XBRCH Admin',
+                'registration-subtitle': 'Business Registratie Portaal',
+                'trial-title': '🎯 Start Uw Gratis Proefperiode',
+                'trial-description': 'Krijg direct toegang tot admin dashboard, broadcast wall, en inbedbare widgets voor uw website.',
+                'business-name-label': 'Bedrijfsnaam',
+                'business-type-label': 'Bedrijfstype',
+                'select-business-type': 'Selecteer bedrijfstype',
+                'retail-store': 'Winkel',
+                'restaurant': 'Restaurant',
+                'service-provider': 'Dienstverlener',
+                'ecommerce': 'E-commerce',
+                'other': 'Anders',
+                'website-url-label': 'Website URL',
+                'contact-person-label': 'Contactpersoon',
+                'email-label': 'E-mailadres',
+                'phone-label': 'Telefoonnummer',
+                'password-label': 'Wachtwoord',
+                'confirm-password-label': 'Bevestig Wachtwoord',
+                'business-description-label': 'Bedrijfsbeschrijving',
+                'business-description-placeholder': 'Vertel ons over uw bedrijf...',
+                'create-business-account': 'Maak Bedrijfsaccount',
+                'creating-account': 'Account wordt aangemaakt...',
+                'already-have-account': 'Heeft u al een account?',
+                'sign-in-link': 'Inloggen'
+            },
+            'af': {
+                'registration-title': 'XBRCH Admin',
+                'registration-subtitle': 'Business Registrasie Portaal',
+                'trial-title': '🎯 Begin Jou Gratis Proefperiode',
+                'trial-description': 'Kryg direkte toegang tot admin dashboard, broadcast wall, en inbedbare widgets vir jou webwerf.',
+                'business-name-label': 'Besigheidsnaam',
+                'business-type-label': 'Besigheidstipe',
+                'select-business-type': 'Kies besigheidstipe',
+                'retail-store': 'Winkel',
+                'restaurant': 'Restaurant',
+                'service-provider': 'Diensteverskaffer',
+                'ecommerce': 'E-commerce',
+                'other': 'Ander',
+                'website-url-label': 'Webwerf URL',
+                'contact-person-label': 'Kontakpersoon',
+                'email-label': 'E-posadres',
+                'phone-label': 'Telefoonnommer',
+                'password-label': 'Wagwoord',
+                'confirm-password-label': 'Bevestig Wagwoord',
+                'business-description-label': 'Besigheidsbeskrywing',
+                'business-description-placeholder': 'Vertel ons oor jou besigheid...',
+                'create-business-account': 'Skep Besigheidsrekening',
+                'creating-account': 'Rekening word geskep...',
+                'already-have-account': 'Het jy al n rekening?',
+                'sign-in-link': 'Teken In'
+            }
+        };
+        
+        // Get current language or default to English
+        let currentLang = localStorage.getItem('adminLanguage') || 'en';
+        
+        // Language switcher function
+        function switchLanguage(lang) {
+            currentLang = lang;
+            localStorage.setItem('adminLanguage', lang);
+            updatePageLanguage();
+        }
+        
+        // Update page content with selected language
+        function updatePageLanguage() {
+            const t = translations[currentLang];
+            
+            // Update all elements with data-translate attribute
+            document.querySelectorAll('[data-translate]').forEach(el => {
+                const key = el.getAttribute('data-translate');
+                if (t[key]) {
+                    el.textContent = t[key];
+                }
+            });
+        }
+        
+        // ============================================
+        // 📝 FONT SIZE CONTROLS
+        // ============================================
+        
+        const fontLevels = [
+            { name: 'small', size: '14px' },
+            { name: 'normal', size: '16px' },
+            { name: 'large', size: '18px' },
+            { name: 'extra-large', size: '20px' },
+            { name: 'huge', size: '22px' }
+        ];
+        
+        let currentFontIndex = 1; // Default to normal (16px)
+        
+        function increaseFontSize() {
+            if (currentFontIndex < fontLevels.length - 1) {
+                currentFontIndex++;
+                applyFontSize();
+            }
+        }
+        
+        function decreaseFontSize() {
+            if (currentFontIndex > 0) {
+                currentFontIndex--;
+                applyFontSize();
+            }
+        }
+        
+        function resetFontSize() {
+            currentFontIndex = 1; // Reset to normal
+            applyFontSize();
+        }
+        
+        function applyFontSize() {
+            const fontSize = fontLevels[currentFontIndex].size;
+            document.body.style.fontSize = fontSize;
+            localStorage.setItem('adminFontSize', fontSize);
+        }
+        
+        // Load saved font size
+        function loadSavedFontSize() {
+            const savedSize = localStorage.getItem('adminFontSize');
+            if (savedSize) {
+                document.body.style.fontSize = savedSize;
+                // Find matching font level
+                const level = fontLevels.find(f => f.size === savedSize);
+                if (level) {
+                    currentFontIndex = fontLevels.indexOf(level);
+                }
+            }
+        }
+        
+        // Initialize language and font size on page load
+        document.addEventListener('DOMContentLoaded', () => {
+            // Set language selector to saved language
+            document.getElementById('language-selector').value = currentLang;
+            
+            // Update page language
+            updatePageLanguage();
+            
+            // Load saved font size
+            loadSavedFontSize();
+        });
     </script>
 </body>
 </html>

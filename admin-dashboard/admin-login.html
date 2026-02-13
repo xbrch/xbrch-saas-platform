@@ -192,44 +192,85 @@
         .forgot-password a:hover {
             text-decoration: underline;
         }
+
+        .language-controls {
+            margin-bottom: 1rem;
+        }
+
+        .language-controls select {
+            padding: 0.5rem;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            font-size: 1rem;
+        }
+
+        .font-controls {
+            margin-top: 0.5rem;
+        }
+
+        .font-btn {
+            padding: 0.25rem 0.5rem;
+            border: none;
+            border-radius: 8px;
+            font-size: 1rem;
+            cursor: pointer;
+        }
+
+        .font-btn:hover {
+            background: var(--primary-light);
+        }
     </style>
 </head>
 <body>
     <div class="login-container">
-        <div class="logo">
-            <h1>XBRCH Admin</h1>
-            <p>Business Dashboard Login</p>
+        <!-- Language and Font Controls -->
+        <div class="language-controls">
+            <select id="language-selector" onchange="switchLanguage(this.value)">
+                <option value="en">🇺🇸 English</option>
+                <option value="nl">🇳🇱 Nederlands</option>
+                <option value="af">🇿🇦 Afrikaans</option>
+            </select>
+            <div class="font-controls">
+                <button onclick="decreaseFontSize()" class="font-btn" title="Decrease font size">A-</button>
+                <button onclick="resetFontSize()" class="font-btn" title="Reset font size">A</button>
+                <button onclick="increaseFontSize()" class="font-btn" title="Increase font size">A+</button>
+            </div>
+        </div>
+
+        <div class="login-header">
+            <h1 data-translate="login-title">XBRCH Admin</h1>
+            <p data-translate="login-subtitle">Business Dashboard Login</p>
         </div>
 
         <div id="notification" class="notification"></div>
 
         <form id="loginForm">
             <div class="form-group">
-                <label for="email">Email Address</label>
+                <label for="email" data-translate="email-label">Email Address</label>
                 <input type="email" id="email" name="email" required>
             </div>
 
             <div class="form-group">
-                <label for="password">Password</label>
+                <label for="password" data-translate="password-label">Password</label>
                 <input type="password" id="password" name="password" required>
             </div>
 
             <div class="forgot-password">
-                <a href="#" onclick="handleForgotPassword()">Forgot password?</a>
+                <a href="#" onclick="handleForgotPassword()" data-translate="forgot-password">Forgot password?</a>
             </div>
 
             <button type="submit" class="btn" id="loginBtn">
-                Sign In
+                <span data-translate="sign-in">Sign In</span>
             </button>
 
             <div class="loading" id="loading">
                 <div class="spinner"></div>
-                <p>Signing in...</p>
+                <p data-translate="signing-in">Signing in...</p>
             </div>
         </form>
 
         <div class="register-link">
-            <p>Don't have an account? <a href="admin-registration.html">Register Your Business</a></p>
+            <p data-translate="no-account">Don't have an account?</p> <a href="admin-registration.html" data-translate="register-business">Register Your Business</a>
         </div>
     </div>
 
@@ -424,6 +465,133 @@
             if (session) {
                 window.location.href = `admin-dashboard.html?userId=${session.user.id}`;
             }
+        });
+
+        // ============================================
+        // 🌍 TRANSLATION SYSTEM
+        // ============================================
+        
+        const translations = {
+            'en': {
+                'login-title': 'XBRCH Admin',
+                'login-subtitle': 'Business Dashboard Login',
+                'email-label': 'Email Address',
+                'password-label': 'Password',
+                'forgot-password': 'Forgot password?',
+                'sign-in': 'Sign In',
+                'signing-in': 'Signing in...',
+                'no-account': "Don't have an account?",
+                'register-business': 'Register Your Business'
+            },
+            'nl': {
+                'login-title': 'XBRCH Admin',
+                'login-subtitle': 'Business Dashboard Inloggen',
+                'email-label': 'E-mailadres',
+                'password-label': 'Wachtwoord',
+                'forgot-password': 'Wachtwoord vergeten?',
+                'sign-in': 'Inloggen',
+                'signing-in': 'Inloggen...',
+                'no-account': 'Heeft u geen account?',
+                'register-business': 'Registreer uw Bedrijf'
+            },
+            'af': {
+                'login-title': 'XBRCH Admin',
+                'login-subtitle': 'Business Dashboard Teken In',
+                'email-label': 'E-posadres',
+                'password-label': 'Wagwoord',
+                'forgot-password': 'Wagwoord vergeet?',
+                'sign-in': 'Teken In',
+                'signing-in': 'Teken in...',
+                'no-account': 'Heeft u nie n rekening nie?',
+                'register-business': 'Registreer jou Besigheid'
+            }
+        };
+        
+        // Get current language or default to English
+        let currentLang = localStorage.getItem('adminLanguage') || 'en';
+        
+        // Language switcher function
+        function switchLanguage(lang) {
+            currentLang = lang;
+            localStorage.setItem('adminLanguage', lang);
+            updatePageLanguage();
+        }
+        
+        // Update page content with selected language
+        function updatePageLanguage() {
+            const t = translations[currentLang];
+            
+            // Update all elements with data-translate attribute
+            document.querySelectorAll('[data-translate]').forEach(el => {
+                const key = el.getAttribute('data-translate');
+                if (t[key]) {
+                    el.textContent = t[key];
+                }
+            });
+        }
+        
+        // ============================================
+        // 📝 FONT SIZE CONTROLS
+        // ============================================
+        
+        const fontLevels = [
+            { name: 'small', size: '14px' },
+            { name: 'normal', size: '16px' },
+            { name: 'large', size: '18px' },
+            { name: 'extra-large', size: '20px' },
+            { name: 'huge', size: '22px' }
+        ];
+        
+        let currentFontIndex = 1; // Default to normal (16px)
+        
+        function increaseFontSize() {
+            if (currentFontIndex < fontLevels.length - 1) {
+                currentFontIndex++;
+                applyFontSize();
+            }
+        }
+        
+        function decreaseFontSize() {
+            if (currentFontIndex > 0) {
+                currentFontIndex--;
+                applyFontSize();
+            }
+        }
+        
+        function resetFontSize() {
+            currentFontIndex = 1; // Reset to normal
+            applyFontSize();
+        }
+        
+        function applyFontSize() {
+            const fontSize = fontLevels[currentFontIndex].size;
+            document.body.style.fontSize = fontSize;
+            localStorage.setItem('adminFontSize', fontSize);
+        }
+        
+        // Load saved font size
+        function loadSavedFontSize() {
+            const savedSize = localStorage.getItem('adminFontSize');
+            if (savedSize) {
+                document.body.style.fontSize = savedSize;
+                // Find matching font level
+                const level = fontLevels.find(f => f.size === savedSize);
+                if (level) {
+                    currentFontIndex = fontLevels.indexOf(level);
+                }
+            }
+        }
+        
+        // Initialize language and font size on page load
+        document.addEventListener('DOMContentLoaded', () => {
+            // Set language selector to saved language
+            document.getElementById('language-selector').value = currentLang;
+            
+            // Update page language
+            updatePageLanguage();
+            
+            // Load saved font size
+            loadSavedFontSize();
         });
     </script>
 </body>
