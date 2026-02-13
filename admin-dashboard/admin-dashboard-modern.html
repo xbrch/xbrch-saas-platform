@@ -1,0 +1,1118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Expires" content="0">
+    <title>XBRCH Admin Dashboard</title>
+    <style>
+        /* ============================================
+           🎨 2026 MODERN DESIGN SYSTEM
+           ============================================ */
+        :root {
+            /* Modern Color Palette */
+            --primary: #6366f1;              /* Modern purple */
+            --primary-dark: #4c1d95;         /* Deep purple */
+            --primary-light: #8b5cf6;         /* Light purple */
+            --secondary: #06b6d4;            /* Cyan accent */
+            --accent: #f59e0b;              /* Orange accent */
+            --success: #10b981;              /* Emerald green */
+            --warning: #f59e0b;              /* Amber */
+            --danger: #ef4444;               /* Red */
+            
+            /* Neutral Colors */
+            --background: #ffffff;            /* Pure white */
+            --surface: #f8fafc;              /* Off-white */
+            --surface-2: #f1f5f9;           /* Light gray */
+            --border: #e2e8f0;              /* Light border */
+            --border-light: #f1f5f9;          /* Very light border */
+            
+            /* Text Colors */
+            --text-primary: #1e293b;          /* Dark slate */
+            --text-secondary: #64748b;        /* Medium gray */
+            --text-muted: #94a3b8;           /* Light gray */
+            --text-inverse: #ffffff;           /* White text */
+            
+            /* Shadows */
+            --shadow-xs: 0 1px 2px rgba(0,0,0,0.05);
+            --shadow-sm: 0 1px 3px rgba(0,0,0,0.1), 0 1px 2px rgba(0,0,0,0.06);
+            --shadow-md: 0 4px 6px rgba(0,0,0,0.07), 0 4px 6px rgba(0,0,0,0.1);
+            --shadow-lg: 0 10px 15px rgba(0,0,0,0.1), 0 10px 15px rgba(0,0,0,0.15);
+            --shadow-xl: 0 20px 25px rgba(0,0,0,0.15), 0 20px 25px rgba(0,0,0,0.2);
+            
+            /* Gradients */
+            --gradient-primary: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+            --gradient-surface: linear-gradient(135deg, var(--surface) 0%, var(--surface-2) 100%);
+            --gradient-accent: linear-gradient(135deg, var(--accent) 0%, var(--warning) 100%);
+            
+            /* Spacing */
+            --space-1: 0.25rem;
+            --space-2: 0.5rem;
+            --space-3: 0.75rem;
+            --space-4: 1rem;
+            --space-5: 1.25rem;
+            --space-6: 1.5rem;
+            --space-8: 2rem;
+            --space-12: 3rem;
+            --space-16: 4rem;
+            --space-20: 5rem;
+            
+            /* Border Radius */
+            --radius-xs: 4px;
+            --radius-sm: 6px;
+            --radius-md: 8px;
+            --radius-lg: 12px;
+            --radius-xl: 16px;
+            --radius-2xl: 20px;
+            --radius-3xl: 24px;
+            
+            /* Typography */
+            --font-sans: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', 'Helvetica Neue', sans-serif;
+            --font-mono: 'SF Mono', 'Monaco', 'Inconsolata', 'Roboto Mono', 'Source Code Pro', monospace;
+            --font-size-xs: 0.75rem;
+            --font-size-sm: 0.875rem;
+            --font-size-base: 1rem;
+            --font-size-lg: 1.125rem;
+            --font-size-xl: 1.25rem;
+            --font-size-2xl: 1.5rem;
+            --font-size-3xl: 1.875rem;
+            --font-size-4xl: 2.25rem;
+            
+            /* Line Heights */
+            --leading-tight: 1.25;
+            --leading-normal: 1.5;
+            --leading-relaxed: 1.75;
+            
+            /* Transitions */
+            --transition-fast: 150ms cubic-bezier(0.4, 0, 0.2, 1);
+            --transition-base: 200ms cubic-bezier(0.4, 0, 0.2, 1);
+            --transition-slow: 300ms cubic-bezier(0.4, 0, 0.2, 1);
+            
+            /* Z-Index */
+            --z-dropdown: 1000;
+            --z-sticky: 1020;
+            --z-fixed: 1030;
+            --z-modal-backdrop: 1040;
+            --z-modal: 1050;
+            --z-popover: 1060;
+            --z-tooltip: 1070;
+            --z-toast: 1080;
+        }
+
+        /* ============================================
+           📱 MODERN RESET & BASE
+           ============================================ */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        *::before,
+        *::after {
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+            -webkit-text-size-adjust: 100%;
+            -moz-text-size-adjust: 100%;
+            text-size-adjust: 100%;
+        }
+
+        body {
+            font-family: var(--font-sans);
+            font-size: var(--font-size-base);
+            line-height: var(--leading-normal);
+            color: var(--text-primary);
+            background: var(--background);
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+            font-feature-settings: 'cv02', 'cv03', 'cv04', 'cv11';
+        }
+
+        /* ============================================
+           🎨 MODERN LAYOUT SYSTEM
+           ============================================ */
+        .app-container {
+            display: grid;
+            grid-template-columns: 280px 1fr;
+            min-height: 100vh;
+            background: var(--background);
+        }
+
+        .sidebar {
+            background: var(--gradient-surface);
+            border-right: 1px solid var(--border);
+            display: flex;
+            flex-direction: column;
+            position: relative;
+            overflow: hidden;
+            transition: var(--transition-base);
+        }
+
+        .sidebar-header {
+            padding: var(--space-6);
+            border-bottom: 1px solid var(--border);
+            background: var(--background);
+            position: relative;
+            z-index: var(--z-sticky);
+        }
+
+        .sidebar-brand {
+            display: flex;
+            align-items: center;
+            gap: var(--space-3);
+            padding: var(--space-4) var(--space-6);
+        }
+
+        .brand-logo {
+            width: 32px;
+            height: 32px;
+            background: var(--gradient-primary);
+            border-radius: var(--radius-md);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            color: var(--text-inverse);
+            font-size: var(--font-size-sm);
+            font-weight: 600;
+        }
+
+        .brand-text {
+            font-size: var(--font-size-lg);
+            font-weight: 700;
+            background: var(--gradient-primary);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            color: transparent;
+            letter-spacing: -0.025em;
+        }
+
+        .sidebar-nav {
+            flex: 1;
+            overflow-y: auto;
+            padding: var(--space-4) 0;
+        }
+
+        .nav-section {
+            margin-bottom: var(--space-6);
+        }
+
+        .nav-section-title {
+            font-size: var(--font-size-xs);
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: var(--text-muted);
+            padding: var(--space-2) var(--space-4);
+            margin-bottom: var(--space-2);
+        }
+
+        .nav-item {
+            display: flex;
+            align-items: center;
+            gap: var(--space-3);
+            padding: var(--space-3) var(--space-4);
+            color: var(--text-secondary);
+            text-decoration: none;
+            border-radius: var(--radius-md);
+            transition: var(--transition-fast);
+            position: relative;
+            font-weight: 500;
+        }
+
+        .nav-item:hover {
+            background: var(--surface);
+            color: var(--text-primary);
+            transform: translateX(4px);
+        }
+
+        .nav-item.active {
+            background: var(--primary);
+            color: var(--text-inverse);
+            box-shadow: var(--shadow-sm);
+        }
+
+        .nav-icon {
+            width: 20px;
+            height: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: var(--font-size-sm);
+        }
+
+        .nav-text {
+            font-size: var(--font-size-sm);
+            font-weight: 500;
+        }
+
+        .main-content {
+            display: flex;
+            flex-direction: column;
+            background: var(--surface);
+            overflow: hidden;
+            position: relative;
+        }
+
+        .top-bar {
+            background: var(--background);
+            border-bottom: 1px solid var(--border);
+            padding: var(--space-4) var(--space-6);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            position: sticky;
+            top: 0;
+            z-index: var(--z-sticky);
+            backdrop-filter: blur(8px);
+            background: rgba(255, 255, 255, 0.8);
+            border-bottom: 1px solid var(--border-light);
+        }
+
+        .search-container {
+            flex: 1;
+            max-width: 400px;
+            position: relative;
+        }
+
+        .search-input {
+            width: 100%;
+            padding: var(--space-3) var(--space-4) var(--space-3) 44px;
+            border: 2px solid var(--border);
+            border-radius: var(--radius-xl);
+            background: var(--background);
+            font-size: var(--font-size-base);
+            transition: var(--transition-base);
+            font-family: var(--font-sans);
+        }
+
+        .search-input:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1);
+        }
+
+        .top-bar-actions {
+            display: flex;
+            align-items: center;
+            gap: var(--space-3);
+        }
+
+        .content-area {
+            flex: 1;
+            padding: var(--space-8);
+            overflow-y: auto;
+            background: var(--background);
+        }
+
+        .page-header {
+            margin-bottom: var(--space-8);
+        }
+
+        .page-title {
+            font-size: var(--font-size-3xl);
+            font-weight: 700;
+            color: var(--text-primary);
+            margin-bottom: var(--space-2);
+            letter-spacing: -0.025em;
+        }
+
+        .page-subtitle {
+            font-size: var(--font-size-lg);
+            color: var(--text-secondary);
+            font-weight: 400;
+        }
+
+        /* ============================================
+           🎨 MODERN CARD SYSTEM
+           ============================================ */
+        .card-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: var(--space-6);
+            margin-bottom: var(--space-8);
+        }
+
+        .card {
+            background: var(--background);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-xl);
+            box-shadow: var(--shadow-sm);
+            transition: var(--transition-base);
+            overflow: hidden;
+            position: relative;
+        }
+
+        .card:hover {
+            box-shadow: var(--shadow-md);
+            transform: translateY(-2px);
+        }
+
+        .card-header {
+            padding: var(--space-6);
+            border-bottom: 1px solid var(--border-light);
+            background: var(--surface);
+        }
+
+        .card-title {
+            font-size: var(--font-size-xl);
+            font-weight: 600;
+            color: var(--text-primary);
+            display: flex;
+            align-items: center;
+            gap: var(--space-3);
+        }
+
+        .card-actions {
+            display: flex;
+            gap: var(--space-2);
+        }
+
+        .card-body {
+            padding: var(--space-6);
+        }
+
+        /* ============================================
+           🎨 MODERN BUTTON SYSTEM
+           ============================================ */
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: var(--space-2);
+            padding: var(--space-3) var(--space-6);
+            font-family: var(--font-sans);
+            font-size: var(--font-size-sm);
+            font-weight: 500;
+            line-height: 1;
+            text-decoration: none;
+            border: none;
+            border-radius: var(--radius-md);
+            cursor: pointer;
+            transition: var(--transition-fast);
+            position: relative;
+            overflow: hidden;
+            white-space: nowrap;
+        }
+
+        .btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(45deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+            transform: translateX(-100%);
+            transition: var(--transition-fast);
+        }
+
+        .btn:hover::before {
+            transform: translateX(0);
+        }
+
+        .btn-primary {
+            background: var(--gradient-primary);
+            color: var(--text-inverse);
+            box-shadow: var(--shadow-sm);
+        }
+
+        .btn-secondary {
+            background: var(--surface);
+            color: var(--text-primary);
+            border: 1px solid var(--border);
+        }
+
+        .btn-secondary:hover {
+            background: var(--surface-2);
+            border-color: var(--primary);
+        }
+
+        .btn-accent {
+            background: var(--gradient-accent);
+            color: var(--text-inverse);
+        }
+
+        .btn-ghost {
+            background: transparent;
+            color: var(--text-primary);
+            border: 1px solid var(--border);
+        }
+
+        .btn-ghost:hover {
+            background: var(--surface);
+            border-color: var(--primary);
+        }
+
+        .btn-sm {
+            padding: var(--space-2) var(--space-4);
+            font-size: var(--font-size-xs);
+        }
+
+        .btn-lg {
+            padding: var(--space-4) var(--space-8);
+            font-size: var(--font-size-lg);
+        }
+
+        .btn-icon {
+            width: 16px;
+            height: 16px;
+        }
+
+        /* ============================================
+           🎨 MODERN FORM SYSTEM
+           ============================================ */
+        .form-group {
+            margin-bottom: var(--space-6);
+        }
+
+        .form-label {
+            display: block;
+            font-size: var(--font-size-sm);
+            font-weight: 500;
+            color: var(--text-primary);
+            margin-bottom: var(--space-2);
+        }
+
+        .form-input,
+        .form-select,
+        .form-textarea {
+            width: 100%;
+            padding: var(--space-3) var(--space-4);
+            border: 2px solid var(--border);
+            border-radius: var(--radius-md);
+            background: var(--background);
+            font-size: var(--font-size-base);
+            font-family: var(--font-sans);
+            transition: var(--transition-base);
+        }
+
+        .form-input:focus,
+        .form-select:focus,
+        .form-textarea:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1);
+        }
+
+        .form-textarea {
+            resize: vertical;
+            min-height: 100px;
+        }
+
+        /* ============================================
+           🎨 MODERN STATS SYSTEM
+           ============================================ */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            gap: var(--space-6);
+            margin-bottom: var(--space-8);
+        }
+
+        .stat-card {
+            background: var(--background);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-xl);
+            padding: var(--space-6);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .stat-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: var(--gradient-primary);
+            opacity: 0.1;
+        }
+
+        .stat-icon {
+            width: 48px;
+            height: 48px;
+            background: var(--gradient-primary);
+            border-radius: var(--radius-lg);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--text-inverse);
+            font-size: var(--font-size-lg);
+            margin-bottom: var(--space-4);
+        }
+
+        .stat-value {
+            font-size: var(--font-size-3xl);
+            font-weight: 700;
+            color: var(--text-primary);
+            margin-bottom: var(--space-1);
+        }
+
+        .stat-label {
+            font-size: var(--font-size-sm);
+            color: var(--text-secondary);
+            font-weight: 500;
+        }
+
+        .stat-change {
+            display: inline-flex;
+            align-items: center;
+            gap: var(--space-1);
+            font-size: var(--font-size-xs);
+            padding: var(--space-1) var(--space-2);
+            border-radius: var(--radius-sm);
+        }
+
+        .stat-change.positive {
+            background: rgba(16, 185, 129, 0.1);
+            color: var(--success);
+        }
+
+        .stat-change.negative {
+            background: rgba(239, 68, 68, 0.1);
+            color: var(--danger);
+        }
+
+        /* ============================================
+           🎨 MODERN TABLE SYSTEM
+           ============================================ */
+        .table-container {
+            background: var(--background);
+            border-radius: var(--radius-xl);
+            overflow: hidden;
+            box-shadow: var(--shadow-sm);
+        }
+
+        .modern-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: var(--font-size-sm);
+        }
+
+        .modern-table th {
+            background: var(--surface);
+            padding: var(--space-4);
+            text-align: left;
+            font-weight: 600;
+            color: var(--text-primary);
+            border-bottom: 2px solid var(--border);
+            font-size: var(--font-size-xs);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .modern-table td {
+            padding: var(--space-4);
+            border-bottom: 1px solid var(--border-light);
+            color: var(--text-secondary);
+        }
+
+        .modern-table tr:hover {
+            background: var(--surface);
+        }
+
+        /* ============================================
+           🎨 MODERN BADGE SYSTEM
+           ============================================ */
+        .badge {
+            display: inline-flex;
+            align-items: center;
+            gap: var(--space-1);
+            padding: var(--space-1) var(--space-3);
+            border-radius: var(--radius-xl);
+            font-size: var(--font-size-xs);
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .badge-primary {
+            background: var(--primary);
+            color: var(--text-inverse);
+        }
+
+        .badge-success {
+            background: var(--success);
+            color: var(--text-inverse);
+        }
+
+        .badge-warning {
+            background: var(--warning);
+            color: var(--text-inverse);
+        }
+
+        .badge-danger {
+            background: var(--danger);
+            color: var(--text-inverse);
+        }
+
+        /* ============================================
+           📱 RESPONSIVE DESIGN
+           ============================================ */
+        
+        /* Tablet Styles */
+        @media (max-width: 1024px) {
+            .app-container {
+                grid-template-columns: 1fr;
+            }
+            
+            .sidebar {
+                position: fixed;
+                left: 0;
+                top: 0;
+                height: 100vh;
+                z-index: var(--z-fixed);
+                transform: translateX(-100%);
+                transition: var(--transition-slow);
+            }
+            
+            .sidebar.open {
+                transform: translateX(0);
+            }
+            
+            .main-content {
+                margin-left: 0;
+            }
+            
+            .mobile-menu-toggle {
+                display: flex;
+                position: fixed;
+                top: var(--space-4);
+                left: var(--space-4);
+                z-index: var(--z-modal);
+                background: var(--primary);
+                color: var(--text-inverse);
+                border: none;
+                border-radius: var(--radius-md);
+                padding: var(--space-3);
+                cursor: pointer;
+                box-shadow: var(--shadow-lg);
+            }
+            
+            .stats-grid {
+                grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            }
+        }
+        
+        /* Mobile Styles */
+        @media (max-width: 768px) {
+            .content-area {
+                padding: var(--space-4);
+            }
+            
+            .page-title {
+                font-size: var(--font-size-2xl);
+            }
+            
+            .card-grid {
+                grid-template-columns: 1fr;
+                gap: var(--space-4);
+            }
+            
+            .stats-grid {
+                grid-template-columns: 1fr;
+                gap: var(--space-4);
+            }
+            
+            .card {
+                border-radius: var(--radius-lg);
+            }
+            
+            .card-header {
+                padding: var(--space-4);
+            }
+            
+            .card-body {
+                padding: var(--space-4);
+            }
+            
+            .btn {
+                padding: var(--space-4) var(--space-6);
+                font-size: var(--font-size-base);
+                width: 100%;
+                justify-content: center;
+            }
+            
+            .btn-sm {
+                padding: var(--space-3) var(--space-4);
+                font-size: var(--font-size-sm);
+            }
+            
+            .modern-table {
+                font-size: var(--font-size-xs);
+            }
+            
+            .modern-table th,
+            .modern-table td {
+                padding: var(--space-2);
+            }
+        }
+        
+        /* Small Mobile Styles */
+        @media (max-width: 480px) {
+            .page-title {
+                font-size: var(--font-size-xl);
+            }
+            
+            .stat-card {
+                padding: var(--space-4);
+            }
+            
+            .stat-icon {
+                width: 40px;
+                height: 40px;
+                font-size: var(--font-size-base);
+            }
+            
+            .stat-value {
+                font-size: var(--font-size-2xl);
+            }
+            
+            .mobile-menu-toggle {
+                padding: var(--space-2);
+            }
+        }
+        
+        /* ============================================
+           🎨 MODERN ANIMATIONS
+           ============================================ */
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+        
+        @keyframes shimmer {
+            0% { background-position: -200% 0; }
+            100% { background-position: 200% 0; }
+        }
+        
+        .animate-slide-in {
+            animation: slideIn 0.3s ease-out;
+        }
+        
+        .animate-fade-in {
+            animation: fadeIn 0.2s ease-out;
+        }
+        
+        .animate-pulse {
+            animation: pulse 2s infinite;
+        }
+        
+        .loading-shimmer {
+            background: linear-gradient(90deg, var(--surface) 25%, var(--surface-2) 50%, var(--surface) 75%);
+            background-size: 200% 100%;
+            animation: shimmer 1.5s infinite;
+        }
+    </style>
+</head>
+<body>
+    <div class="app-container">
+        <!-- Modern Sidebar -->
+        <aside class="sidebar" id="sidebar">
+            <div class="sidebar-header">
+                <div class="sidebar-brand">
+                    <div class="brand-logo">X</div>
+                    <div class="brand-text">XBRCH</div>
+                </div>
+            </div>
+            
+            <nav class="sidebar-nav">
+                <div class="nav-section">
+                    <div class="nav-section-title">Main</div>
+                    <a href="#dashboard" class="nav-item active">
+                        <span class="nav-icon">📊</span>
+                        <span class="nav-text">Dashboard</span>
+                    </a>
+                    <a href="#broadcasts" class="nav-item">
+                        <span class="nav-icon">📡</span>
+                        <span class="nav-text">Broadcasts</span>
+                    </a>
+                    <a href="#website" class="nav-item">
+                        <span class="nav-icon">🌐</span>
+                        <span class="nav-text">Website</span>
+                    </a>
+                    <a href="#wall" class="nav-item">
+                        <span class="nav-icon">📢</span>
+                        <span class="nav-text">Wall</span>
+                    </a>
+                </div>
+                
+                <div class="nav-section">
+                    <div class="nav-section-title">Analytics</div>
+                    <a href="#analytics" class="nav-item">
+                        <span class="nav-icon">📈</span>
+                        <span class="nav-text">Analytics</span>
+                    </a>
+                    <a href="#reports" class="nav-item">
+                        <span class="nav-icon">📋</span>
+                        <span class="nav-text">Reports</span>
+                    </a>
+                </div>
+                
+                <div class="nav-section">
+                    <div class="nav-section-title">Settings</div>
+                    <a href="#settings" class="nav-item">
+                        <span class="nav-icon">⚙️</span>
+                        <span class="nav-text">Settings</span>
+                    </a>
+                    <a href="#help" class="nav-item">
+                        <span class="nav-icon">❓</span>
+                        <span class="nav-text">Help</span>
+                    </a>
+                </div>
+            </nav>
+        </aside>
+        
+        <!-- Mobile Menu Toggle -->
+        <button class="mobile-menu-toggle" id="mobileMenuToggle" style="display: none;">
+            <span>☰</span>
+        </button>
+        
+        <!-- Main Content Area -->
+        <main class="main-content">
+            <!-- Modern Top Bar -->
+            <header class="top-bar">
+                <div class="search-container">
+                    <input type="text" class="search-input" placeholder="Search anything...">
+                </div>
+                
+                <div class="top-bar-actions">
+                    <button class="btn btn-ghost btn-sm">
+                        <span class="btn-icon">🔔</span>
+                    </button>
+                    <button class="btn btn-ghost btn-sm">
+                        <span class="btn-icon">👤</span>
+                    </button>
+                </div>
+            </header>
+            
+            <!-- Content Area -->
+            <div class="content-area">
+                <!-- Page Header -->
+                <div class="page-header">
+                    <h1 class="page-title">Dashboard</h1>
+                    <p class="page-subtitle">Welcome back! Here's what's happening with your broadcasts.</p>
+                </div>
+                
+                <!-- Stats Grid -->
+                <div class="stats-grid">
+                    <div class="stat-card animate-slide-in">
+                        <div class="stat-icon">📊</div>
+                        <div class="stat-value">1,234</div>
+                        <div class="stat-label">Total Broadcasts</div>
+                        <div class="stat-change positive">
+                            <span>↑</span>
+                            <span>12%</span>
+                        </div>
+                    </div>
+                    
+                    <div class="stat-card animate-slide-in" style="animation-delay: 0.1s;">
+                        <div class="stat-icon">👥</div>
+                        <div class="stat-value">8,901</div>
+                        <div class="stat-label">Total Reach</div>
+                        <div class="stat-change positive">
+                            <span>↑</span>
+                            <span>23%</span>
+                        </div>
+                    </div>
+                    
+                    <div class="stat-card animate-slide-in" style="animation-delay: 0.2s;">
+                        <div class="stat-icon">⚡</div>
+                        <div class="stat-value">94.2%</div>
+                        <div class="stat-label">Engagement Rate</div>
+                        <div class="stat-change positive">
+                            <span>↑</span>
+                            <span>5.1%</span>
+                        </div>
+                    </div>
+                    
+                    <div class="stat-card animate-slide-in" style="animation-delay: 0.3s;">
+                        <div class="stat-icon">🎯</div>
+                        <div class="stat-value">89</div>
+                        <div class="stat-label">Avg Score</div>
+                        <div class="stat-change negative">
+                            <span>↓</span>
+                            <span>2.3%</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Recent Activity -->
+                <div class="card-grid">
+                    <div class="card animate-fade-in">
+                        <div class="card-header">
+                            <h3 class="card-title">
+                                Recent Broadcasts
+                                <div class="card-actions">
+                                    <button class="btn btn-ghost btn-sm">View All</button>
+                                </div>
+                            </h3>
+                        </div>
+                        <div class="card-body">
+                            <div class="table-container">
+                                <table class="modern-table">
+                                    <thead>
+                                        <tr>
+                                            <th>Platform</th>
+                                            <th>Content</th>
+                                            <th>Score</th>
+                                            <th>Status</th>
+                                            <th>Actions</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td><span class="badge badge-primary">X</span></td>
+                                            <td>Check out our latest updates...</td>
+                                            <td><span class="badge badge-success">92</span></td>
+                                            <td><span class="badge badge-success">Published</span></td>
+                                            <td>
+                                                <button class="btn btn-ghost btn-sm">Edit</button>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td><span class="badge badge-primary">FB</span></td>
+                                            <td>New product launch announcement...</td>
+                                            <td><span class="badge badge-warning">78</span></td>
+                                            <td><span class="badge badge-warning">Draft</span></td>
+                                            <td>
+                                                <button class="btn btn-ghost btn-sm">Edit</button>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td><span class="badge badge-primary">IG</span></td>
+                                            <td>Behind the scenes content...</td>
+                                            <td><span class="badge badge-success">88</span></td>
+                                            <td><span class="badge badge-success">Published</span></td>
+                                            <td>
+                                                <button class="btn btn-ghost btn-sm">Edit</button>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="card animate-fade-in" style="animation-delay: 0.1s;">
+                        <div class="card-header">
+                            <h3 class="card-title">
+                                Quick Actions
+                                <div class="card-actions">
+                                    <button class="btn btn-primary btn-sm">Create New</button>
+                                </div>
+                            </h3>
+                        </div>
+                        <div class="card-body">
+                            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: var(--space-4);">
+                                <button class="btn btn-secondary">
+                                    <span class="btn-icon">📡</span>
+                                    New Broadcast
+                                </button>
+                                <button class="btn btn-accent">
+                                    <span class="btn-icon">📝</span>
+                                    Create Post
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script>
+        // Mobile menu functionality
+        const mobileMenuToggle = document.getElementById('mobileMenuToggle');
+        const sidebar = document.getElementById('sidebar');
+        
+        mobileMenuToggle.addEventListener('click', () => {
+            sidebar.classList.toggle('open');
+            const isOpen = sidebar.classList.contains('open');
+            mobileMenuToggle.innerHTML = isOpen ? '✕' : '☰';
+            
+            // Prevent body scroll when sidebar is open on mobile
+            if (window.innerWidth <= 1024) {
+                document.body.style.overflow = isOpen ? 'hidden' : '';
+            }
+        });
+        
+        // Close sidebar when clicking outside on mobile
+        document.addEventListener('click', (e) => {
+            if (window.innerWidth <= 1024 && 
+                sidebar.classList.contains('open') && 
+                !sidebar.contains(e.target) && 
+                !mobileMenuToggle.contains(e.target)) {
+                sidebar.classList.remove('open');
+                mobileMenuToggle.innerHTML = '☰';
+                document.body.style.overflow = '';
+            }
+        });
+        
+        // Handle window resize
+        window.addEventListener('resize', () => {
+            if (window.innerWidth > 1024) {
+                sidebar.classList.remove('open');
+                mobileMenuToggle.innerHTML = '☰';
+                document.body.style.overflow = '';
+                mobileMenuToggle.style.display = 'none';
+            } else {
+                mobileMenuToggle.style.display = 'flex';
+            }
+        });
+        
+        // Initialize mobile menu display
+        window.addEventListener('load', () => {
+            if (window.innerWidth <= 1024) {
+                mobileMenuToggle.style.display = 'flex';
+            }
+        });
+        
+        // Add interactive hover effects
+        document.querySelectorAll('.nav-item').forEach(item => {
+            item.addEventListener('mouseenter', () => {
+                item.style.transform = 'translateX(4px)';
+            });
+            
+            item.addEventListener('mouseleave', () => {
+                item.style.transform = 'translateX(0)';
+            });
+        });
+        
+        // Smooth scroll behavior
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', (e) => {
+                e.preventDefault();
+                const target = document.querySelector(anchor.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({ behavior: 'smooth' });
+                }
+            });
+        });
+    </script>
+</body>
+</html>
