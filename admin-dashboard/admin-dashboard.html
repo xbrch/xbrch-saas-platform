@@ -607,6 +607,121 @@
         .toggle-switch.active::after {
             left: 26px;
         }
+
+        /* ============================================
+           🏢 BUSINESS MANAGEMENT STYLES
+           ============================================ */
+        .business-section, .analytics-section, .approval-section {
+            display: none;
+        }
+
+        .table-controls {
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+        }
+
+        .approval-stats {
+            display: flex;
+            gap: 0.5rem;
+            margin-right: 1rem;
+        }
+
+        .import-instructions {
+            background: #f8fafc;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .import-instructions h3 {
+            color: var(--text-primary);
+            margin-bottom: 1rem;
+        }
+
+        .import-instructions ol {
+            margin-left: 1.5rem;
+            color: var(--text-secondary);
+        }
+
+        .import-instructions li {
+            margin-bottom: 0.5rem;
+        }
+
+        .template-download {
+            margin-top: 1rem;
+        }
+
+        .file-upload-area {
+            margin: 2rem 0;
+        }
+
+        .import-actions {
+            display: flex;
+            gap: 1rem;
+            margin-top: 1.5rem;
+        }
+
+        .charts-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .top-performers-list {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .performer-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem;
+            background: #f8fafc;
+            border-radius: 8px;
+            border: 1px solid var(--border-color);
+        }
+
+        .performer-info {
+            flex: 1;
+        }
+
+        .performer-name {
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+
+        .performer-metrics {
+            color: var(--text-secondary);
+            font-size: 0.875rem;
+        }
+
+        .performer-score {
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: var(--primary);
+        }
+
+        @media (max-width: 768px) {
+            .charts-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .table-controls {
+                flex-direction: column;
+                align-items: stretch;
+            }
+            
+            .approval-stats {
+                justify-content: center;
+                margin-right: 0;
+                margin-bottom: 1rem;
+            }
+        }
     </style>
 </head>
 <body>
@@ -632,6 +747,22 @@
                     <a href="#analytics" class="nav-item">
                         <span class="nav-icon">📈</span>
                         <span>Analytics</span>
+                    </a>
+                </div>
+                
+                <div class="nav-section">
+                    <div class="nav-section-title">Business Management</div>
+                    <a href="#business-management" class="nav-item">
+                        <span class="nav-icon">🏢</span>
+                        <span>Business Management</span>
+                    </a>
+                    <a href="#business-analytics" class="nav-item">
+                        <span class="nav-icon">📊</span>
+                        <span>Business Analytics</span>
+                    </a>
+                    <a href="#approval-queue" class="nav-item">
+                        <span class="nav-icon">✅</span>
+                        <span>Approval Queue</span>
                     </a>
                 </div>
                 
@@ -736,6 +867,393 @@
                         <span>↑</span>
                         <span>18% from last month</span>
                     </div>
+                </div>
+            </div>
+
+            <!-- Business Management Section -->
+            <div class="business-section" id="business-management" style="display: none;">
+                <div class="top-bar">
+                    <div>
+                        <h1 class="page-title">Business Management</h1>
+                        <p class="page-subtitle">Add and manage all businesses on the platform</p>
+                    </div>
+                    <div class="top-bar-actions">
+                        <button class="btn btn-primary" onclick="showAddBusinessForm()">
+                            <span>➕</span>
+                            <span>Add Business</span>
+                        </button>
+                        <button class="btn btn-secondary" onclick="showBulkImport()">
+                            <span>📤</span>
+                            <span>Bulk Import</span>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Business Stats -->
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-icon">🏢</div>
+                        <div class="stat-value" id="total-businesses">0</div>
+                        <div class="stat-label">Total Businesses</div>
+                        <div class="stat-change positive">
+                            <span>↑</span>
+                            <span>3 new this week</span>
+                        </div>
+                    </div>
+                    
+                    <div class="stat-card">
+                        <div class="stat-icon">✅</div>
+                        <div class="stat-value" id="active-businesses">0</div>
+                        <div class="stat-label">Active Businesses</div>
+                        <div class="stat-change positive">
+                            <span>↑</span>
+                            <span>85% activation rate</span>
+                        </div>
+                    </div>
+                    
+                    <div class="stat-card">
+                        <div class="stat-icon">⏳</div>
+                        <div class="stat-value" id="pending-approvals">0</div>
+                        <div class="stat-label">Pending Approvals</div>
+                        <div class="stat-change warning">
+                            <span>⚠️</span>
+                            <span>Need review</span>
+                        </div>
+                    </div>
+                    
+                    <div class="stat-card">
+                        <div class="stat-icon">📈</div>
+                        <div class="stat-value" id="growth-rate">0%</div>
+                        <div class="stat-label">Monthly Growth</div>
+                        <div class="stat-change positive">
+                            <span>↑</span>
+                            <span>12% increase</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Add Business Form -->
+                <div class="card" id="add-business-form" style="display: none;">
+                    <div class="card-header">
+                        <h2 class="card-title">Add New Business</h2>
+                        <button class="btn btn-secondary" onclick="hideAddBusinessForm()">Cancel</button>
+                    </div>
+                    <div class="card-body">
+                        <form class="form-grid" id="business-creation-form">
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label class="form-label">Business Name *</label>
+                                    <input type="text" class="form-input" id="business-name" required>
+                                </div>
+                                <div class="form-group">
+                                    <label class="form-label">Business Email *</label>
+                                    <input type="email" class="form-input" id="business-email" required>
+                                </div>
+                            </div>
+                            
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label class="form-label">Contact Person *</label>
+                                    <input type="text" class="form-input" id="contact-person" required>
+                                </div>
+                                <div class="form-group">
+                                    <label class="form-label">Phone Number</label>
+                                    <input type="tel" class="form-input" id="phone-number">
+                                </div>
+                            </div>
+                            
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label class="form-label">Business Category *</label>
+                                    <select class="form-select" id="business-category" required>
+                                        <option value="">Select category</option>
+                                        <option value="restaurant">Restaurant</option>
+                                        <option value="retail">Retail Store</option>
+                                        <option value="service">Service Provider</option>
+                                        <option value="professional">Professional Services</option>
+                                        <option value="ecommerce">E-commerce</option>
+                                        <option value="other">Other</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label class="form-label">Business Size</label>
+                                    <select class="form-select" id="business-size">
+                                        <option value="small">Small (1-10 employees)</option>
+                                        <option value="medium">Medium (11-50 employees)</option>
+                                        <option value="large">Large (50+ employees)</option>
+                                    </select>
+                                </div>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label class="form-label">Business Address</label>
+                                <input type="text" class="form-input" id="business-address" placeholder="Full business address">
+                            </div>
+                            
+                            <div class="form-group">
+                                <label class="form-label">Business Description</label>
+                                <textarea class="form-textarea" id="business-description" placeholder="Brief description of the business..."></textarea>
+                            </div>
+                            
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label class="form-label">Initial Status</label>
+                                    <select class="form-select" id="initial-status">
+                                        <option value="pending">Pending Approval</option>
+                                        <option value="approved">Approved</option>
+                                        <option value="active">Active</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label class="form-label">Send Welcome Email</label>
+                                    <div class="toggle-switch active" id="welcome-email-toggle" onclick="toggleSwitch(this)"></div>
+                                </div>
+                            </div>
+                            
+                            <div class="form-group">
+                                <button type="button" class="btn btn-primary" onclick="createBusiness()">
+                                    <span>🏢</span>
+                                    <span>Create Business</span>
+                                </button>
+                                <button type="button" class="btn btn-secondary" onclick="previewBusiness()">
+                                    <span>👁️</span>
+                                    <span>Preview</span>
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+
+                <!-- Bulk Import Section -->
+                <div class="card" id="bulk-import-section" style="display: none;">
+                    <div class="card-header">
+                        <h2 class="card-title">Bulk Import Businesses</h2>
+                        <button class="btn btn-secondary" onclick="hideBulkImport()">Cancel</button>
+                    </div>
+                    <div class="card-body">
+                        <div class="import-instructions">
+                            <h3>Import Instructions</h3>
+                            <ol>
+                                <li>Download the CSV template below</li>
+                                <li>Fill in your business data</li>
+                                <li>Upload the completed CSV file</li>
+                                <li>Review and confirm the import</li>
+                            </ol>
+                            
+                            <div class="template-download">
+                                <button class="btn btn-secondary" onclick="downloadCSVTemplate()">
+                                    <span>📥</span>
+                                    <span>Download CSV Template</span>
+                                </button>
+                            </div>
+                        </div>
+                        
+                        <div class="file-upload-area">
+                            <div class="image-upload" id="csv-upload-btn">
+                                <div>📄 Click to upload CSV file or drag and drop</div>
+                                <small>CSV files only, max 10MB</small>
+                                <input type="file" id="csv-input" accept=".csv" style="display: none;" onchange="previewCSV(event)">
+                            </div>
+                        </div>
+                        
+                        <div id="csv-preview" style="display: none;">
+                            <h3>Preview Import Data</h3>
+                            <div class="table-container">
+                                <table id="csv-preview-table">
+                                    <!-- CSV data will be shown here -->
+                                </table>
+                            </div>
+                            <div class="import-actions">
+                                <button class="btn btn-primary" onclick="executeBulkImport()">
+                                    <span>📤</span>
+                                    <span>Import Businesses</span>
+                                </button>
+                                <button class="btn btn-secondary" onclick="cancelBulkImport()">Cancel</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Businesses Table -->
+                <div class="table-container">
+                    <div class="table-header">
+                        <h2 class="card-title">All Businesses</h2>
+                        <div class="table-controls">
+                            <div class="search-box">
+                                <span class="search-icon">🔍</span>
+                                <input type="text" class="search-input" placeholder="Search businesses..." onkeyup="filterBusinesses(this.value)">
+                            </div>
+                            <select class="form-select" id="business-filter" onchange="filterBusinessesByStatus(this.value)">
+                                <option value="all">All Status</option>
+                                <option value="active">Active</option>
+                                <option value="pending">Pending</option>
+                                <option value="approved">Approved</option>
+                                <option value="suspended">Suspended</option>
+                            </select>
+                        </div>
+                    </div>
+                    
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Business</th>
+                                <th>Contact</th>
+                                <th>Category</th>
+                                <th>Status</th>
+                                <th>Created</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="businesses-table">
+                            <!-- Businesses will be loaded here -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Business Analytics Section -->
+            <div class="analytics-section" id="business-analytics" style="display: none;">
+                <div class="top-bar">
+                    <div>
+                        <h1 class="page-title">Business Analytics</h1>
+                        <p class="page-subtitle">Comprehensive analytics for all businesses on the platform</p>
+                    </div>
+                    <div class="top-bar-actions">
+                        <select class="form-select" id="analytics-period" onchange="updateAnalytics()">
+                            <option value="7">Last 7 Days</option>
+                            <option value="30">Last 30 Days</option>
+                            <option value="90">Last 90 Days</option>
+                            <option value="365">Last Year</option>
+                        </select>
+                        <button class="btn btn-primary" onclick="exportAnalytics()">
+                            <span>📊</span>
+                            <span>Export Report</span>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Analytics Overview -->
+                <div class="analytics-overview">
+                    <div class="stats-grid">
+                        <div class="stat-card">
+                            <div class="stat-icon">📈</div>
+                            <div class="stat-value" id="total-revenue">€0</div>
+                            <div class="stat-label">Total Revenue</div>
+                            <div class="stat-change positive">
+                                <span>↑</span>
+                                <span>23% growth</span>
+                            </div>
+                        </div>
+                        
+                        <div class="stat-card">
+                            <div class="stat-icon">👥</div>
+                            <div class="stat-value" id="active-users">0</div>
+                            <div class="stat-label">Active Users</div>
+                            <div class="stat-change positive">
+                                <span>↑</span>
+                                <span>15% increase</span>
+                            </div>
+                        </div>
+                        
+                        <div class="stat-card">
+                            <div class="stat-icon">📝</div>
+                            <div class="stat-value" id="total-uploads">0</div>
+                            <div class="stat-label">Total Uploads</div>
+                            <div class="stat-change positive">
+                                <span>↑</span>
+                                <span>8% more</span>
+                            </div>
+                        </div>
+                        
+                        <div class="stat-card">
+                            <div class="stat-icon">⭐</div>
+                            <div class="stat-value" id="engagement-rate">0%</div>
+                            <div class="stat-label">Engagement Rate</div>
+                            <div class="stat-change positive">
+                                <span>↑</span>
+                                <span>5% improvement</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Charts Section -->
+                <div class="charts-grid">
+                    <div class="card">
+                        <div class="card-header">
+                            <h2 class="card-title">Business Growth Trend</h2>
+                        </div>
+                        <div class="card-body">
+                            <canvas id="growth-chart" width="400" height="200"></canvas>
+                        </div>
+                    </div>
+                    
+                    <div class="card">
+                        <div class="card-header">
+                            <h2 class="card-title">Category Distribution</h2>
+                        </div>
+                        <div class="card-body">
+                            <canvas id="category-chart" width="400" height="200"></canvas>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Top Performers -->
+                <div class="card">
+                    <div class="card-header">
+                        <h2 class="card-title">Top Performing Businesses</h2>
+                    </div>
+                    <div class="card-body">
+                        <div class="top-performers-list" id="top-performers">
+                            <!-- Top performers will be loaded here -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Approval Queue Section -->
+            <div class="approval-section" id="approval-queue" style="display: none;">
+                <div class="top-bar">
+                    <div>
+                        <h1 class="page-title">Approval Queue</h1>
+                        <p class="page-subtitle">Review and approve pending business registrations</p>
+                    </div>
+                    <div class="top-bar-actions">
+                        <div class="approval-stats">
+                            <span class="badge badge-warning" id="pending-count">0 Pending</span>
+                            <span class="badge badge-success" id="approved-count">0 Approved Today</span>
+                        </div>
+                        <button class="btn btn-primary" onclick="approveAllPending()">
+                            <span>✅</span>
+                            <span>Approve All</span>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Pending Approvals Table -->
+                <div class="table-container">
+                    <div class="table-header">
+                        <h2 class="card-title">Pending Approvals</h2>
+                        <div class="search-box">
+                            <span class="search-icon">🔍</span>
+                            <input type="text" class="search-input" placeholder="Search pending approvals..." onkeyup="filterPending(this.value)">
+                        </div>
+                    </div>
+                    
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Business</th>
+                                <th>Contact</th>
+                                <th>Category</th>
+                                <th>Applied</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="pending-approvals-table">
+                            <!-- Pending approvals will be loaded here -->
+                        </tbody>
+                    </table>
                 </div>
             </div>
 
@@ -897,6 +1415,526 @@
         // Update page content with selected language
         function updatePageLanguage() {
             const t = translations[currentLang];
+            
+            // Update all elements with data-translate attribute
+            document.querySelectorAll('[data-translate]').forEach(el => {
+                const key = el.getAttribute('data-translate');
+                if (t[key]) {
+                    el.textContent = t[key];
+                }
+            });
+        }
+
+        // ============================================
+        // 🏢 BUSINESS MANAGEMENT FUNCTIONS
+        // ============================================
+
+        // Navigation handling
+        function showSection(sectionId) {
+            // Hide all sections
+            document.querySelectorAll('.business-section, .analytics-section, .approval-section').forEach(section => {
+                section.style.display = 'none';
+            });
+            
+            // Show selected section
+            const targetSection = document.getElementById(sectionId);
+            if (targetSection) {
+                targetSection.style.display = 'block';
+            }
+            
+            // Update navigation active state
+            document.querySelectorAll('.nav-item').forEach(item => {
+                item.classList.remove('active');
+            });
+            
+            const activeNavItem = document.querySelector(`[href="#${sectionId}"]`);
+            if (activeNavItem) {
+                activeNavItem.classList.add('active');
+            }
+        }
+
+        // Add navigation event listeners
+        document.addEventListener('DOMContentLoaded', () => {
+            // Add click handlers to navigation items
+            document.querySelectorAll('.nav-item').forEach(item => {
+                item.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    const href = item.getAttribute('href');
+                    if (href && href.startsWith('#')) {
+                        const sectionId = href.substring(1);
+                        showSection(sectionId);
+                    }
+                });
+            });
+        });
+
+        // Business Creation Functions
+        function showAddBusinessForm() {
+            document.getElementById('add-business-form').style.display = 'block';
+            document.getElementById('bulk-import-section').style.display = 'none';
+            clearBusinessForm();
+        }
+
+        function hideAddBusinessForm() {
+            document.getElementById('add-business-form').style.display = 'none';
+        }
+
+        function clearBusinessForm() {
+            document.getElementById('business-creation-form').reset();
+            document.getElementById('welcome-email-toggle').classList.add('active');
+        }
+
+        function previewBusiness() {
+            const businessData = {
+                name: document.getElementById('business-name').value,
+                email: document.getElementById('business-email').value,
+                contact: document.getElementById('contact-person').value,
+                phone: document.getElementById('phone-number').value,
+                category: document.getElementById('business-category').value,
+                size: document.getElementById('business-size').value,
+                address: document.getElementById('business-address').value,
+                description: document.getElementById('business-description').value,
+                status: document.getElementById('initial-status').value
+            };
+            
+            alert(`Business Preview:\n\nName: ${businessData.name}\nEmail: ${businessData.email}\nContact: ${businessData.contact}\nCategory: ${businessData.category}\nStatus: ${businessData.status}\n\nClick "Create Business" to confirm.`);
+        }
+
+        async function createBusiness() {
+            const businessData = {
+                name: document.getElementById('business-name').value,
+                email: document.getElementById('business-email').value,
+                contact: document.getElementById('contact-person').value,
+                phone: document.getElementById('phone-number').value,
+                category: document.getElementById('business-category').value,
+                size: document.getElementById('business-size').value,
+                address: document.getElementById('business-address').value,
+                description: document.getElementById('business-description').value,
+                status: document.getElementById('initial-status').value,
+                sendWelcomeEmail: document.getElementById('welcome-email-toggle').classList.contains('active')
+            };
+            
+            // Validation
+            if (!businessData.name || !businessData.email || !businessData.contact || !businessData.category) {
+                alert('Please fill in all required fields.');
+                return;
+            }
+            
+            try {
+                // Create Supabase user account
+                const { data, error } = await supabase.auth.signUp({
+                    email: businessData.email,
+                    password: generateRandomPassword(),
+                    options: {
+                        emailRedirectTo: `${window.location.origin}/admin-login.html`,
+                        data: {
+                            business_name: businessData.name,
+                            contact_person: businessData.contact,
+                            category: businessData.category,
+                            role: 'business_admin'
+                        }
+                    }
+                });
+                
+                if (error) throw error;
+                
+                // Create business profile
+                const businessProfile = {
+                    user_id: data.user.id,
+                    business_name: businessData.name,
+                    contact_person: businessData.contact,
+                    phone: businessData.phone,
+                    category: businessData.category,
+                    size: businessData.size,
+                    address: businessData.address,
+                    description: businessData.description,
+                    status: businessData.status,
+                    created_at: new Date().toISOString()
+                };
+                
+                const { error: profileError } = await supabase
+                    .from('business_settings')
+                    .insert([businessProfile]);
+                
+                if (profileError) throw profileError;
+                
+                alert('Business created successfully!');
+                hideAddBusinessForm();
+                loadBusinesses();
+                
+            } catch (error) {
+                console.error('Error creating business:', error);
+                alert('Failed to create business: ' + error.message);
+            }
+        }
+
+        function generateRandomPassword() {
+            return Math.random().toString(36).slice(-8) + Math.random().toString(36).slice(-8).toUpperCase();
+        }
+
+        // Bulk Import Functions
+        function showBulkImport() {
+            document.getElementById('bulk-import-section').style.display = 'block';
+            document.getElementById('add-business-form').style.display = 'none';
+        }
+
+        function hideBulkImport() {
+            document.getElementById('bulk-import-section').style.display = 'none';
+        }
+
+        function downloadCSVTemplate() {
+            const csvContent = "Business Name,Contact Person,Email,Phone,Category,Size,Address,Description\n" +
+                               "Example Business,John Doe,john@example.com,+1234567890,restaurant,small,123 Main St,Restaurant description";
+            
+            const blob = new Blob([csvContent], { type: 'text/csv' });
+            const url = window.URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'business_import_template.csv';
+            a.click();
+            window.URL.revokeObjectURL(url);
+        }
+
+        function previewCSV(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+            
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                const csv = e.target.result;
+                const lines = csv.split('\n');
+                const headers = lines[0].split(',');
+                
+                let tableHTML = '<thead><tr>';
+                headers.forEach(header => {
+                    tableHTML += `<th>${header.trim()}</th>`;
+                });
+                tableHTML += '</tr></thead><tbody>';
+                
+                for (let i = 1; i < Math.min(lines.length, 6); i++) {
+                    if (lines[i].trim()) {
+                        const values = lines[i].split(',');
+                        tableHTML += '<tr>';
+                        values.forEach(value => {
+                            tableHTML += `<td>${value.trim()}</td>`;
+                        });
+                        tableHTML += '</tr>';
+                    }
+                }
+                
+                tableHTML += '</tbody>';
+                
+                document.getElementById('csv-preview-table').innerHTML = tableHTML;
+                document.getElementById('csv-preview').style.display = 'block';
+            };
+            reader.readAsText(file);
+        }
+
+        async function executeBulkImport() {
+            alert('Bulk import functionality would process the CSV and create multiple businesses. This requires backend implementation.');
+        }
+
+        function cancelBulkImport() {
+            hideBulkImport();
+            document.getElementById('csv-input').value = '';
+            document.getElementById('csv-preview').style.display = 'none';
+        }
+
+        // Business Management Functions
+        async function loadBusinesses() {
+            try {
+                const { data, error } = await supabase
+                    .from('business_settings')
+                    .select('*')
+                    .order('created_at', { ascending: false });
+                
+                if (error) throw error;
+                
+                displayBusinesses(data);
+                updateBusinessStats(data);
+                
+            } catch (error) {
+                console.error('Error loading businesses:', error);
+                // Load demo data for testing
+                loadDemoBusinesses();
+            }
+        }
+
+        function displayBusinesses(businesses) {
+            const tableBody = document.getElementById('businesses-table');
+            tableBody.innerHTML = '';
+            
+            businesses.forEach(business => {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>
+                        <div>
+                            <div style="font-weight: 600;">${business.business_name}</div>
+                            <div style="font-size: 0.875rem; color: var(--text-secondary);">${business.contact_person}</div>
+                        </div>
+                    </td>
+                    <td>
+                        <div>
+                            <div>${business.email || 'N/A'}</div>
+                            <div style="font-size: 0.875rem; color: var(--text-secondary);">${business.phone || 'N/A'}</div>
+                        </div>
+                    </td>
+                    <td><span class="badge badge-primary">${business.category || 'Other'}</span></td>
+                    <td><span class="badge badge-${getStatusClass(business.status)}">${business.status || 'Active'}</span></td>
+                    <td>${new Date(business.created_at).toLocaleDateString()}</td>
+                    <td>
+                        <button class="btn btn-sm btn-secondary" onclick="editBusiness('${business.id}')">Edit</button>
+                        <button class="btn btn-sm btn-danger" onclick="deleteBusiness('${business.id}')">Delete</button>
+                    </td>
+                `;
+                tableBody.appendChild(row);
+            });
+        }
+
+        function getStatusClass(status) {
+            switch (status?.toLowerCase()) {
+                case 'active': return 'success';
+                case 'pending': return 'warning';
+                case 'suspended': return 'danger';
+                case 'approved': return 'primary';
+                default: return 'success';
+            }
+        }
+
+        function updateBusinessStats(businesses) {
+            const totalBusinesses = businesses.length;
+            const activeBusinesses = businesses.filter(b => b.status === 'active').length;
+            const pendingApprovals = businesses.filter(b => b.status === 'pending').length;
+            const growthRate = calculateGrowthRate(businesses);
+            
+            document.getElementById('total-businesses').textContent = totalBusinesses;
+            document.getElementById('active-businesses').textContent = activeBusinesses;
+            document.getElementById('pending-approvals').textContent = pendingApprovals;
+            document.getElementById('growth-rate').textContent = growthRate + '%';
+        }
+
+        function calculateGrowthRate(businesses) {
+            // Simple growth calculation based on recent businesses
+            const thirtyDaysAgo = new Date(Date.now() - 30 * 24 * 60 * 60 * 1000);
+            const recentBusinesses = businesses.filter(b => new Date(b.created_at) > thirtyDaysAgo);
+            return Math.round((recentBusinesses.length / businesses.length) * 100) || 0;
+        }
+
+        function loadDemoBusinesses() {
+            const demoBusinesses = [
+                {
+                    id: '1',
+                    business_name: 'Coffee Shop Deluxe',
+                    contact_person: 'Jane Smith',
+                    email: 'jane@coffeeshop.com',
+                    phone: '+1234567890',
+                    category: 'restaurant',
+                    status: 'active',
+                    created_at: new Date(Date.now() - 5 * 24 * 60 * 60 * 1000).toISOString()
+                },
+                {
+                    id: '2',
+                    business_name: 'Tech Solutions Inc',
+                    contact_person: 'Mike Johnson',
+                    email: 'mike@techsolutions.com',
+                    phone: '+0987654321',
+                    category: 'professional',
+                    status: 'pending',
+                    created_at: new Date(Date.now() - 2 * 24 * 60 * 60 * 1000).toISOString()
+                },
+                {
+                    id: '3',
+                    business_name: 'Fashion Boutique',
+                    contact_person: 'Sarah Williams',
+                    email: 'sarah@fashion.com',
+                    phone: '+1122334455',
+                    category: 'retail',
+                    status: 'active',
+                    created_at: new Date(Date.now() - 10 * 24 * 60 * 60 * 1000).toISOString()
+                }
+            ];
+            
+            displayBusinesses(demoBusinesses);
+            updateBusinessStats(demoBusinesses);
+        }
+
+        function filterBusinesses(searchTerm) {
+            const rows = document.querySelectorAll('#businesses-table tr');
+            rows.forEach(row => {
+                const text = row.textContent.toLowerCase();
+                row.style.display = text.includes(searchTerm.toLowerCase()) ? '' : 'none';
+            });
+        }
+
+        function filterBusinessesByStatus(status) {
+            const rows = document.querySelectorAll('#businesses-table tr');
+            rows.forEach(row => {
+                if (status === 'all') {
+                    row.style.display = '';
+                } else {
+                    const statusBadge = row.querySelector('.badge');
+                    const rowStatus = statusBadge ? statusBadge.textContent.toLowerCase() : '';
+                    row.style.display = rowStatus === status.toLowerCase() ? '' : 'none';
+                }
+            });
+        }
+
+        function editBusiness(businessId) {
+            alert(`Edit business functionality for business ID: ${businessId}`);
+        }
+
+        function deleteBusiness(businessId) {
+            if (confirm('Are you sure you want to delete this business?')) {
+                alert(`Delete business functionality for business ID: ${businessId}`);
+            }
+        }
+
+        // Analytics Functions
+        function updateAnalytics() {
+            const period = document.getElementById('analytics-period').value;
+            alert(`Update analytics for period: ${period} days`);
+        }
+
+        function exportAnalytics() {
+            alert('Export analytics functionality - would generate PDF/Excel report');
+        }
+
+        // Approval Queue Functions
+        async function loadPendingApprovals() {
+            try {
+                const { data, error } = await supabase
+                    .from('business_settings')
+                    .select('*')
+                    .eq('status', 'pending')
+                    .order('created_at', { ascending: false });
+                
+                if (error) throw error;
+                
+                displayPendingApprovals(data);
+                updateApprovalStats(data);
+                
+            } catch (error) {
+                console.error('Error loading pending approvals:', error);
+                loadDemoPendingApprovals();
+            }
+        }
+
+        function displayPendingApprovals(approvals) {
+            const tableBody = document.getElementById('pending-approvals-table');
+            tableBody.innerHTML = '';
+            
+            approvals.forEach(approval => {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>
+                        <div>
+                            <div style="font-weight: 600;">${approval.business_name}</div>
+                            <div style="font-size: 0.875rem; color: var(--text-secondary);">${approval.description || 'No description'}</div>
+                        </div>
+                    </td>
+                    <td>
+                        <div>
+                            <div>${approval.contact_person}</div>
+                            <div style="font-size: 0.875rem; color: var(--text-secondary);">${approval.email || 'N/A'}</div>
+                        </div>
+                    </td>
+                    <td><span class="badge badge-primary">${approval.category || 'Other'}</span></td>
+                    <td>${new Date(approval.created_at).toLocaleDateString()}</td>
+                    <td>
+                        <button class="btn btn-sm btn-success" onclick="approveBusiness('${approval.id}')">Approve</button>
+                        <button class="btn btn-sm btn-danger" onclick="rejectBusiness('${approval.id}')">Reject</button>
+                    </td>
+                `;
+                tableBody.appendChild(row);
+            });
+        }
+
+        function updateApprovalStats(approvals) {
+            document.getElementById('pending-count').textContent = `${approvals.length} Pending`;
+            document.getElementById('approved-count').textContent = '0 Approved Today';
+        }
+
+        function loadDemoPendingApprovals() {
+            const demoApprovals = [
+                {
+                    id: '4',
+                    business_name: 'New Restaurant',
+                    contact_person: 'Tom Brown',
+                    email: 'tom@newrestaurant.com',
+                    category: 'restaurant',
+                    description: 'Fine dining restaurant',
+                    created_at: new Date(Date.now() - 1 * 24 * 60 * 60 * 1000).toISOString()
+                },
+                {
+                    id: '5',
+                    business_name: 'Digital Agency',
+                    contact_person: 'Lisa Chen',
+                    email: 'lisa@digital.com',
+                    category: 'service',
+                    description: 'Web design and marketing',
+                    created_at: new Date(Date.now() - 3 * 24 * 60 * 60 * 1000).toISOString()
+                }
+            ];
+            
+            displayPendingApprovals(demoApprovals);
+            updateApprovalStats(demoApprovals);
+        }
+
+        function filterPending(searchTerm) {
+            const rows = document.querySelectorAll('#pending-approvals-table tr');
+            rows.forEach(row => {
+                const text = row.textContent.toLowerCase();
+                row.style.display = text.includes(searchTerm.toLowerCase()) ? '' : 'none';
+            });
+        }
+
+        async function approveBusiness(businessId) {
+            try {
+                const { error } = await supabase
+                    .from('business_settings')
+                    .update({ status: 'approved' })
+                    .eq('id', businessId);
+                
+                if (error) throw error;
+                
+                alert('Business approved successfully!');
+                loadPendingApprovals();
+                loadBusinesses();
+                
+            } catch (error) {
+                console.error('Error approving business:', error);
+                alert('Failed to approve business: ' + error.message);
+            }
+        }
+
+        function rejectBusiness(businessId) {
+            if (confirm('Are you sure you want to reject this business application?')) {
+                alert(`Reject business functionality for business ID: ${businessId}`);
+            }
+        }
+
+        function approveAllPending() {
+            if (confirm('Are you sure you want to approve all pending businesses?')) {
+                alert('Approve all pending businesses functionality');
+            }
+        }
+
+        // Initialize business management when page loads
+        document.addEventListener('DOMContentLoaded', () => {
+            // Load initial data
+            loadBusinesses();
+            loadPendingApprovals();
+            
+            // Set up file upload for CSV
+            const csvUploadBtn = document.getElementById('csv-upload-btn');
+            const csvInput = document.getElementById('csv-input');
+            
+            if (csvUploadBtn && csvInput) {
+                csvUploadBtn.addEventListener('click', () => {
+                    csvInput.click();
+                });
+            }
+        });
             
             // Update page title and subtitle
             const pageTitle = document.querySelector('.page-title');
