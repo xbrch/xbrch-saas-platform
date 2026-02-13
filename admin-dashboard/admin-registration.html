@@ -328,8 +328,14 @@
         </div>
     </div>
 
-    <script src="security-config.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
+    <script src="../security/security-config.js"></script>
+    <script src="../security/admin-security.js"></script>
     <script>
+        // Initialize Supabase
+        const { createClient } = supabase;
+        const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+        
         // Initialize security
         let xbrchSecurity;
         
@@ -339,15 +345,17 @@
             
             // Add CSRF token to form
             const form = document.getElementById('registrationForm');
-            const csrfToken = XBRCHCSRFProtection.generateToken();
-            XBRCHCSRFProtection.storeToken(csrfToken, 'registration');
-            
-            // Add CSRF token as hidden input
-            const csrfInput = document.createElement('input');
-            csrfInput.type = 'hidden';
-            csrfInput.name = 'csrf_token';
-            csrfInput.value = csrfToken;
-            form.appendChild(csrfInput);
+            if (form && typeof XBRCHCSRFProtection !== 'undefined') {
+                const csrfToken = XBRCHCSRFProtection.generateToken();
+                XBRCHCSRFProtection.storeToken(csrfToken, 'registration');
+                
+                // Add CSRF token as hidden input
+                const csrfInput = document.createElement('input');
+                csrfInput.type = 'hidden';
+                csrfInput.name = 'csrf_token';
+                csrfInput.value = csrfToken;
+                form.appendChild(csrfInput);
+            }
             
             // Add password strength indicator
             const passwordInput = document.getElementById('password');
@@ -660,10 +668,6 @@
             }, 5000);
         }
         
-        // Initialize Supabase
-        const { createClient } = supabase;
-        const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-
         // ============================================
         // 🌍 TRANSLATION SYSTEM
         // ============================================
