@@ -1,0 +1,952 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Expires" content="0">
+    <title>XBRCH Admin - Social Broadcasting</title>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
+    <script src="/xbrch-saas-platform/security/security-config.js?v=1.0.5"></script>
+    <script src="/xbrch-saas-platform/security/admin-security.js?v=1.0.5"></script>
+    <style>
+        :root {
+            --primary: #3b82f6;
+            --primary-dark: #2563eb;
+            --primary-light: #60a5fa;
+            --secondary: #06b6d4;
+            --success: #10b981;
+            --warning: #f59e0b;
+            --danger: #ef4444;
+            --text-primary: #1e293b;
+            --text-secondary: #64748b;
+            --bg-main: #f8fafc;
+            --card-bg: #ffffff;
+            --border-color: #e2e8f0;
+            --sidebar-bg: #1e293b;
+            --sidebar-hover: #334155;
+            --radius: 12px;
+            --shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            --shadow-lg: 0 10px 25px rgba(0, 0, 0, 0.15);
+            --transition: all 0.3s ease;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Oxygen', 'Ubuntu', sans-serif;
+            background: var(--bg-main);
+            color: var(--text-primary);
+            line-height: 1.6;
+        }
+
+        .admin-container {
+            display: flex;
+            min-height: 100vh;
+        }
+
+        .sidebar {
+            width: 280px;
+            background: var(--sidebar-bg);
+            color: white;
+            padding: 2rem 0;
+            overflow-y: auto;
+            transition: var(--transition);
+        }
+
+        .sidebar-header {
+            padding: 0 2rem 2rem;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .sidebar-logo {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
+
+        .nav-menu {
+            list-style: none;
+        }
+
+        .nav-item {
+            display: block;
+            padding: 1rem 2rem;
+            color: rgba(255, 255, 255, 0.8);
+            text-decoration: none;
+            transition: var(--transition);
+            cursor: pointer;
+            border-left: 3px solid transparent;
+        }
+
+        .nav-item:hover, .nav-item.active {
+            background: var(--sidebar-hover);
+            color: white;
+            border-left-color: var(--primary);
+        }
+
+        .nav-item i {
+            margin-right: 0.75rem;
+            width: 20px;
+            text-align: center;
+        }
+
+        .main-content {
+            flex: 1;
+            padding: 2rem;
+            overflow-y: auto;
+            background: var(--bg-main);
+        }
+
+        .page-header {
+            margin-bottom: 2rem;
+        }
+
+        .page-title {
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--text-primary);
+            margin-bottom: 0.5rem;
+        }
+
+        .page-subtitle {
+            color: var(--text-secondary);
+            font-size: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        .broadcast-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .card {
+            background: var(--card-bg);
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+            padding: 1.5rem;
+            border: 1px solid var(--border-color);
+        }
+
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+
+        .card-title {
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-label {
+            display: block;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 0.5rem;
+        }
+
+        .form-input, .form-textarea, .form-select {
+            width: 100%;
+            padding: 0.75rem;
+            border: 2px solid var(--border-color);
+            border-radius: 8px;
+            font-size: 1rem;
+            background: var(--card-bg);
+            color: var(--text-primary);
+            transition: var(--transition);
+        }
+
+        .form-input:focus, .form-textarea:focus, .form-select:focus {
+            outline: none;
+            border-color: var(--primary);
+        }
+
+        .form-textarea {
+            min-height: 120px;
+            resize: vertical;
+        }
+
+        .btn {
+            padding: 0.75rem 1.5rem;
+            border: none;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition);
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .btn-primary {
+            background: var(--primary);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: var(--primary-dark);
+            transform: translateY(-2px);
+        }
+
+        .btn-secondary {
+            background: var(--secondary);
+            color: white;
+        }
+
+        .btn-success {
+            background: var(--success);
+            color: white;
+        }
+
+        .btn-danger {
+            background: var(--danger);
+            color: white;
+        }
+
+        .btn-sm {
+            padding: 0.5rem 1rem;
+            font-size: 0.875rem;
+        }
+
+        .ai-suggestions {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 1rem;
+            border-radius: 8px;
+            margin-bottom: 1rem;
+        }
+
+        .ai-suggestion {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 0.75rem;
+            border-radius: 6px;
+            margin-bottom: 0.5rem;
+            border-left: 3px solid var(--primary);
+        }
+
+        .ai-suggestion-text {
+            font-size: 0.9rem;
+            margin-bottom: 0.25rem;
+        }
+
+        .ai-suggestion-actions {
+            display: flex;
+            gap: 0.5rem;
+            margin-top: 0.5rem;
+        }
+
+        .calendar-widget {
+            background: var(--card-bg);
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+            padding: 1.5rem;
+        }
+
+        .schedule-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .schedule-time {
+            font-weight: 600;
+            color: var(--primary);
+        }
+
+        .platform-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+
+        .platform-card {
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 1rem;
+            text-align: center;
+            transition: var(--transition);
+        }
+
+        .platform-card:hover {
+            border-color: var(--primary);
+            transform: translateY(-2px);
+        }
+
+        .platform-icon {
+            font-size: 2rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .platform-name {
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 0.25rem;
+        }
+
+        .status-indicator {
+            display: inline-block;
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            margin-left: 0.5rem;
+        }
+
+        .status-connected { background: var(--success); }
+        .status-pending { background: var(--warning); }
+        .status-disconnected { background: var(--danger); }
+
+        .content-preview {
+            background: var(--bg-main);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 1rem;
+            margin-top: 1rem;
+        }
+
+        .media-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+
+        .media-item {
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 1rem;
+            text-align: center;
+        }
+
+        .analytics-card {
+            background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius);
+            padding: 1.5rem;
+        }
+
+        .metric {
+            text-align: center;
+            padding: 1rem;
+        }
+
+        .metric-value {
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--primary);
+        }
+
+        .metric-label {
+            color: var(--text-secondary);
+            font-size: 0.875rem;
+            margin-top: 0.25rem;
+        }
+
+        .loading {
+            text-align: center;
+            padding: 2rem;
+            color: var(--text-secondary);
+        }
+
+        .spinner {
+            border: 3px solid var(--border-color);
+            border-top: 3px solid var(--primary);
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 1rem;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .notification {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: var(--success);
+            color: white;
+            padding: 1rem 1.5rem;
+            border-radius: 8px;
+            box-shadow: var(--shadow-lg);
+            z-index: 1000;
+            animation: slideIn 0.3s ease-out;
+        }
+
+        @keyframes slideIn {
+            from { transform: translateX(100%); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
+        }
+
+        @media (max-width: 1024px) {
+            .admin-container {
+                flex-direction: column;
+            }
+            
+            .sidebar {
+                width: 100%;
+                height: auto;
+            }
+            
+            .broadcast-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="admin-container">
+        <!-- Sidebar Navigation -->
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <div class="sidebar-logo">XBRCH Social</div>
+            </div>
+            <nav class="nav-menu">
+                <a href="admin-dashboard.html" class="nav-item">
+                    <i>📊</i> Dashboard
+                </a>
+                <a href="admin-social-broadcast.html" class="nav-item active">
+                    <i>📱</i> Social Broadcast
+                </a>
+                <a href="admin-updates.html" class="nav-item">
+                    <i>📝</i> Updates
+                </a>
+                <a href="admin-products.html" class="nav-item">
+                    <i>🛍️</i> Products
+                </a>
+                <a href="admin-analytics.html" class="nav-item">
+                    <i>📈</i> Analytics
+                </a>
+            </nav>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <div class="page-header">
+                <h1 class="page-title">Social Broadcasting Dashboard</h1>
+                <p class="page-subtitle">Create, schedule, and manage social media content with AI assistance</p>
+            </div>
+
+            <div class="broadcast-grid">
+                <!-- Content Creation -->
+                <div class="card">
+                    <div class="card-header">
+                        <h2 class="card-title">📝 Create Content</h2>
+                    </div>
+                    <form id="broadcast-form">
+                        <div class="form-group">
+                            <label class="form-label">Content Type</label>
+                            <select class="form-select" id="contentType">
+                                <option value="text">Text Post</option>
+                                <option value="image">Image Post</option>
+                                <option value="video">Video Post</option>
+                                <option value="story">Story</option>
+                                <option value="reel">Reel</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Content</label>
+                            <textarea class="form-textarea" id="content" placeholder="Write your content here..." rows="6"></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Media URL (optional)</label>
+                            <input type="url" class="form-input" id="mediaUrl" placeholder="https://...">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">AI Enhancement</label>
+                            <select class="form-select" id="aiEnhancement">
+                                <option value="none">None</option>
+                                <option value="improve">Improve Writing</option>
+                                <option value="expand">Expand Content</option>
+                                <option value="hashtags">Generate Hashtags</option>
+                                <option value="emojis">Add Emojis</option>
+                                <option value="rewrite">Rewrite for Engagement</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <button type="button" class="btn btn-primary" onclick="generateAIContent()">
+                                <span>🤖</span> Generate AI Content
+                            </button>
+                        </div>
+                    </form>
+                </div>
+
+                <!-- AI Suggestions -->
+                <div class="card">
+                    <div class="card-header">
+                        <h2 class="card-title">🤖 AI Suggestions</h2>
+                    </div>
+                    <div id="ai-suggestions" class="ai-suggestions">
+                        <div class="loading">
+                            <div class="spinner"></div>
+                            <p>Generating AI suggestions...</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Platform Integration -->
+                <div class="card">
+                    <div class="card-header">
+                        <h2 class="card-title">🌐 Connected Platforms</h2>
+                    </div>
+                    <div class="platform-grid" id="platform-grid">
+                        <div class="platform-card" onclick="connectPlatform('facebook')">
+                            <div class="platform-icon">📘</div>
+                            <div class="platform-name">Facebook</div>
+                            <div class="status-indicator status-disconnected"></div>
+                        </div>
+                        <div class="platform-card" onclick="connectPlatform('instagram')">
+                            <div class="platform-icon">📷</div>
+                            <div class="platform-name">Instagram</div>
+                            <div class="status-indicator status-disconnected"></div>
+                        </div>
+                        <div class="platform-card" onclick="connectPlatform('twitter')">
+                            <div class="platform-icon">🐦</div>
+                            <div class="platform-name">Twitter</div>
+                            <div class="status-indicator status-disconnected"></div>
+                        </div>
+                        <div class="platform-card" onclick="connectPlatform('linkedin')">
+                            <div class="platform-icon">💼</div>
+                            <div class="platform-name">LinkedIn</div>
+                            <div class="status-indicator status-disconnected"></div>
+                        </div>
+                        <div class="platform-card" onclick="connectPlatform('youtube')">
+                            <div class="platform-icon">📺</div>
+                            <div class="platform-name">YouTube</div>
+                            <div class="status-indicator status-disconnected"></div>
+                        </div>
+                        <div class="platform-card" onclick="connectPlatform('tiktok')">
+                            <div class="platform-icon">🎵</div>
+                            <div class="platform-name">TikTok</div>
+                            <div class="status-indicator status-disconnected"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Content Preview -->
+                <div class="card">
+                    <div class="card-header">
+                        <h2 class="card-title">👀 Content Preview</h2>
+                    </div>
+                    <div id="content-preview" class="content-preview">
+                        <p>Your content will appear here...</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Scheduling Section -->
+            <div class="card">
+                <div class="card-header">
+                    <h2 class="card-title">📅 Schedule Posts</h2>
+                </div>
+                <div class="calendar-widget" id="calendar-widget">
+                    <div class="loading">
+                        <div class="spinner"></div>
+                        <p>Loading calendar...</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Analytics Section -->
+            <div class="card">
+                <div class="card-header">
+                    <h2 class="card-title">📊 Social Analytics</h2>
+                </div>
+                <div class="analytics-card">
+                    <div class="metric">
+                        <div class="metric-value" id="totalPosts">0</div>
+                        <div class="metric-label">Total Posts</div>
+                    </div>
+                    <div class="metric">
+                        <div class="metric-value" id="scheduledPosts">0</div>
+                        <div class="metric-label">Scheduled</div>
+                    </div>
+                    <div class="metric">
+                        <div class="metric-value" id="engagementRate">0%</div>
+                        <div class="metric-label">Engagement Rate</div>
+                    </div>
+                    <div class="metric">
+                        <div class="metric-value" id="reach">0</div>
+                        <div class="metric-label">Total Reach</div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Notification -->
+    <div id="notification" class="notification" style="display: none;"></div>
+
+    <script>
+        // Initialize Supabase
+        const { createClient } = supabase;
+        const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+        
+        // Initialize security
+        let xbrchSecurity;
+        
+        document.addEventListener('DOMContentLoaded', () => {
+            xbrchSecurity = new XBRCHSecurity();
+            xbrchSecurity.init();
+            
+            // Initialize dashboard
+            loadSocialBroadcastData();
+            initializeCalendar();
+            loadAnalytics();
+            checkPlatformConnections();
+        });
+
+        // ============================================
+        // 📱 SOCIAL BROADCAST FUNCTIONS
+        // ============================================
+        
+        async function generateAIContent() {
+            const content = document.getElementById('content').value;
+            const contentType = document.getElementById('contentType').value;
+            const aiEnhancement = document.getElementById('aiEnhancement').value;
+            
+            if (!content.trim()) {
+                showNotification('Please enter some content first', 'warning');
+                return;
+            }
+            
+            try {
+                // Simulate AI processing
+                showNotification('AI is analyzing your content...', 'info');
+                
+                // Mock AI suggestions (in real implementation, this would call an AI API)
+                const suggestions = await generateAISuggestions(content, contentType, aiEnhancement);
+                
+                displayAISuggestions(suggestions);
+                updateContentPreview(content, suggestions);
+                showNotification('AI content generated successfully!', 'success');
+                
+            } catch (error) {
+                console.error('AI generation error:', error);
+                showNotification('Failed to generate AI content', 'error');
+            }
+        }
+
+        async function generateAISuggestions(content, contentType, enhancement) {
+            // Mock AI suggestions (replace with actual AI API call)
+            return new Promise((resolve) => {
+                setTimeout(() => {
+                    const suggestions = [];
+                    
+                    if (enhancement === 'improve') {
+                        suggestions.push({
+                            type: 'improved',
+                            text: 'Enhanced version: ' + content + ' with better engagement hooks',
+                            action: 'replace'
+                        });
+                    }
+                    
+                    if (enhancement === 'expand') {
+                        suggestions.push({
+                            type: 'expanded',
+                            text: content + ' [Additional context for better audience understanding]',
+                            action: 'append'
+                        });
+                    }
+                    
+                    if (enhancement === 'hashtags') {
+                        const hashtags = ['#socialmedia', '#marketing', '#business', '#content'].slice(0, 5);
+                        suggestions.push({
+                            type: 'hashtags',
+                            text: 'Suggested hashtags: ' + hashtags.join(', '),
+                            action: 'add'
+                        });
+                    }
+                    
+                    if (enhancement === 'emojis') {
+                        suggestions.push({
+                            type: 'emojis',
+                            text: content + ' 🚀✨📈',
+                            action: 'add'
+                        });
+                    }
+                    
+                    if (enhancement === 'rewrite') {
+                        suggestions.push({
+                            type: 'rewritten',
+                            text: 'Engagement-optimized: ' + content.replace(/\b(good|great|nice)\b/gi, 'amazing'),
+                            action: 'replace'
+                        });
+                    }
+                    
+                    resolve(suggestions);
+                }, 2000);
+            });
+        }
+
+        function displayAISuggestions(suggestions) {
+            const container = document.getElementById('ai-suggestions');
+            container.innerHTML = '';
+            
+            suggestions.forEach((suggestion, index) => {
+                const suggestionDiv = document.createElement('div');
+                suggestionDiv.className = 'ai-suggestion';
+                suggestionDiv.innerHTML = `
+                    <div class="ai-suggestion-text">${suggestion.text}</div>
+                    <div class="ai-suggestion-actions">
+                        <button class="btn btn-sm btn-primary" onclick="applyAISuggestion(${index})">Apply</button>
+                        <button class="btn btn-sm btn-secondary" onclick="ignoreAISuggestion(${index})">Ignore</button>
+                    </div>
+                `;
+                container.appendChild(suggestionDiv);
+            });
+        }
+
+        function applyAISuggestion(index) {
+            // Apply AI suggestion to content
+            showNotification('AI suggestion applied!', 'success');
+        }
+
+        function ignoreAISuggestion(index) {
+            // Ignore AI suggestion
+            showNotification('AI suggestion ignored', 'info');
+        }
+
+        function updateContentPreview(content, suggestions) {
+            const preview = document.getElementById('content-preview');
+            let previewContent = content;
+            
+            // Apply first suggestion to preview
+            if (suggestions.length > 0) {
+                previewContent = suggestions[0].text;
+            }
+            
+            preview.innerHTML = `
+                <h3>Preview:</h3>
+                <p>${previewContent}</p>
+                <div class="media-grid">
+                    ${generateMediaPreview()}
+                </div>
+            `;
+        }
+
+        function generateMediaPreview() {
+            const mediaUrl = document.getElementById('mediaUrl').value;
+            if (mediaUrl) {
+                if (mediaUrl.match(/\.(jpg|jpeg|png|gif)$/i)) {
+                    return `<img src="${mediaUrl}" alt="Preview" style="max-width: 100%; border-radius: 8px;">`;
+                } else if (mediaUrl.match(/\.(mp4|webm|mov)$/i)) {
+                    return `<video src="${mediaUrl}" controls style="max-width: 100%; border-radius: 8px;"></video>`;
+                }
+            }
+            return '';
+        }
+
+        // ============================================
+        // 🌐 PLATFORM CONNECTION FUNCTIONS
+        // ============================================
+        
+        function connectPlatform(platform) {
+            showNotification(`Connecting to ${platform}...`, 'info');
+            
+            // Simulate platform connection (replace with actual OAuth)
+            setTimeout(() => {
+                updatePlatformStatus(platform, 'connected');
+                showNotification(`${platform} connected successfully!`, 'success');
+                savePlatformConnection(platform, true);
+            }, 2000);
+        }
+
+        function updatePlatformStatus(platform, status) {
+            const cards = document.querySelectorAll('.platform-card');
+            cards.forEach(card => {
+                if (card.onclick && card.onclick.toString().includes(platform)) {
+                    const indicator = card.querySelector('.status-indicator');
+                    indicator.className = `status-indicator status-${status}`;
+                }
+            });
+        }
+
+        function savePlatformConnection(platform, connected) {
+            // Save to localStorage or Supabase
+            const connections = JSON.parse(localStorage.getItem('platformConnections') || '{}');
+            connections[platform] = connected;
+            localStorage.setItem('platformConnections', JSON.stringify(connections));
+        }
+
+        function checkPlatformConnections() {
+            const connections = JSON.parse(localStorage.getItem('platformConnections') || '{}');
+            Object.keys(connections).forEach(platform => {
+                if (connections[platform]) {
+                    updatePlatformStatus(platform, 'connected');
+                }
+            });
+        }
+
+        // ============================================
+        // 📅 CALENDAR FUNCTIONS
+        // ============================================
+        
+        function initializeCalendar() {
+            const calendarWidget = document.getElementById('calendar-widget');
+            calendarWidget.innerHTML = `
+                <div style="text-align: center; padding: 2rem;">
+                    <h3>📅 Content Calendar</h3>
+                    <p>Click on dates to schedule posts</p>
+                    <div style="margin-top: 1rem; padding: 1rem; background: var(--card-bg); border-radius: 8px;">
+                        <input type="date" id="scheduleDate" style="width: 100%; padding: 0.5rem; border: 1px solid var(--border-color); border-radius: 4px;">
+                        <button class="btn btn-primary" style="margin-top: 1rem;" onclick="schedulePost()">Schedule Post</button>
+                    </div>
+                </div>
+            `;
+        }
+
+        function schedulePost() {
+            const date = document.getElementById('scheduleDate').value;
+            const content = document.getElementById('content').value;
+            
+            if (!date || !content) {
+                showNotification('Please select a date and enter content', 'warning');
+                return;
+            }
+            
+            // Save to Supabase
+            saveScheduledPost(date, content);
+            showNotification('Post scheduled successfully!', 'success');
+        }
+
+        async function saveScheduledPost(date, content) {
+            try {
+                const { data, error } = await supabase
+                    .from('scheduled_posts')
+                    .insert({
+                        user_id: USER_ID,
+                        content: content,
+                        scheduled_date: date,
+                        created_at: new Date().toISOString()
+                    });
+                
+                if (error) throw error;
+                
+                updateAnalytics();
+            } catch (error) {
+                console.error('Error saving scheduled post:', error);
+            }
+        }
+
+        // ============================================
+        // 📊 ANALYTICS FUNCTIONS
+        // ============================================
+        
+        function loadAnalytics() {
+            loadSocialMetrics();
+            loadEngagementData();
+        }
+
+        async function loadSocialMetrics() {
+            try {
+                const { data, error } = await supabase
+                    .from('social_posts')
+                    .select('*')
+                    .eq('user_id', USER_ID);
+                
+                if (error) throw error;
+                
+                const totalPosts = data.length;
+                document.getElementById('totalPosts').textContent = totalPosts;
+                
+                // Load scheduled posts
+                const { data: scheduledData } = await supabase
+                    .from('scheduled_posts')
+                    .select('*')
+                    .eq('user_id', USER_ID)
+                    .eq('scheduled_date', 'gte', new Date().toISOString().split('T')[0]);
+                
+                const scheduledPosts = scheduledData?.length || 0;
+                document.getElementById('scheduledPosts').textContent = scheduledPosts;
+                
+            } catch (error) {
+                console.error('Error loading metrics:', error);
+            }
+        }
+
+        function updateAnalytics() {
+            // Update engagement rate and reach
+            // This would calculate based on actual social media API data
+        }
+
+        // ============================================
+        // 📱 CONTENT MANAGEMENT FUNCTIONS
+        // ============================================
+        
+        async function publishToPlatforms(content, platforms) {
+            const results = [];
+            
+            for (const platform of platforms) {
+                try {
+                    // Simulate publishing to each platform
+                    const result = await publishToSinglePlatform(platform, content);
+                    results.push(result);
+                } catch (error) {
+                    console.error(`Error publishing to ${platform}:`, error);
+                    results.push({ platform, error: error.message });
+                }
+            }
+            
+            return results;
+        }
+
+        async function publishToSinglePlatform(platform, content) {
+            // Simulate platform publishing (replace with actual API calls)
+            return new Promise((resolve) => {
+                setTimeout(() => {
+                    resolve({ 
+                        platform, 
+                        status: 'success', 
+                        postId: 'post_' + Date.now(),
+                        url: `https://${platform}.com/post/${Date.now()}`
+                    });
+                }, 1000);
+            });
+        }
+
+        async function loadSocialBroadcastData() {
+            // Load existing posts, scheduled content, etc.
+            console.log('Loading social broadcast data...');
+        }
+
+        // ============================================
+        // 🔔 NOTIFICATION FUNCTIONS
+        // ============================================
+        
+        function showNotification(message, type = 'info') {
+            const notification = document.getElementById('notification');
+            notification.textContent = message;
+            notification.className = `notification ${type}`;
+            notification.style.display = 'block';
+            
+            setTimeout(() => {
+                notification.style.display = 'none';
+            }, 5000);
+        }
+    </script>
+</body>
+</html>
