@@ -1,0 +1,1057 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>XBRCH Admin Dashboard</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Oxygen', 'Ubuntu', sans-serif;
+            background: #f8f9fa;
+            color: #2c3e50;
+            line-height: 1.6;
+        }
+
+        /* ============================================
+           🎨 COLOR SCHEME (from screenshots)
+           ============================================ */
+        :root {
+            --primary: #3b82f6;              /* Light blue instead of purple */
+            --primary-dark: #2563eb;         /* Darker blue */
+            --primary-light: #60a5fa;         /* Lighter blue */
+            --secondary: #06b6d4;            /* Cyan accent */
+            --sidebar-bg: #1e293b;           /* Dark sidebar */
+            --sidebar-hover: #334155;        /* Sidebar hover */
+            --card-bg: #ffffff;               /* White cards */
+            --border-color: #e2e8f0;         /* Light borders */
+            --text-primary: #000000;         /* Black text for better contrast on dark sidebar */
+            --text-secondary: #cccccc;        /* Light gray for secondary text */
+            --success: #10b981;              /* Green */
+            --warning: #f59e0b;              /* Orange */
+            --danger: #ef4444;               /* Red */
+            --shadow-sm: 0 1px 3px rgba(0,0,0,0.08);
+            --shadow-md: 0 4px 12px rgba(0,0,0,0.1);
+            --shadow-lg: 0 8px 24px rgba(0,0,0,0.12);
+            --radius: 12px;
+            --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        /* ============================================
+           📱 MAIN LAYOUT
+           ============================================ */
+        .admin-container {
+            display: flex;
+            min-height: 100vh;
+        }
+
+        /* ============================================
+           🎯 SIDEBAR
+           ============================================ */
+        .sidebar {
+            width: 280px;
+            background: var(--sidebar-bg);
+            color: white;
+            position: fixed;
+            height: 100vh;
+            overflow-y: auto;
+            z-index: 1000;
+            transition: var(--transition);
+        }
+
+        .sidebar-header {
+            padding: 2rem 1.5rem;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+        }
+
+        .brand-logo {
+            font-size: 1.5rem;
+            font-weight: 800;
+            color: white;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .brand-icon {
+            width: 40px;
+            height: 40px;
+            background: var(--primary);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 1.2rem;
+        }
+
+        .nav-menu {
+            padding: 1.5rem 0;
+        }
+
+        .nav-section {
+            margin-bottom: 2rem;
+        }
+
+        .nav-section-title {
+            font-size: 0.75rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            color: #94a3b8;
+            padding: 0 1.5rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .nav-item {
+            display: block;
+            padding: 0.75rem 1.5rem;
+            color: #cbd5e1;
+            text-decoration: none;
+            transition: var(--transition);
+            border-left: 3px solid transparent;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .nav-item:hover {
+            background: var(--sidebar-hover);
+            color: white;
+        }
+
+        .nav-item.active {
+            background: var(--sidebar-hover);
+            color: var(--primary-light);
+            border-left-color: var(--primary-light);
+        }
+
+        .nav-icon {
+            width: 20px;
+            height: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* ============================================
+           📦 MAIN CONTENT
+           ============================================ */
+        .main-content {
+            flex: 1;
+            margin-left: 280px;
+            padding: 2rem;
+            max-width: calc(100vw - 280px);
+        }
+
+        /* ============================================
+           🔝 TOP BAR
+           ============================================ */
+        .top-bar {
+            background: white;
+            border-radius: var(--radius);
+            padding: 1.5rem 2rem;
+            margin-bottom: 2rem;
+            box-shadow: var(--shadow-sm);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .page-title {
+            font-size: 1.75rem;
+            font-weight: 700;
+            color: var(--text-primary);
+        }
+
+        .page-subtitle {
+            color: var(--text-secondary);
+            font-size: 0.95rem;
+            margin-top: 0.25rem;
+        }
+
+        .top-bar-actions {
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+        }
+
+        .user-profile {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 0.5rem 1rem;
+            background: var(--sidebar-bg);
+            border-radius: 25px;
+            color: white;
+            text-decoration: none;
+            transition: var(--transition);
+        }
+
+        .user-avatar {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background: var(--primary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+        }
+
+        /* ============================================
+           🎯 CARDS
+           ============================================ */
+        .card {
+            background: var(--card-bg);
+            border-radius: var(--radius);
+            box-shadow: var(--shadow-sm);
+            overflow: hidden;
+            transition: var(--transition);
+        }
+
+        .card:hover {
+            box-shadow: var(--shadow-md);
+        }
+
+        .card-header {
+            padding: 1.5rem 2rem;
+            border-bottom: 1px solid var(--border-color);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .card-title {
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+
+        .card-body {
+            padding: 2rem;
+        }
+
+        /* ============================================
+           📊 STATS CARDS
+           ============================================ */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .stat-card {
+            background: white;
+            border-radius: var(--radius);
+            padding: 1.5rem;
+            box-shadow: var(--shadow-sm);
+            border-left: 4px solid var(--primary);
+            transition: var(--transition);
+        }
+
+        .stat-card:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-md);
+        }
+
+        .stat-icon {
+            width: 48px;
+            height: 48px;
+            background: var(--primary-light);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 1rem;
+            font-size: 1.5rem;
+        }
+
+        .stat-value {
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--text-primary);
+            margin-bottom: 0.25rem;
+        }
+
+        .stat-label {
+            color: var(--text-secondary);
+            font-size: 0.875rem;
+        }
+
+        .stat-change {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.25rem;
+            font-size: 0.75rem;
+            font-weight: 600;
+            margin-top: 0.5rem;
+            padding: 0.25rem 0.5rem;
+            border-radius: 15px;
+        }
+
+        .stat-change.positive {
+            color: var(--success);
+            background: rgba(16, 185, 129, 0.1);
+        }
+
+        .stat-change.negative {
+            color: var(--danger);
+            background: rgba(239, 68, 68, 0.1);
+        }
+
+        /* ============================================
+           📋 TABLES
+           ============================================ */
+        .table-container {
+            background: white;
+            border-radius: var(--radius);
+            box-shadow: var(--shadow-sm);
+            overflow: hidden;
+        }
+
+        .table-header {
+            padding: 1.5rem 2rem;
+            border-bottom: 1px solid var(--border-color);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .search-box {
+            position: relative;
+            width: 300px;
+        }
+
+        .search-input {
+            width: 100%;
+            padding: 0.75rem 1rem 0.75rem 2.5rem;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            font-size: 0.875rem;
+            transition: var(--transition);
+        }
+
+        .search-input:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1);
+        }
+
+        .search-icon {
+            position: absolute;
+            left: 0.75rem;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--text-secondary);
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th {
+            text-align: left;
+            padding: 1rem 2rem;
+            font-weight: 600;
+            color: var(--text-secondary);
+            font-size: 0.875rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        td {
+            padding: 1rem 2rem;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        tr:hover {
+            background: #f8fafc;
+        }
+
+        /* ============================================
+           🎨 BUTTONS
+           ============================================ */
+        .btn {
+            padding: 0.75rem 1.5rem;
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition);
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            text-decoration: none;
+            font-size: 0.875rem;
+        }
+
+        .btn-primary {
+            background: var(--primary);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: var(--primary-dark);
+            transform: translateY(-1px);
+            box-shadow: var(--shadow-md);
+        }
+
+        .btn-secondary {
+            background: var(--border-color);
+            color: var(--text-primary);
+        }
+
+        .btn-secondary:hover {
+            background: #cbd5e1;
+        }
+
+        .btn-success {
+            background: var(--success);
+            color: white;
+        }
+
+        .btn-danger {
+            background: var(--danger);
+            color: white;
+        }
+
+        .btn-sm {
+            padding: 0.5rem 1rem;
+            font-size: 0.8rem;
+        }
+
+        /* ============================================
+           🏷️ BADGES
+           ============================================ */
+        .badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.25rem;
+            padding: 0.25rem 0.75rem;
+            border-radius: 15px;
+            font-size: 0.75rem;
+            font-weight: 600;
+        }
+
+        .badge-success {
+            background: rgba(16, 185, 129, 0.1);
+            color: var(--success);
+        }
+
+        .badge-warning {
+            background: rgba(245, 158, 11, 0.1);
+            color: var(--warning);
+        }
+
+        .badge-danger {
+            background: rgba(239, 68, 68, 0.1);
+            color: var(--danger);
+        }
+
+        .badge-primary {
+            background: rgba(99, 102, 241, 0.1);
+            color: var(--primary);
+        }
+
+        /* ============================================
+           📱 RESPONSIVE
+           ============================================ */
+        @media (max-width: 1024px) {
+            .sidebar {
+                transform: translateX(-100%);
+            }
+            
+            .sidebar.open {
+                transform: translateX(0);
+            }
+            
+            .main-content {
+                margin-left: 0;
+                max-width: 100vw;
+            }
+            
+            .stats-grid {
+                grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            }
+        }
+
+        @media (max-width: 768px) {
+            .main-content {
+                padding: 1rem;
+            }
+            
+            .top-bar {
+                flex-direction: column;
+                gap: 1rem;
+                align-items: stretch;
+            }
+            
+            .search-box {
+                width: 100%;
+            }
+            
+            .table-container {
+                overflow-x: auto;
+            }
+            
+            table {
+                min-width: 600px;
+            }
+        }
+
+        /* ============================================
+           🎯 PAGE SPECIFIC STYLES
+           ============================================ */
+        .content-grid {
+            display: grid;
+            gap: 2rem;
+        }
+
+        .form-grid {
+            display: grid;
+            gap: 1.5rem;
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1.5rem;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        .form-label {
+            font-weight: 600;
+            color: var(--text-primary);
+            font-size: 0.875rem;
+        }
+
+        .form-input, .form-textarea, .form-select {
+            padding: 0.75rem 1rem;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            font-size: 0.875rem;
+            transition: var(--transition);
+        }
+
+        .form-input:focus, .form-textarea:focus, .form-select:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1);
+        }
+
+        .form-textarea {
+            resize: vertical;
+            min-height: 100px;
+        }
+
+        .image-upload {
+            border: 2px dashed var(--border-color);
+            border-radius: 8px;
+            padding: 2rem;
+            text-align: center;
+            transition: var(--transition);
+            cursor: pointer;
+        }
+
+        .image-upload:hover {
+            border-color: var(--primary);
+            background: rgba(99, 102, 241, 0.05);
+        }
+
+        .image-upload.dragover {
+            border-color: var(--primary);
+            background: rgba(99, 102, 241, 0.1);
+        }
+
+        .toggle-switch {
+            position: relative;
+            width: 48px;
+            height: 24px;
+            background: var(--border-color);
+            border-radius: 12px;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .toggle-switch.active {
+            background: var(--primary);
+        }
+
+        .toggle-switch::after {
+            content: '';
+            position: absolute;
+            width: 20px;
+            height: 20px;
+            background: white;
+            border-radius: 50%;
+            top: 2px;
+            left: 2px;
+            transition: var(--transition);
+        }
+
+        .toggle-switch.active::after {
+            left: 26px;
+        }
+    </style>
+</head>
+<body>
+    <div class="admin-container">
+        <!-- ============================================
+           🎯 SIDEBAR
+           ============================================ -->
+        <aside class="sidebar" id="sidebar">
+            <div class="sidebar-header">
+                <a href="#" class="brand-logo">
+                    <div class="brand-icon">X</div>
+                    <span>XBRCH Admin</span>
+                </a>
+            </div>
+            
+            <nav class="nav-menu">
+                <div class="nav-section">
+                    <div class="nav-section-title">Main</div>
+                    <a href="#dashboard" class="nav-item active">
+                        <span class="nav-icon">📊</span>
+                        <span>Dashboard</span>
+                    </a>
+                    <a href="#analytics" class="nav-item">
+                        <span class="nav-icon">📈</span>
+                        <span>Analytics</span>
+                    </a>
+                </div>
+                
+                <div class="nav-section">
+                    <div class="nav-section-title">Web Broadcast</div>
+                    <a href="#updates" class="nav-item">
+                        <span class="nav-icon">📝</span>
+                        <span>Updates</span>
+                    </a>
+                    <a href="#products" class="nav-item">
+                        <span class="nav-icon">🛍️</span>
+                        <span>Products</span>
+                    </a>
+                    <a href="#orders" class="nav-item">
+                        <span class="nav-icon">📦</span>
+                        <span>Orders</span>
+                    </a>
+                    <a href="#settings" class="nav-item">
+                        <span class="nav-icon">⚙️</span>
+                        <span>Settings</span>
+                    </a>
+                </div>
+                
+                <div class="nav-section">
+                    <div class="nav-section-title">Account</div>
+                    <a href="#profile" class="nav-item">
+                        <span class="nav-icon">👤</span>
+                        <span>Profile</span>
+                    </a>
+                    <a href="#logout" class="nav-item">
+                        <span class="nav-icon">🚪</span>
+                        <span>Logout</span>
+                    </a>
+                </div>
+            </nav>
+        </aside>
+
+        <!-- ============================================
+           📦 MAIN CONTENT
+           ============================================ -->
+        <main class="main-content">
+            <!-- Top Bar -->
+            <div class="top-bar">
+                <div>
+                    <h1 class="page-title" data-translate="dashboard">Dashboard</h1>
+                    <p class="page-subtitle">Manage your broadcast wall and monitor performance</p>
+                </div>
+                <div class="top-bar-actions">
+                    <select id="language-selector" onchange="switchLanguage(this.value)" style="margin-right: 1rem; padding: 0.5rem; border-radius: 6px; border: 1px solid var(--border-color);">
+                        <option value="en">🇺🇸 English</option>
+                        <option value="nl">🇳🇱 Nederlands</option>
+                        <option value="af">🇿🇦 Afrikaans</option>
+                    </select>
+                    <button class="btn btn-primary">
+                        <span>➕</span>
+                        <span>New Update</span>
+                    </button>
+                    <a href="#" class="user-profile">
+                        <div class="user-avatar">A</div>
+                        <span>Admin User</span>
+                    </a>
+                </div>
+            </div>
+
+            <!-- Stats Grid -->
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-icon">📝</div>
+                    <div class="stat-value">24</div>
+                    <div class="stat-label">Total Updates</div>
+                    <div class="stat-change positive">
+                        <span>↑</span>
+                        <span>12% from last month</span>
+                    </div>
+                </div>
+                
+                <div class="stat-card">
+                    <div class="stat-icon">🛍️</div>
+                    <div class="stat-value">8</div>
+                    <div class="stat-label">Active Products</div>
+                    <div class="stat-change positive">
+                        <span>↑</span>
+                        <span>2 new this week</span>
+                    </div>
+                </div>
+                
+                <div class="stat-card">
+                    <div class="stat-icon">📦</div>
+                    <div class="stat-value">156</div>
+                    <div class="stat-label">Total Orders</div>
+                    <div class="stat-change positive">
+                        <span>↑</span>
+                        <span>23% from last week</span>
+                    </div>
+                </div>
+                
+                <div class="stat-card">
+                    <div class="stat-icon">💰</div>
+                    <div class="stat-value">€2,847</div>
+                    <div class="stat-label">Revenue</div>
+                    <div class="stat-change positive">
+                        <span>↑</span>
+                        <span>18% from last month</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Recent Activity Table -->
+            <div class="table-container">
+                <div class="table-header">
+                    <h2 class="card-title">Recent Activity</h2>
+                    <div class="search-box">
+                        <span class="search-icon">🔍</span>
+                        <input type="text" class="search-input" placeholder="Search activity...">
+                    </div>
+                </div>
+                
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Type</th>
+                            <th>Title</th>
+                            <th>Status</th>
+                            <th>Date</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>
+                                <span class="badge badge-primary">📝 Update</span>
+                            </td>
+                            <td>Grand Opening Next Week!</td>
+                            <td><span class="badge badge-success">Published</span></td>
+                            <td>2 hours ago</td>
+                            <td>
+                                <button class="btn btn-sm btn-secondary">Edit</button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <span class="badge badge-success">🛍️ Product</span>
+                            </td>
+                            <td>Fresh Croissants - Today Only!</td>
+                            <td><span class="badge badge-success">Active</span></td>
+                            <td>5 hours ago</td>
+                            <td>
+                                <button class="btn btn-sm btn-secondary">Edit</button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <span class="badge badge-warning">📦 Order</span>
+                            </td>
+                            <td>Order #ORD-123456</td>
+                            <td><span class="badge badge-warning">Preparing</span></td>
+                            <td>1 hour ago</td>
+                            <td>
+                                <button class="btn btn-sm btn-primary">View</button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </main>
+    </div>
+
+    <script src="security-config.js"></script>
+    <script src="admin-security.js"></script>
+    <script>
+        // Initialize security and check authentication
+        document.addEventListener('DOMContentLoaded', () => {
+            // Wait for security to initialize
+            setTimeout(() => {
+                if (typeof adminSecurity !== 'undefined') {
+                    // Check if user can access this page
+                    if (!adminSecurity.canAccessPage('admin-dashboard.html')) {
+                        return;
+                    }
+                    
+                    // Load user info
+                    const userInfo = adminSecurity.getUserInfo();
+                    if (userInfo) {
+                        updateDashboardWithUserInfo(userInfo);
+                    }
+                }
+            }, 100);
+        });
+
+        function updateDashboardWithUserInfo(userInfo) {
+            // Update user info in header
+            const userInfoElements = document.querySelectorAll('.user-info');
+            userInfoElements.forEach(el => {
+                el.textContent = `${userInfo.businessName} (${userInfo.roleLabel})`;
+            });
+        }
+
+        // Translation system
+        const translations = {
+            'en': {
+                dashboard: 'Dashboard',
+                totalUpdates: 'Total Updates',
+                totalProducts: 'Total Products', 
+                totalOrders: 'Total Orders',
+                totalRevenue: 'Total Revenue',
+                recentActivity: 'Recent Activity',
+                viewAll: 'View All',
+                quickActions: 'Quick Actions',
+                createUpdate: 'Create Update',
+                addProduct: 'Add Product',
+                viewOrders: 'View Orders',
+                settings: 'Settings',
+                analytics: 'Analytics',
+                profile: 'Profile',
+                logout: 'Logout'
+            },
+            'nl': {
+                dashboard: 'Dashboard',
+                totalUpdates: 'Totaal Updates',
+                totalProducts: 'Totaal Producten',
+                totalOrders: 'Totaal Bestellingen',
+                totalRevenue: 'Totaale Omzet',
+                recentActivity: 'Recent Activiteit',
+                viewAll: 'Bekijk Alles',
+                quickActions: 'Snelle Acties',
+                createUpdate: 'Update Maken',
+                addProduct: 'Product Toevoegen',
+                viewOrders: 'Bestellingen Bekijken',
+                settings: 'Instellingen',
+                analytics: 'Analytics',
+                profile: 'Profiel',
+                logout: 'Uitloggen'
+            },
+            'af': {
+                dashboard: 'Dashboard',
+                totalUpdates: 'Totale Opdaterings',
+                totalProducts: 'Totaal Produkte',
+                totalOrders: 'Totaal Bestellings',
+                totalRevenue: 'Totaale Inkomste',
+                recentActivity: 'Onlangte Aktiwiteit',
+                viewAll: 'Sien Alles',
+                quickActions: 'Vinnige Aksies',
+                createUpdate: 'Skep Opdatering',
+                addProduct: 'Voeg Produk By',
+                viewOrders: 'Sien Bestellings',
+                settings: 'Instellings',
+                analytics: 'Analise',
+                profile: 'Profiel',
+                logout: 'Teken Uit'
+            }
+        };
+        
+        // Get current language or default to English
+        let currentLang = localStorage.getItem('adminLanguage') || 'en';
+        
+        // Language switcher function
+        function switchLanguage(lang) {
+            currentLang = lang;
+            localStorage.setItem('adminLanguage', lang);
+            updatePageLanguage();
+        }
+        
+        // Update page content with selected language
+        function updatePageLanguage() {
+            const t = translations[currentLang];
+            
+            // Update page title and subtitle
+            const pageTitle = document.querySelector('.page-title');
+            const pageSubtitle = document.querySelector('.page-subtitle');
+            if (pageTitle) pageTitle.textContent = t.dashboard;
+            if (pageSubtitle) pageSubtitle.textContent = 'Manage your broadcast wall and monitor performance';
+            
+            // Update stat cards
+            const statLabels = document.querySelectorAll('.stat-label');
+            if (statLabels[0]) statLabels[0].textContent = t.totalUpdates;
+            if (statLabels[1]) statLabels[1].textContent = t.totalProducts;
+            if (statLabels[2]) statLabels[2].textContent = t.totalOrders;
+            if (statLabels[3]) statLabels[3].textContent = t.totalRevenue;
+            
+            // Update table headers
+            const tableHeaders = document.querySelectorAll('th');
+            tableHeaders.forEach(header => {
+                const text = header.textContent;
+                if (text.includes('Activity')) header.textContent = t.recentActivity;
+                if (text.includes('Update')) header.textContent = t.totalUpdates;
+                if (text.includes('Customer')) header.textContent = t.totalOrders;
+            });
+            
+            // Update navigation
+            const navLinks = document.querySelectorAll('.nav-item span');
+            navLinks.forEach(link => {
+                const text = link.textContent;
+                if (text.includes('Dashboard')) link.textContent = t.dashboard;
+                if (text.includes('Updates')) link.textContent = t.totalUpdates;
+                if (text.includes('Products')) link.textContent = t.totalProducts;
+                if (text.includes('Orders')) link.textContent = t.totalOrders;
+                if (text.includes('Settings')) link.textContent = t.settings;
+                if (text.includes('Analytics')) link.textContent = t.analytics;
+                if (text.includes('Profile')) link.textContent = t.profile;
+                if (text.includes('Logout')) link.textContent = t.logout;
+            });
+            
+            // Update buttons
+            const buttons = document.querySelectorAll('.btn span');
+            buttons.forEach(btn => {
+                const text = btn.textContent;
+                if (text.includes('Create Update')) btn.textContent = t.createUpdate;
+                if (text.includes('Add Product')) btn.textContent = t.addProduct;
+                if (text.includes('View Orders')) btn.textContent = t.viewOrders;
+            });
+            
+            console.log('Language updated to:', currentLang);
+        }
+        
+        // ============================================
+        // 🔌 SUPABASE CONFIGURATION
+        // ============================================
+        
+        // TODO: Replace these with your actual Supabase credentials
+        const SUPABASE_URL = 'https://pvmbxnflhcrdhcwvtdxc.supabase.co';
+        const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InB2bWJ4bmZsaGNyZGhjd3Z0ZHhjIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzAyMTY5NzQsImV4cCI6MjA4NTc5Mjk3NH0.GN4p_s8Cqod-K3S1lt_48oDZIhAroCLDrKDNs7DLjYg';
+        
+        // Get user ID from URL parameter (e.g., ?userId=xxx)
+        function getUserIdFromUrl() {
+            const urlParams = new URLSearchParams(window.location.search);
+            return urlParams.get('userId') || 'demo-user-id'; // Fallback to demo ID
+        }
+        
+        const USER_ID = getUserIdFromUrl();
+        
+        // ============================================
+        // 📊 API FUNCTIONS
+        // ============================================
+        
+        // Generic API call function
+        async function apiCall(endpoint, method = 'GET', data = null) {
+            const url = `${SUPABASE_URL}/rest/v1/${endpoint}`;
+            const options = {
+                method,
+                headers: {
+                    'apikey': SUPABASE_ANON_KEY,
+                    'Authorization': `Bearer ${SUPABASE_ANON_KEY}`,
+                    'Content-Type': 'application/json'
+                }
+            };
+            
+            if (data) {
+                options.body = JSON.stringify(data);
+            }
+            
+            const response = await fetch(url, options);
+            
+            if (!response.ok) {
+                throw new Error(`API Error: ${response.statusText}`);
+            }
+            
+            return response.json();
+        }
+        
+        // ============================================
+        // 🎯 NAVIGATION
+        // ============================================
+        
+        document.addEventListener('DOMContentLoaded', () => {
+            // Set initial language
+            updatePageLanguage();
+            
+            // Set language selector value
+            const langSelector = document.getElementById('language-selector');
+            if (langSelector) {
+                langSelector.value = currentLang;
+            }
+            
+            // Simple navigation handling
+            document.querySelectorAll('.nav-item').forEach(item => {
+                item.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    
+                    // Remove active class from all items
+                    document.querySelectorAll('.nav-item').forEach(nav => nav.classList.remove('active'));
+                    
+                    // Add active class to clicked item
+                    this.classList.add('active');
+                    
+                    // Here you would typically load the corresponding page content
+                    const page = this.getAttribute('href').substring(1);
+                    console.log('Loading page:', page);
+                });
+                
+                // Here you would typically load the corresponding page content
+                const page = this.getAttribute('href').substring(1);
+                console.log('Loading page:', page);
+            });
+        });
+
+        // Mobile sidebar toggle
+        function toggleSidebar() {
+            document.getElementById('sidebar').classList.toggle('open');
+        }
+
+        // Add mobile menu button for responsive design
+        if (window.innerWidth <= 1024) {
+            const mobileMenuBtn = document.createElement('button');
+            mobileMenuBtn.innerHTML = '☰';
+            mobileMenuBtn.style.cssText = `
+                position: fixed;
+                top: 1rem;
+                left: 1rem;
+                z-index: 1001;
+                background: var(--primary);
+                color: white;
+                border: none;
+                border-radius: 8px;
+                padding: 0.5rem;
+                font-size: 1.5rem;
+                cursor: pointer;
+            `;
+            mobileMenuBtn.onclick = toggleSidebar;
+            document.body.appendChild(mobileMenuBtn);
+        }
+    </script>
+</body>
+</html>

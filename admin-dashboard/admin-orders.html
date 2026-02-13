@@ -1,0 +1,1158 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Orders - XBRCH Admin Dashboard</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Oxygen', 'Ubuntu', sans-serif;
+            background: #f8f9fa;
+            color: #2c3e50;
+            line-height: 1.6;
+        }
+
+        /* ============================================
+           🎨 COLOR SCHEME (from screenshots)
+           ============================================ */
+        :root {
+            --primary: #3b82f6;              /* Light blue instead of purple */
+            --primary-dark: #2563eb;         /* Darker blue */
+            --primary-light: #60a5fa;         /* Lighter blue */
+            --secondary: #06b6d4;            /* Cyan accent */
+            --sidebar-bg: #1e293b;           /* Dark sidebar */
+            --sidebar-hover: #334155;        /* Sidebar hover */
+            --card-bg: #ffffff;               /* White cards */
+            --border-color: #e2e8f0;         /* Light borders */
+            --text-primary: #000000;         /* Black text for better contrast on dark sidebar */
+            --text-secondary: #cccccc;        /* Light gray for secondary text */
+            --success: #10b981;              /* Green */
+            --warning: #f59e0b;              /* Orange */
+            --danger: #ef4444;               /* Red */
+            --shadow-sm: 0 1px 3px rgba(0,0,0,0.08);
+            --shadow-md: 0 4px 12px rgba(0,0,0,0.1);
+            --shadow-lg: 0 8px 24px rgba(0,0,0,0.12);
+            --radius: 12px;
+            --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        /* ============================================
+           📱 MAIN LAYOUT
+           ============================================ */
+        .admin-container {
+            display: flex;
+            min-height: 100vh;
+        }
+
+        /* ============================================
+           🎯 SIDEBAR
+           ============================================ */
+        .sidebar {
+            width: 280px;
+            background: var(--sidebar-bg);
+            color: white;
+            position: fixed;
+            height: 100vh;
+            overflow-y: auto;
+            z-index: 1000;
+            transition: var(--transition);
+        }
+
+        .sidebar-header {
+            padding: 2rem 1.5rem;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+        }
+
+        .brand-logo {
+            font-size: 1.5rem;
+            font-weight: 800;
+            color: white;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .brand-icon {
+            width: 40px;
+            height: 40px;
+            background: var(--primary);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 1.2rem;
+        }
+
+        .nav-menu {
+            padding: 1.5rem 0;
+        }
+
+        .nav-section {
+            margin-bottom: 2rem;
+        }
+
+        .nav-section-title {
+            font-size: 0.75rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            color: #94a3b8;
+            padding: 0 1.5rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .nav-item {
+            display: block;
+            padding: 0.75rem 1.5rem;
+            color: #cbd5e1;
+            text-decoration: none;
+            transition: var(--transition);
+            border-left: 3px solid transparent;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .nav-item:hover {
+            background: var(--sidebar-hover);
+            color: white;
+        }
+
+        .nav-item.active {
+            background: var(--sidebar-hover);
+            color: var(--primary-light);
+            border-left-color: var(--primary-light);
+        }
+
+        .nav-icon {
+            width: 20px;
+            height: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* ============================================
+           📦 MAIN CONTENT
+           ============================================ */
+        .main-content {
+            flex: 1;
+            margin-left: 280px;
+            padding: 2rem;
+            max-width: calc(100vw - 280px);
+        }
+
+        /* ============================================
+           🔝 TOP BAR
+           ============================================ */
+        .top-bar {
+            background: white;
+            border-radius: var(--radius);
+            padding: 1.5rem 2rem;
+            margin-bottom: 2rem;
+            box-shadow: var(--shadow-sm);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .page-title {
+            font-size: 1.75rem;
+            font-weight: 700;
+            color: var(--text-primary);
+        }
+
+        .page-subtitle {
+            color: var(--text-secondary);
+            font-size: 0.95rem;
+            margin-top: 0.25rem;
+        }
+
+        .top-bar-actions {
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+        }
+
+        /* ============================================
+           🎨 BUTTONS
+           ============================================ */
+        .btn {
+            padding: 0.75rem 1.5rem;
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition);
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            text-decoration: none;
+            font-size: 0.875rem;
+        }
+
+        .btn-primary {
+            background: var(--primary);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: var(--primary-dark);
+            transform: translateY(-1px);
+            box-shadow: var(--shadow-md);
+        }
+
+        .btn-secondary {
+            background: var(--border-color);
+            color: var(--text-primary);
+        }
+
+        .btn-secondary:hover {
+            background: #cbd5e1;
+        }
+
+        .btn-success {
+            background: var(--success);
+            color: white;
+        }
+
+        .btn-danger {
+            background: var(--danger);
+            color: white;
+        }
+
+        .btn-sm {
+            padding: 0.5rem 1rem;
+            font-size: 0.8rem;
+        }
+
+        /* ============================================
+           📊 STATS CARDS
+           ============================================ */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .stat-card {
+            background: white;
+            border-radius: var(--radius);
+            padding: 1.5rem;
+            box-shadow: var(--shadow-sm);
+            border-left: 4px solid var(--primary);
+            transition: var(--transition);
+        }
+
+        .stat-card:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-md);
+        }
+
+        .stat-icon {
+            width: 48px;
+            height: 48px;
+            background: var(--primary-light);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 1rem;
+            font-size: 1.5rem;
+        }
+
+        .stat-value {
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--text-primary);
+            margin-bottom: 0.25rem;
+        }
+
+        .stat-label {
+            color: var(--text-secondary);
+            font-size: 0.875rem;
+        }
+
+        /* ============================================
+           📋 TABLES
+           ============================================ */
+        .table-container {
+            background: white;
+            border-radius: var(--radius);
+            box-shadow: var(--shadow-sm);
+            overflow: hidden;
+        }
+
+        .table-header {
+            padding: 1.5rem 2rem;
+            border-bottom: 1px solid var(--border-color);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .search-box {
+            position: relative;
+            width: 300px;
+        }
+
+        .search-input {
+            width: 100%;
+            padding: 0.75rem 1rem 0.75rem 2.5rem;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            font-size: 0.875rem;
+            transition: var(--transition);
+        }
+
+        .search-input:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1);
+        }
+
+        .search-icon {
+            position: absolute;
+            left: 0.75rem;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--text-secondary);
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th {
+            text-align: left;
+            padding: 1rem 2rem;
+            font-weight: 600;
+            color: var(--text-secondary);
+            font-size: 0.875rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        td {
+            padding: 1rem 2rem;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        tr:hover {
+            background: #f8fafc;
+        }
+
+        /* ============================================
+           🏷️ BADGES
+           ============================================ */
+        .badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.25rem;
+            padding: 0.25rem 0.75rem;
+            border-radius: 15px;
+            font-size: 0.75rem;
+            font-weight: 600;
+        }
+
+        .badge-success {
+            background: rgba(16, 185, 129, 0.1);
+            color: var(--success);
+        }
+
+        .badge-warning {
+            background: rgba(245, 158, 11, 0.1);
+            color: var(--warning);
+        }
+
+        .badge-danger {
+            background: rgba(239, 68, 68, 0.1);
+            color: var(--danger);
+        }
+
+        .badge-primary {
+            background: rgba(99, 102, 241, 0.1);
+            color: var(--primary);
+        }
+
+        /* ============================================
+           📦 ORDER DETAILS
+           ============================================ */
+        .order-info {
+            display: flex;
+            align-items: start;
+            gap: 1rem;
+        }
+
+        .order-number {
+            font-weight: 700;
+            color: var(--text-primary);
+            font-size: 1rem;
+        }
+
+        .order-meta {
+            font-size: 0.875rem;
+            color: var(--text-secondary);
+            margin-top: 0.25rem;
+        }
+
+        .customer-info {
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+
+        .customer-contact {
+            font-size: 0.875rem;
+            color: var(--text-secondary);
+            margin-top: 0.25rem;
+        }
+
+        .product-info {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .product-icon {
+            width: 40px;
+            height: 40px;
+            background: var(--primary-light);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.25rem;
+        }
+
+        .product-details {
+            flex: 1;
+        }
+
+        .product-name {
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+
+        .product-quantity {
+            font-size: 0.875rem;
+            color: var(--text-secondary);
+        }
+
+        .price-info {
+            text-align: right;
+        }
+
+        .price-total {
+            font-weight: 700;
+            color: var(--text-primary);
+            font-size: 1.1rem;
+        }
+
+        .price-unit {
+            font-size: 0.875rem;
+            color: var(--text-secondary);
+        }
+
+        .pickup-info {
+            font-size: 0.875rem;
+            color: var(--text-secondary);
+        }
+
+        .pickup-time {
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+
+        /* ============================================
+           🔄 STATUS SELECT
+           ============================================ */
+        .status-select {
+            padding: 0.5rem 1rem;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            font-size: 0.875rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .status-select:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1);
+        }
+
+        .status-select.status-preparing {
+            background: rgba(245, 158, 11, 0.1);
+            color: var(--warning);
+            border-color: var(--warning);
+        }
+
+        .status-select.status-ready {
+            background: rgba(16, 185, 129, 0.1);
+            color: var(--success);
+            border-color: var(--success);
+        }
+
+        .status-select.status-completed {
+            background: rgba(99, 102, 241, 0.1);
+            color: var(--primary);
+            border-color: var(--primary);
+        }
+
+        .status-select.status-cancelled {
+            background: rgba(239, 68, 68, 0.1);
+            color: var(--danger);
+            border-color: var(--danger);
+        }
+
+        /* ============================================
+           📱 RESPONSIVE
+           ============================================ */
+        @media (max-width: 1024px) {
+            .sidebar {
+                transform: translateX(-100%);
+            }
+            
+            .sidebar.open {
+                transform: translateX(0);
+            }
+            
+            .main-content {
+                margin-left: 0;
+                max-width: 100vw;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .main-content {
+                padding: 1rem;
+            }
+            
+            .top-bar {
+                flex-direction: column;
+                gap: 1rem;
+                align-items: stretch;
+            }
+            
+            .search-box {
+                width: 100%;
+            }
+            
+            .stats-grid {
+                grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            }
+        }
+
+        /* ============================================
+           📄 ORDER MODAL
+           ============================================ */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 2000;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal.active {
+            display: flex;
+        }
+
+        .modal-content {
+            background: white;
+            border-radius: var(--radius);
+            max-width: 600px;
+            width: 90%;
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+
+        .modal-header {
+            padding: 1.5rem 2rem;
+            border-bottom: 1px solid var(--border-color);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .modal-body {
+            padding: 2rem;
+        }
+
+        .modal-footer {
+            padding: 1.5rem 2rem;
+            border-top: 1px solid var(--border-color);
+            display: flex;
+            justify-content: flex-end;
+            gap: 1rem;
+        }
+
+        .close-btn {
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: var(--text-secondary);
+            padding: 0.5rem;
+            border-radius: 8px;
+            transition: var(--transition);
+        }
+
+        .close-btn:hover {
+            background: var(--border-color);
+        }
+
+        .order-detail-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 1rem 0;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .order-detail-label {
+            font-weight: 600;
+            color: var(--text-secondary);
+        }
+
+        .order-detail-value {
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+    </style>
+</head>
+<body>
+    <div class="admin-container">
+        <!-- ============================================
+           🎯 SIDEBAR
+           ============================================ -->
+        <aside class="sidebar" id="sidebar">
+            <div class="sidebar-header">
+                <a href="admin-dashboard.html" class="brand-logo">
+                    <div class="brand-icon">X</div>
+                    <span>XBRCH Admin</span>
+                </a>
+            </div>
+            
+            <nav class="nav-menu">
+                <div class="nav-section">
+                    <div class="nav-section-title">Main</div>
+                    <a href="admin-dashboard.html" class="nav-item">
+                        <span class="nav-icon">📊</span>
+                        <span>Dashboard</span>
+                    </a>
+                    <a href="#" class="nav-item">
+                        <span class="nav-icon">📈</span>
+                        <span>Analytics</span>
+                    </a>
+                </div>
+                
+                <div class="nav-section">
+                    <div class="nav-section-title">Web Broadcast</div>
+                    <a href="admin-updates.html" class="nav-item">
+                        <span class="nav-icon">📝</span>
+                        <span>Updates</span>
+                    </a>
+                    <a href="admin-products.html" class="nav-item">
+                        <span class="nav-icon">🛍️</span>
+                        <span>Products</span>
+                    </a>
+                    <a href="admin-orders.html" class="nav-item active">
+                        <span class="nav-icon">📦</span>
+                        <span>Orders</span>
+                    </a>
+                    <a href="admin-settings.html" class="nav-item">
+                        <span class="nav-icon">⚙️</span>
+                        <span>Settings</span>
+                    </a>
+                </div>
+                
+                <div class="nav-section">
+                    <div class="nav-section-title">Account</div>
+                    <a href="#" class="nav-item">
+                        <span class="nav-icon">👤</span>
+                        <span>Profile</span>
+                    </a>
+                    <a href="#" class="nav-item">
+                        <span class="nav-icon">🚪</span>
+                        <span>Logout</span>
+                    </a>
+                </div>
+            </nav>
+        </aside>
+
+        <!-- ============================================
+           📦 MAIN CONTENT
+           ============================================ -->
+        <main class="main-content">
+            <!-- Top Bar -->
+            <div class="top-bar">
+                <div>
+                    <h1 class="page-title">Orders Management</h1>
+                    <p class="page-subtitle">Track and manage customer orders</p>
+                </div>
+                <div class="top-bar-actions">
+                    <button class="btn btn-primary" onclick="exportOrders()">
+                        <span>📥</span>
+                        <span>Export Orders</span>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Stats Grid -->
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-icon">📦</div>
+                    <div class="stat-value">24</div>
+                    <div class="stat-label">Total Orders Today</div>
+                </div>
+                
+                <div class="stat-card">
+                    <div class="stat-icon">⏳</div>
+                    <div class="stat-value">8</div>
+                    <div class="stat-label">Preparing</div>
+                </div>
+                
+                <div class="stat-card">
+                    <div class="stat-icon">✅</div>
+                    <div class="stat-value">12</div>
+                    <div class="stat-label">Ready for Pickup</div>
+                </div>
+                
+                <div class="stat-card">
+                    <div class="stat-icon">💰</div>
+                    <div class="stat-value">€342</div>
+                    <div class="stat-label">Today's Revenue</div>
+                </div>
+            </div>
+
+            <!-- Orders Table -->
+            <div class="table-container">
+                <div class="table-header">
+                    <h2 class="card-title">Recent Orders</h2>
+                    <div class="search-box">
+                        <span class="search-icon">🔍</span>
+                        <input type="text" class="search-input" placeholder="Search orders..." onkeyup="filterOrders(this.value)">
+                    </div>
+                </div>
+                
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Order</th>
+                            <th>Customer</th>
+                            <th>Product</th>
+                            <th>Price</th>
+                            <th>Pickup</th>
+                            <th>Status</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="orders-table">
+                        <tr>
+                            <td>
+                                <div class="order-info">
+                                    <div>
+                                        <div class="order-number">ORD-123456</div>
+                                        <div class="order-meta">2 hours ago</div>
+                                    </div>
+                                </div>
+                            </td>
+                            <td>
+                                <div>
+                                    <div class="customer-info">John Smith</div>
+                                    <div class="customer-contact">📞 +31 6 12345678</div>
+                                    <div class="customer-contact">✉️ john@email.com</div>
+                                </div>
+                            </td>
+                            <td>
+                                <div class="product-info">
+                                    <div class="product-icon">🥐</div>
+                                    <div class="product-details">
+                                        <div class="product-name">Fresh Croissants</div>
+                                        <div class="product-quantity">Quantity: 3</div>
+                                    </div>
+                                </div>
+                            </td>
+                            <td>
+                                <div class="price-info">
+                                    <div class="price-total">€12.00</div>
+                                    <div class="price-unit">€4.00 each</div>
+                                </div>
+                            </td>
+                            <td>
+                                <div class="pickup-info">
+                                    <div class="pickup-time">Today, 3:00 PM</div>
+                                    <div>ASAP</div>
+                                </div>
+                            </td>
+                            <td>
+                                <select class="status-select status-preparing" onchange="updateOrderStatus(this, 'ORD-123456')">
+                                    <option value="preparing" selected>Preparing</option>
+                                    <option value="ready">Ready</option>
+                                    <option value="completed">Completed</option>
+                                    <option value="cancelled">Cancelled</option>
+                                </select>
+                            </td>
+                            <td>
+                                <button class="btn btn-sm btn-primary" onclick="viewOrder('ORD-123456')">View</button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <div class="order-info">
+                                    <div>
+                                        <div class="order-number">ORD-123457</div>
+                                        <div class="order-meta">1 hour ago</div>
+                                    </div>
+                                </div>
+                            </td>
+                            <td>
+                                <div>
+                                    <div class="customer-info">Sarah Johnson</div>
+                                    <div class="customer-contact">📞 +31 6 87654321</div>
+                                    <div class="customer-contact">✉️ sarah@email.com</div>
+                                </div>
+                            </td>
+                            <td>
+                                <div class="product-info">
+                                    <div class="product-icon">☕</div>
+                                    <div class="product-details">
+                                        <div class="product-name">Coffee Special</div>
+                                        <div class="product-quantity">Quantity: 2</div>
+                                    </div>
+                                </div>
+                            </td>
+                            <td>
+                                <div class="price-info">
+                                    <div class="price-total">€5.00</div>
+                                    <div class="price-unit">€2.50 each</div>
+                                </div>
+                            </td>
+                            <td>
+                                <div class="pickup-info">
+                                    <div class="pickup-time">Today, 4:30 PM</div>
+                                    <div>Scheduled</div>
+                                </div>
+                            </td>
+                            <td>
+                                <select class="status-select status-ready" onchange="updateOrderStatus(this, 'ORD-123457')">
+                                    <option value="preparing">Preparing</option>
+                                    <option value="ready" selected>Ready</option>
+                                    <option value="completed">Completed</option>
+                                    <option value="cancelled">Cancelled</option>
+                                </select>
+                            </td>
+                            <td>
+                                <button class="btn btn-sm btn-primary" onclick="viewOrder('ORD-123457')">View</button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <div class="order-info">
+                                    <div>
+                                        <div class="order-number">ORD-123458</div>
+                                        <div class="order-meta">30 minutes ago</div>
+                                    </div>
+                                </div>
+                            </td>
+                            <td>
+                                <div>
+                                    <div class="customer-info">Mike Wilson</div>
+                                    <div class="customer-contact">📞 +31 6 11223344</div>
+                                    <div class="customer-contact">✉️ mike@email.com</div>
+                                </div>
+                            </td>
+                            <td>
+                                <div class="product-info">
+                                    <div class="product-icon">🥪</div>
+                                    <div class="product-details">
+                                        <div class="product-name">Club Sandwich</div>
+                                        <div class="product-quantity">Quantity: 1</div>
+                                    </div>
+                                </div>
+                            </td>
+                            <td>
+                                <div class="price-info">
+                                    <div class="price-total">€8.50</div>
+                                    <div class="price-unit">€8.50 each</div>
+                                </div>
+                            </td>
+                            <td>
+                                <div class="pickup-info">
+                                    <div class="pickup-time">Today, 2:00 PM</div>
+                                    <div>ASAP</div>
+                                </div>
+                            </td>
+                            <td>
+                                <select class="status-select status-completed" onchange="updateOrderStatus(this, 'ORD-123458')">
+                                    <option value="preparing">Preparing</option>
+                                    <option value="ready">Ready</option>
+                                    <option value="completed" selected>Completed</option>
+                                    <option value="cancelled">Cancelled</option>
+                                </select>
+                            </td>
+                            <td>
+                                <button class="btn btn-sm btn-primary" onclick="viewOrder('ORD-123458')">View</button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </main>
+    </div>
+
+    <!-- Order Details Modal -->
+    <div class="modal" id="order-modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 class="card-title">Order Details</h2>
+                <button class="close-btn" onclick="closeOrderModal()">×</button>
+            </div>
+            <div class="modal-body" id="order-modal-body">
+                <!-- Order details will be populated here -->
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" onclick="closeOrderModal()">Close</button>
+                <button class="btn btn-primary" onclick="printOrder()">Print Order</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Order status update
+        function updateOrderStatus(select, orderNumber) {
+            const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InB2bWJ4bmZsaGNyZGhjd3Z0ZHhjIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzAyMTY5NzQsImV4cCI6MjA4NTc5Mjk3NH0.GN4p_s8Cqod-K3S1lt_48oDZIhAroCLDrKDNs7DLjYg';
+            const SUPABASE_URL = 'https://pvmbxnflhcrdhcwvtdxc.supabase.co';
+            const newStatus = select.value;
+            
+            // Update select styling
+            select.className = 'status-select status-' + newStatus;
+            
+            console.log('Updating order', orderNumber, 'to status:', newStatus);
+            
+            // Here you would normally update the status in Supabase
+            // For now, just show a success message
+            showNotification(`Order ${orderNumber} status updated to ${newStatus}`);
+        }
+
+        // View order details
+        function viewOrder(orderNumber) {
+            // Mock order data - in a real app, you would fetch this from Supabase
+            const orderData = {
+                orderNumber: orderNumber,
+                customer: {
+                    name: 'John Smith',
+                    phone: '+31 6 12345678',
+                    email: 'john@email.com'
+                },
+                product: {
+                    name: 'Fresh Croissants',
+                    quantity: 3,
+                    unitPrice: 4.00,
+                    totalPrice: 12.00
+                },
+                pickup: {
+                    time: 'Today, 3:00 PM',
+                    type: 'ASAP'
+                },
+                status: 'preparing',
+                specialInstructions: 'No butter please',
+                orderDate: '2024-01-15 1:00 PM'
+            };
+
+            // Populate modal with order details
+            const modalBody = document.getElementById('order-modal-body');
+            modalBody.innerHTML = `
+                <div class="order-detail-row">
+                    <span class="order-detail-label">Order Number:</span>
+                    <span class="order-detail-value">${orderData.orderNumber}</span>
+                </div>
+                <div class="order-detail-row">
+                    <span class="order-detail-label">Order Date:</span>
+                    <span class="order-detail-value">${orderData.orderDate}</span>
+                </div>
+                <div class="order-detail-row">
+                    <span class="order-detail-label">Customer Name:</span>
+                    <span class="order-detail-value">${orderData.customer.name}</span>
+                </div>
+                <div class="order-detail-row">
+                    <span class="order-detail-label">Phone:</span>
+                    <span class="order-detail-value">${orderData.customer.phone}</span>
+                </div>
+                <div class="order-detail-row">
+                    <span class="order-detail-label">Email:</span>
+                    <span class="order-detail-value">${orderData.customer.email}</span>
+                </div>
+                <div class="order-detail-row">
+                    <span class="order-detail-label">Product:</span>
+                    <span class="order-detail-value">${orderData.product.name}</span>
+                </div>
+                <div class="order-detail-row">
+                    <span class="order-detail-label">Quantity:</span>
+                    <span class="order-detail-value">${orderData.product.quantity}</span>
+                </div>
+                <div class="order-detail-row">
+                    <span class="order-detail-label">Unit Price:</span>
+                    <span class="order-detail-value">€${orderData.product.unitPrice.toFixed(2)}</span>
+                </div>
+                <div class="order-detail-row">
+                    <span class="order-detail-label">Total Price:</span>
+                    <span class="order-detail-value">€${orderData.product.totalPrice.toFixed(2)}</span>
+                </div>
+                <div class="order-detail-row">
+                    <span class="order-detail-label">Pickup Time:</span>
+                    <span class="order-detail-value">${orderData.pickup.time}</span>
+                </div>
+                <div class="order-detail-row">
+                    <span class="order-detail-label">Pickup Type:</span>
+                    <span class="order-detail-value">${orderData.pickup.type}</span>
+                </div>
+                <div class="order-detail-row">
+                    <span class="order-detail-label">Special Instructions:</span>
+                    <span class="order-detail-value">${orderData.specialInstructions || 'None'}</span>
+                </div>
+                <div class="order-detail-row">
+                    <span class="order-detail-label">Status:</span>
+                    <span class="order-detail-value">${orderData.status}</span>
+                </div>
+            `;
+
+            // Show modal
+            document.getElementById('order-modal').classList.add('active');
+        }
+
+        // Close order modal
+        function closeOrderModal() {
+            document.getElementById('order-modal').classList.remove('active');
+        }
+
+        // Print order
+        function printOrder() {
+            window.print();
+        }
+
+        // Export orders
+        function exportOrders() {
+            console.log('Exporting orders...');
+            // In a real app, you would generate and download a CSV/Excel file
+            showNotification('Orders exported successfully!');
+        }
+
+        // Filter orders
+        function filterOrders(searchTerm) {
+            const rows = document.querySelectorAll('#orders-table tr');
+            rows.forEach(row => {
+                const text = row.textContent.toLowerCase();
+                row.style.display = text.includes(searchTerm.toLowerCase()) ? '' : 'none';
+            });
+        }
+
+        // Show notification
+        function showNotification(message) {
+            // Create notification element
+            const notification = document.createElement('div');
+            notification.style.cssText = `
+                position: fixed;
+                top: 2rem;
+                right: 2rem;
+                background: var(--success);
+                color: white;
+                padding: 1rem 1.5rem;
+                border-radius: 8px;
+                box-shadow: var(--shadow-lg);
+                z-index: 3000;
+                animation: slideIn 0.3s ease-out;
+            `;
+            notification.textContent = message;
+            
+            // Add to page
+            document.body.appendChild(notification);
+            
+            // Remove after 3 seconds
+            setTimeout(() => {
+                notification.style.animation = 'slideOut 0.3s ease-out';
+                setTimeout(() => {
+                    document.body.removeChild(notification);
+                }, 300);
+            }, 3000);
+        }
+
+        // Mobile sidebar toggle
+        function toggleSidebar() {
+            document.getElementById('sidebar').classList.toggle('open');
+        }
+
+        // Add mobile menu button for responsive design
+        if (window.innerWidth <= 1024) {
+            const mobileMenuBtn = document.createElement('button');
+            mobileMenuBtn.innerHTML = '☰';
+            mobileMenuBtn.style.cssText = `
+                position: fixed;
+                top: 1rem;
+                left: 1rem;
+                z-index: 1001;
+                background: var(--primary);
+                color: white;
+                border: none;
+                border-radius: 8px;
+                padding: 0.5rem;
+                font-size: 1.5rem;
+                cursor: pointer;
+            `;
+            mobileMenuBtn.onclick = toggleSidebar;
+            document.body.appendChild(mobileMenuBtn);
+        }
+
+        // Add animations
+        const style = document.createElement('style');
+        style.textContent = `
+            @keyframes slideIn {
+                from {
+                    transform: translateX(100%);
+                    opacity: 0;
+                }
+                to {
+                    transform: translateX(0);
+                    opacity: 1;
+                }
+            }
+            
+            @keyframes slideOut {
+                from {
+                    transform: translateX(0);
+                    opacity: 1;
+                }
+                to {
+                    transform: translateX(100%);
+                    opacity: 0;
+                }
+            }
+        `;
+        document.head.appendChild(style);
+
+        // Close modal when clicking outside
+        document.getElementById('order-modal').addEventListener('click', function(e) {
+            if (e.target === this) {
+                closeOrderModal();
+            }
+        });
+    </script>
+</body>
+</html>
