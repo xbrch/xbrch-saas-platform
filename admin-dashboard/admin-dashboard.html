@@ -1317,9 +1317,14 @@
         </main>
     </div>
 
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
     <script src="../security/security-config.js"></script>
     <script src="../security/admin-security.js"></script>
     <script>
+        // Initialize Supabase
+        const { createClient } = supabase;
+        const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+        
         // Initialize security and check authentication
         document.addEventListener('DOMContentLoaded', () => {
             // Wait for security to initialize
