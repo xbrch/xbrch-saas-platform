@@ -40,8 +40,8 @@
 
         body {
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Oxygen', 'Ubuntu', sans-serif;
-            background: var(--bg-main);
-            color: var(--text-primary);
+            background: #f3f3f3;
+            color: #000000;
             line-height: 1.6;
         }
 
@@ -397,51 +397,23 @@
         }
 
         @keyframes slideIn {
-            from { transform: translateX(100%); opacity: 0; }
-            to { transform: translateX(0); opacity: 1; }
-        }
+            }
 
-        /* ============================================
-           📱 RESPONSIVE DESIGN
-           ============================================ */
-        
-        /* Tablet Styles */
-        @media (max-width: 1024px) {
-            .admin-container {
-                flex-direction: column;
+            .btn-secondary {
+                background: var(--secondary);
+                color: white;
             }
-            
-            .sidebar {
-                width: 100%;
-                height: auto;
-                position: relative;
-                transform: none;
+
+            .btn-success {
+                background: var(--success);
+                color: white;
             }
-            
-            .main-content {
-                padding: 1rem;
+
+            .btn-danger {
+                background: var(--danger);
+                color: white;
             }
-            
-            .broadcast-grid {
-                grid-template-columns: 1fr;
-                gap: 1rem;
-            }
-            
-            .platform-grid {
-                grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-                gap: 0.75rem;
-            }
-            
-            .calendar-widget {
-                overflow-x: auto;
-            }
-        }
-        
-        /* Mobile Styles */
-        @media (max-width: 768px) {
-            .main-content {
-                padding: 0.75rem;
-            }
+
             
             .page-title {
                 font-size: 1.5rem;
