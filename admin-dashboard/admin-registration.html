@@ -34,7 +34,7 @@
 
         body {
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Oxygen', 'Ubuntu', sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #faf9f5 100%);
+            background: linear-gradient(135deg, #667eea 0%, #f8fafc 100%);
             min-height: 100vh;
             display: flex;
             align-items: center;
@@ -233,20 +233,21 @@
     </style>
 </head>
 <body>
-    <div class="registration-container">
-        <!-- Language and Font Controls -->
-        <div class="language-controls">
-            <select id="language-selector" onchange="switchLanguage(this.value)">
-                <option value="en">🇺🇸 English</option>
-                <option value="nl">🇳🇱 Nederlands</option>
-                <option value="af">🇿🇦 Afrikaans</option>
-            </select>
-            <div class="font-controls">
-                <button onclick="decreaseFontSize()" class="font-btn" title="Decrease font size">A-</button>
-                <button onclick="resetFontSize()" class="font-btn" title="Reset font size">A</button>
-                <button onclick="increaseFontSize()" class="font-btn" title="Increase font size">A+</button>
-            </div>
+    <!-- Language and Font Controls -->
+    <div class="language-controls" style="position: fixed; top: 20px; right: 20px; z-index: 1000; background: white; padding: 10px; border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.15);">
+        <select id="language-selector" onchange="switchLanguage(this.value)">
+            <option value="en">🇺🇸 English</option>
+            <option value="nl">🇳🇱 Nederlands</option>
+            <option value="af">🇿🇦 Afrikaans</option>
+        </select>
+        <div class="font-controls">
+            <button onclick="decreaseFontSize()" class="font-btn" title="Decrease font size">A-</button>
+            <button onclick="resetFontSize()" class="font-btn" title="Reset font size">A</button>
+            <button onclick="increaseFontSize()" class="font-btn" title="Increase font size">A+</button>
         </div>
+    </div>
+    
+    <div class="registration-container">
 
         <div class="logo">
             <h1 data-translate="registration-title">XBRCH Admin</h1>
@@ -329,12 +330,18 @@
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
-    <script src="../security/security-config.js"></script>
-    <script src="../security/admin-security.js"></script>
+    <script src="../security/security-config.js?v=1.0.1"></script>
+    <script src="../security/admin-security.js?v=1.0.1"></script>
     <script>
+        console.log('Scripts loaded, checking security classes...');
+        console.log('XBRCHSecurity available:', typeof XBRCHSecurity !== 'undefined');
+        console.log('XBRCHCSRFProtection available:', typeof XBRCHCSRFProtection !== 'undefined');
+        console.log('XBRCHValidator available:', typeof XBRCHValidator !== 'undefined');
+        
         // Initialize Supabase
         const { createClient } = supabase;
         const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+        console.log('Supabase initialized:', typeof supabase !== 'undefined');
         
         // Initialize security
         let xbrchSecurity;
