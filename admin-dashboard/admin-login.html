@@ -1,0 +1,430 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>XBRCH Admin - Login</title>
+    <style>
+        :root {
+            --primary: #3b82f6;
+            --primary-dark: #2563eb;
+            --primary-light: #60a5fa;
+            --secondary: #06b6d4;
+            --sidebar-bg: #1e293b;
+            --sidebar-hover: #334155;
+            --card-bg: #ffffff;
+            --border-color: #e2e8f0;
+            --text-primary: #000000;
+            --text-secondary: #cccccc;
+            --success: #10b981;
+            --warning: #f59e0b;
+            --danger: #ef4444;
+            --shadow-sm: 0 1px 3px rgba(0,0,0,0.08);
+            --shadow-md: 0 4px 12px rgba(0,0,0,0.1);
+            --shadow-lg: 0 8px 24px rgba(0,0,0,0.12);
+            --radius: 12px;
+            --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Oxygen', 'Ubuntu', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--text-primary);
+        }
+
+        .login-container {
+            background: var(--card-bg);
+            border-radius: var(--radius);
+            box-shadow: var(--shadow-lg);
+            width: 100%;
+            max-width: 400px;
+            padding: 2rem;
+            margin: 2rem;
+        }
+
+        .logo {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+
+        .logo h1 {
+            color: var(--primary);
+            font-size: 2rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
+
+        .logo p {
+            color: var(--text-secondary);
+            font-size: 1rem;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 0.75rem;
+            border: 2px solid var(--border-color);
+            border-radius: 8px;
+            font-size: 1rem;
+            transition: var(--transition);
+        }
+
+        .form-group input:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+        }
+
+        .btn {
+            width: 100%;
+            padding: 1rem;
+            background: var(--primary);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .btn:hover {
+            background: var(--primary-dark);
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-md);
+        }
+
+        .btn:disabled {
+            background: var(--text-secondary);
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .register-link {
+            text-align: center;
+            margin-top: 1.5rem;
+            padding-top: 1.5rem;
+            border-top: 1px solid var(--border-color);
+        }
+
+        .register-link a {
+            color: var(--primary);
+            text-decoration: none;
+            font-weight: 600;
+        }
+
+        .register-link a:hover {
+            text-decoration: underline;
+        }
+
+        .notification {
+            padding: 1rem;
+            border-radius: 8px;
+            margin-bottom: 1rem;
+            display: none;
+        }
+
+        .notification.success {
+            background: rgba(16, 185, 129, 0.1);
+            border: 1px solid var(--success);
+            color: var(--success);
+        }
+
+        .notification.error {
+            background: rgba(239, 68, 68, 0.1);
+            border: 1px solid var(--danger);
+            color: var(--danger);
+        }
+
+        .loading {
+            display: none;
+            text-align: center;
+            margin: 1rem 0;
+        }
+
+        .spinner {
+            border: 3px solid var(--border-color);
+            border-top: 3px solid var(--primary);
+            border-radius: 50%;
+            width: 30px;
+            height: 30px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .forgot-password {
+            text-align: right;
+            margin-top: -0.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .forgot-password a {
+            color: var(--primary);
+            text-decoration: none;
+            font-size: 0.9rem;
+        }
+
+        .forgot-password a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <div class="login-container">
+        <div class="logo">
+            <h1>XBRCH Admin</h1>
+            <p>Business Dashboard Login</p>
+        </div>
+
+        <div id="notification" class="notification"></div>
+
+        <form id="loginForm">
+            <div class="form-group">
+                <label for="email">Email Address</label>
+                <input type="email" id="email" name="email" required>
+            </div>
+
+            <div class="form-group">
+                <label for="password">Password</label>
+                <input type="password" id="password" name="password" required>
+            </div>
+
+            <div class="forgot-password">
+                <a href="#" onclick="handleForgotPassword()">Forgot password?</a>
+            </div>
+
+            <button type="submit" class="btn" id="loginBtn">
+                Sign In
+            </button>
+
+            <div class="loading" id="loading">
+                <div class="spinner"></div>
+                <p>Signing in...</p>
+            </div>
+        </form>
+
+        <div class="register-link">
+            <p>Don't have an account? <a href="admin-registration.html">Register Your Business</a></p>
+        </div>
+    </div>
+
+    <script src="security-config.js"></script>
+    <script>
+        // Initialize security
+        let xbrchSecurity;
+        
+        document.addEventListener('DOMContentLoaded', () => {
+            xbrchSecurity = new XBRCHSecurity();
+            xbrchSecurity.init();
+            
+            // Add CSRF token to form
+            const form = document.getElementById('loginForm');
+            const csrfToken = XBRCHCSRFProtection.generateToken();
+            XBRCHCSRFProtection.storeToken(csrfToken, 'login');
+            
+            // Add CSRF token as hidden input
+            const csrfInput = document.createElement('input');
+            csrfInput.type = 'hidden';
+            csrfInput.name = 'csrf_token';
+            csrfInput.value = csrfToken;
+            form.appendChild(csrfInput);
+            
+            // Check for verification message
+            const urlParams = new URLSearchParams(window.location.search);
+            const message = urlParams.get('message');
+            const verified = urlParams.get('verified');
+            
+            if (message === 'verify_email') {
+                showNotification('Please check your email to verify your account.', 'info');
+            }
+            
+            if (verified === 'true') {
+                showNotification('Email verified! You can now log in.', 'success');
+            }
+        });
+
+        // Login form handler with security
+        document.getElementById('loginForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const formData = new FormData(e.target);
+            const data = Object.fromEntries(formData);
+            
+            // Validate CSRF token
+            if (!XBRCHCSRFProtection.validateToken(data.csrf_token, 'login')) {
+                showNotification('Security token invalid. Please refresh page.', 'error');
+                return;
+            }
+            
+            // Check rate limiting
+            const rateLimit = xbrchSecurity.checkRateLimit(data.email);
+            if (!rateLimit.allowed) {
+                showNotification(`Too many login attempts. Please try again in ${rateLimit.lockoutRemaining} minutes.`, 'error');
+                return;
+            }
+            
+            // Validate and sanitize form data
+            const validation = xbrchSecurity.validateForm(formData, 'login');
+            if (Object.keys(validation.errors).length > 0) {
+                const errorMessages = Object.values(validation.errors).join(', ');
+                showNotification(errorMessages, 'error');
+                return;
+            }
+            
+            const validatedData = validation.validated;
+            
+            // Show loading
+            document.getElementById('loading').style.display = 'block';
+            document.getElementById('loginBtn').disabled = true;
+            
+            try {
+                // Initialize Supabase with secure config
+                const supabaseConfig = xbrchSecurity.getSupabaseConfig();
+                const supabase = window.supabase.createClient(supabaseConfig.url, supabaseConfig.anonKey);
+                
+                // Sign in with Supabase Auth
+                const { data: authData, error: authError } = await supabase.auth.signInWithPassword({
+                    email: validatedData.email,
+                    password: validatedData.password
+                });
+                
+                if (authError) throw authError;
+                
+                // Get business profile
+                const { data: profileData, error: profileError } = await supabase
+                    .from('business_profiles')
+                    .select('*')
+                    .eq('id', authData.user.id)
+                    .single();
+                
+                if (profileError) throw profileError;
+                
+                // Check if email is verified
+                if (!authData.user.email_confirmed_at) {
+                    showNotification('Please verify your email before logging in.', 'error');
+                    await supabase.auth.resend({
+                        type: 'signup',
+                        email: validatedData.email,
+                        options: {
+                            emailRedirectTo: `${window.location.origin}/admin-login.html?verified=true`
+                        }
+                    });
+                    return;
+                }
+                
+                // Create secure session
+                xbrchSecurity.createSession({
+                    id: authData.user.id,
+                    email: validatedData.email,
+                    businessName: profileData.business_name,
+                    role: 'business_owner'
+                });
+                
+                showNotification('Login successful! Redirecting...', 'success');
+                
+                setTimeout(() => {
+                    window.location.href = `admin-dashboard.html?userId=${authData.user.id}`;
+                }, 1500);
+                
+            } catch (error) {
+                console.error('Login error:', error);
+                showNotification(error.message || 'Login failed. Please check your credentials.', 'error');
+            } finally {
+                document.getElementById('loading').style.display = 'none';
+                document.getElementById('loginBtn').disabled = false;
+            }
+        });
+        
+        async function handleForgotPassword() {
+            const email = document.getElementById('email').value;
+            const validation = XBRCHValidator.validateEmail(email);
+            
+            if (!validation) {
+                showNotification('Please enter a valid email address', 'error');
+                return;
+            }
+            
+            // Check rate limiting for password reset
+            const rateLimit = xbrchSecurity.checkRateLimit(`reset_${email}`);
+            if (!rateLimit.allowed) {
+                showNotification(`Too many password reset attempts. Please try again in ${rateLimit.lockoutRemaining} minutes.`, 'error');
+                return;
+            }
+            
+            try {
+                const supabaseConfig = xbrchSecurity.getSupabaseConfig();
+                const supabase = window.supabase.createClient(supabaseConfig.url, supabaseConfig.anonKey);
+                
+                // Send password reset email
+                await supabase.auth.resetPasswordForEmail(validation, {
+                    redirectTo: `${window.location.origin}/admin-login.html?reset=true`
+                });
+                
+                showNotification('Password reset link sent to your email!', 'success');
+            } catch (error) {
+                console.error('Password reset error:', error);
+                showNotification('Failed to send password reset email. Please try again.', 'error');
+            }
+        }
+        
+        function updatePageLanguage(message, type) {
+            const notification = document.getElementById('notification');
+            notification.textContent = message;
+            notification.className = `notification ${type}`;
+            notification.style.display = 'block';
+            
+            setTimeout(() => {
+                notification.style.display = 'none';
+            }, 5000);
+        }
+        
+        function showNotification(message, type) {
+            const notification = document.getElementById('notification');
+            notification.textContent = message;
+            notification.className = `notification ${type}`;
+            notification.style.display = 'block';
+            
+            setTimeout(() => {
+                notification.style.display = 'none';
+            }, 5000);
+        }
+        
+        // Initialize Supabase
+        const { createClient } = supabase;
+        const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+        
+        // Check if user is already logged in
+        window.addEventListener('load', async () => {
+            const { data: { session } } = await supabase.auth.getSession();
+            if (session) {
+                window.location.href = `admin-dashboard.html?userId=${session.user.id}`;
+            }
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,49 @@
+/* XBRCH Widgets Frontend Styles */
+.xbrch-widget-container {
+    width: 100%;
+    overflow: hidden;
+}
+
+.xbrch-widget-container iframe {
+    width: 100%;
+    border: none;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+}
+
+.xbrch-error {
+    background: rgba(239, 68, 68, 0.1);
+    border: 1px solid #ef4444;
+    color: #ef4444;
+    padding: 15px;
+    border-radius: 8px;
+    text-align: center;
+}
+
+.xbrch-loading {
+    text-align: center;
+    padding: 20px;
+}
+
+.xbrch-loading-spinner {
+    border: 3px solid #e2e8f0;
+    border-top: 3px solid #3b82f6;
+    border-radius: 50%;
+    width: 30px;
+    height: 30px;
+    animation: xbrch-spin 1s linear infinite;
+    margin: 0 auto 10px;
+}
+
+@keyframes xbrch-spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .xbrch-widget-container iframe {
+        height: auto;
+        min-height: 400px;
+    }
+}

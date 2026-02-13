@@ -1,0 +1,1005 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Analytics - XBRCH Admin Dashboard</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Oxygen', 'Ubuntu', sans-serif;
+            background: #f8f9fa;
+            color: #2c3e50;
+            line-height: 1.6;
+        }
+
+        /* ============================================
+           🎨 COLOR SCHEME (from screenshots)
+           ============================================ */
+        :root {
+            --primary: #3b82f6;              /* Light blue instead of purple */
+            --primary-dark: #2563eb;         /* Darker blue */
+            --primary-light: #60a5fa;         /* Lighter blue */
+            --secondary: #06b6d4;            /* Cyan accent */
+            --sidebar-bg: #1e293b;           /* Dark sidebar */
+            --sidebar-hover: #334155;        /* Sidebar hover */
+            --card-bg: #ffffff;               /* White cards */
+            --border-color: #e2e8f0;         /* Light borders */
+            --text-primary: #000000;         /* Black text for better contrast on dark sidebar */
+            --text-secondary: #cccccc;        /* Light gray for secondary text */
+            --success: #10b981;              /* Green */
+            --warning: #f59e0b;              /* Orange */
+            --danger: #ef4444;               /* Red */
+            --shadow-sm: 0 1px 3px rgba(0,0,0,0.08);
+            --shadow-md: 0 4px 12px rgba(0,0,0,0.1);
+            --shadow-lg: 0 8px 24px rgba(0,0,0,0.12);
+            --radius: 12px;
+            --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        /* ============================================
+           📱 MAIN LAYOUT
+           ============================================ */
+        .admin-container {
+            display: flex;
+            min-height: 100vh;
+        }
+
+        /* ============================================
+           🎯 SIDEBAR
+           ============================================ */
+        .sidebar {
+            width: 280px;
+            background: var(--sidebar-bg);
+            color: white;
+            position: fixed;
+            height: 100vh;
+            overflow-y: auto;
+            z-index: 1000;
+            transition: var(--transition);
+        }
+
+        .sidebar-header {
+            padding: 2rem 1.5rem;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+        }
+
+        .brand-logo {
+            font-size: 1.5rem;
+            font-weight: 800;
+            color: white;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .brand-icon {
+            width: 40px;
+            height: 40px;
+            background: var(--primary);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 1.2rem;
+        }
+
+        .nav-menu {
+            padding: 1.5rem 0;
+        }
+
+        .nav-section {
+            margin-bottom: 2rem;
+        }
+
+        .nav-section-title {
+            font-size: 0.75rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            color: #94a3b8;
+            padding: 0 1.5rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .nav-item {
+            display: block;
+            padding: 0.75rem 1.5rem;
+            color: #cbd5e1;
+            text-decoration: none;
+            transition: var(--transition);
+            border-left: 3px solid transparent;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .nav-item:hover {
+            background: var(--sidebar-hover);
+            color: white;
+        }
+
+        .nav-item.active {
+            background: var(--sidebar-hover);
+            color: var(--primary-light);
+            border-left-color: var(--primary-light);
+        }
+
+        .nav-icon {
+            width: 20px;
+            height: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* ============================================
+           📦 MAIN CONTENT
+           ============================================ */
+        .main-content {
+            flex: 1;
+            margin-left: 280px;
+            padding: 2rem;
+            max-width: calc(100vw - 280px);
+        }
+
+        /* ============================================
+           🔝 TOP BAR
+           ============================================ */
+        .top-bar {
+            background: white;
+            border-radius: var(--radius);
+            padding: 1.5rem 2rem;
+            margin-bottom: 2rem;
+            box-shadow: var(--shadow-sm);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .page-title {
+            font-size: 1.75rem;
+            font-weight: 700;
+            color: var(--text-primary);
+        }
+
+        .page-subtitle {
+            color: var(--text-secondary);
+            font-size: 0.95rem;
+            margin-top: 0.25rem;
+        }
+
+        .top-bar-actions {
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+        }
+
+        /* ============================================
+           🎨 BUTTONS
+           ============================================ */
+        .btn {
+            padding: 0.75rem 1.5rem;
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition);
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            text-decoration: none;
+            font-size: 0.875rem;
+        }
+
+        .btn-primary {
+            background: var(--primary);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: var(--primary-dark);
+            transform: translateY(-1px);
+            box-shadow: var(--shadow-md);
+        }
+
+        .btn-secondary {
+            background: var(--border-color);
+            color: var(--text-primary);
+        }
+
+        .btn-secondary:hover {
+            background: #cbd5e1;
+        }
+
+        .btn-success {
+            background: var(--success);
+            color: white;
+        }
+
+        .btn-danger {
+            background: var(--danger);
+            color: white;
+        }
+
+        .btn-sm {
+            padding: 0.5rem 1rem;
+            font-size: 0.8rem;
+        }
+
+        /* ============================================
+           📊 STATS CARDS
+           ============================================ */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .stat-card {
+            background: white;
+            border-radius: var(--radius);
+            padding: 1.5rem;
+            box-shadow: var(--shadow-sm);
+            border-left: 4px solid var(--primary);
+            transition: var(--transition);
+        }
+
+        .stat-card:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-md);
+        }
+
+        .stat-icon {
+            width: 48px;
+            height: 48px;
+            background: var(--primary-light);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 1rem;
+            font-size: 1.5rem;
+        }
+
+        .stat-value {
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--text-primary);
+            margin-bottom: 0.25rem;
+        }
+
+        .stat-label {
+            color: var(--text-secondary);
+            font-size: 0.875rem;
+        }
+
+        .stat-change {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.25rem;
+            font-size: 0.75rem;
+            font-weight: 600;
+            margin-top: 0.5rem;
+            padding: 0.25rem 0.5rem;
+            border-radius: 15px;
+        }
+
+        .stat-change.positive {
+            color: var(--success);
+            background: rgba(16, 185, 129, 0.1);
+        }
+
+        .stat-change.negative {
+            color: var(--danger);
+            background: rgba(239, 68, 68, 0.1);
+        }
+
+        /* ============================================
+           📊 CHARTS
+           ============================================ */
+        .chart-container {
+            background: white;
+            border-radius: var(--radius);
+            box-shadow: var(--shadow-sm);
+            padding: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .chart-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+        }
+
+        .chart-title {
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+
+        .chart-period {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .period-btn {
+            padding: 0.5rem 1rem;
+            border: 1px solid var(--border-color);
+            background: white;
+            border-radius: 8px;
+            font-size: 0.875rem;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .period-btn.active {
+            background: var(--primary);
+            color: white;
+            border-color: var(--primary);
+        }
+
+        .period-btn:hover:not(.active) {
+            background: var(--border-color);
+        }
+
+        .chart-canvas {
+            width: 100%;
+            height: 300px;
+            position: relative;
+        }
+
+        /* Simple bar chart */
+        .bar-chart {
+            display: flex;
+            align-items: flex-end;
+            justify-content: space-between;
+            height: 250px;
+            padding: 1rem 0;
+            border-left: 2px solid var(--border-color);
+            border-bottom: 2px solid var(--border-color);
+        }
+
+        .bar {
+            flex: 1;
+            margin: 0 0.5rem;
+            background: var(--primary);
+            border-radius: 8px 8px 0 0;
+            position: relative;
+            transition: var(--transition);
+            cursor: pointer;
+        }
+
+        .bar:hover {
+            background: var(--primary-dark);
+            transform: translateY(-2px);
+        }
+
+        .bar-label {
+            position: absolute;
+            bottom: -25px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 0.75rem;
+            color: var(--text-secondary);
+            white-space: nowrap;
+        }
+
+        .bar-value {
+            position: absolute;
+            top: -25px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 0.875rem;
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+
+        /* ============================================
+           📋 TABLES
+           ============================================ */
+        .table-container {
+            background: white;
+            border-radius: var(--radius);
+            box-shadow: var(--shadow-sm);
+            overflow: hidden;
+        }
+
+        .table-header {
+            padding: 1.5rem 2rem;
+            border-bottom: 1px solid var(--border-color);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th {
+            text-align: left;
+            padding: 1rem 2rem;
+            font-weight: 600;
+            color: var(--text-secondary);
+            font-size: 0.875rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        td {
+            padding: 1rem 2rem;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        tr:hover {
+            background: #f8fafc;
+        }
+
+        /* ============================================
+           🏷️ BADGES
+           ============================================ */
+        .badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.25rem;
+            padding: 0.25rem 0.75rem;
+            border-radius: 15px;
+            font-size: 0.75rem;
+            font-weight: 600;
+        }
+
+        .badge-success {
+            background: rgba(16, 185, 129, 0.1);
+            color: var(--success);
+        }
+
+        .badge-warning {
+            background: rgba(245, 158, 11, 0.1);
+            color: var(--warning);
+        }
+
+        .badge-danger {
+            background: rgba(239, 68, 68, 0.1);
+            color: var(--danger);
+        }
+
+        .badge-primary {
+            background: rgba(99, 102, 241, 0.1);
+            color: var(--primary);
+        }
+
+        /* ============================================
+           📱 RESPONSIVE
+           ============================================ */
+        @media (max-width: 1024px) {
+            .sidebar {
+                transform: translateX(-100%);
+            }
+            
+            .sidebar.open {
+                transform: translateX(0);
+            }
+            
+            .main-content {
+                margin-left: 0;
+                max-width: 100vw;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .main-content {
+                padding: 1rem;
+            }
+            
+            .top-bar {
+                flex-direction: column;
+                gap: 1rem;
+                align-items: stretch;
+            }
+            
+            .stats-grid {
+                grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            }
+            
+            .chart-period {
+                flex-wrap: wrap;
+            }
+            
+            .bar-chart {
+                height: 200px;
+            }
+        }
+
+        /* ============================================
+           📊 PROGRESS BARS
+           ============================================ */
+        .progress-item {
+            margin-bottom: 1.5rem;
+        }
+
+        .progress-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 0.5rem;
+        }
+
+        .progress-label {
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+
+        .progress-value {
+            font-size: 0.875rem;
+            color: var(--text-secondary);
+        }
+
+        .progress-bar {
+            height: 8px;
+            background: var(--border-color);
+            border-radius: 4px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: var(--primary);
+            border-radius: 4px;
+            transition: width 0.3s ease;
+        }
+
+        /* ============================================
+           🎯 ACTIVITY FEED
+           ============================================ */
+        .activity-item {
+            display: flex;
+            align-items: start;
+            gap: 1rem;
+            padding: 1rem 0;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .activity-item:last-child {
+            border-bottom: none;
+        }
+
+        .activity-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.25rem;
+            flex-shrink: 0;
+        }
+
+        .activity-content {
+            flex: 1;
+        }
+
+        .activity-title {
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 0.25rem;
+        }
+
+        .activity-description {
+            font-size: 0.875rem;
+            color: var(--text-secondary);
+        }
+
+        .activity-time {
+            font-size: 0.75rem;
+            color: var(--text-secondary);
+            margin-top: 0.25rem;
+        }
+    </style>
+</head>
+<body>
+    <div class="admin-container">
+        <!-- ============================================
+           🎯 SIDEBAR
+           ============================================ -->
+        <aside class="sidebar" id="sidebar">
+            <div class="sidebar-header">
+                <a href="admin-dashboard.html" class="brand-logo">
+                    <div class="brand-icon">X</div>
+                    <span>XBRCH Admin</span>
+                </a>
+            </div>
+            
+            <nav class="nav-menu">
+                <div class="nav-section">
+                    <div class="nav-section-title">Main</div>
+                    <a href="admin-dashboard.html" class="nav-item">
+                        <span class="nav-icon">📊</span>
+                        <span>Dashboard</span>
+                    </a>
+                    <a href="admin-analytics.html" class="nav-item active">
+                        <span class="nav-icon">📈</span>
+                        <span>Analytics</span>
+                    </a>
+                </div>
+                
+                <div class="nav-section">
+                    <div class="nav-section-title">Web Broadcast</div>
+                    <a href="admin-updates.html" class="nav-item">
+                        <span class="nav-icon">📝</span>
+                        <span>Updates</span>
+                    </a>
+                    <a href="admin-products.html" class="nav-item">
+                        <span class="nav-icon">🛍️</span>
+                        <span>Products</span>
+                    </a>
+                    <a href="admin-orders.html" class="nav-item">
+                        <span class="nav-icon">📦</span>
+                        <span>Orders</span>
+                    </a>
+                    <a href="admin-settings.html" class="nav-item">
+                        <span class="nav-icon">⚙️</span>
+                        <span>Settings</span>
+                    </a>
+                </div>
+                
+                <div class="nav-section">
+                    <div class="nav-section-title">Account</div>
+                    <a href="#" class="nav-item">
+                        <span class="nav-icon">👤</span>
+                        <span>Profile</span>
+                    </a>
+                    <a href="#" class="nav-item">
+                        <span class="nav-icon">🚪</span>
+                        <span>Logout</span>
+                    </a>
+                </div>
+            </nav>
+        </aside>
+
+        <!-- ============================================
+           📦 MAIN CONTENT
+           ============================================ -->
+        <main class="main-content">
+            <!-- Top Bar -->
+            <div class="top-bar">
+                <div>
+                    <h1 class="page-title">Analytics & Insights</h1>
+                    <p class="page-subtitle">Track your broadcast wall performance and customer engagement</p>
+                </div>
+                <div class="top-bar-actions">
+                    <button class="btn btn-primary" onclick="exportReport()">
+                        <span>📥</span>
+                        <span>Export Report</span>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Overview Stats -->
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-icon">👁️</div>
+                    <div class="stat-value">1,247</div>
+                    <div class="stat-label">Total Views</div>
+                    <div class="stat-change positive">
+                        <span>↑</span>
+                        <span>23% from last week</span>
+                    </div>
+                </div>
+                
+                <div class="stat-card">
+                    <div class="stat-icon">👥</div>
+                    <div class="stat-value">89</div>
+                    <div class="stat-label">Unique Visitors</div>
+                    <div class="stat-change positive">
+                        <span>↑</span>
+                        <span>15% from last week</span>
+                    </div>
+                </div>
+                
+                <div class="stat-card">
+                    <div class="stat-icon">🛒</div>
+                    <div class="stat-value">24</div>
+                    <div class="stat-label">Orders Placed</div>
+                    <div class="stat-change positive">
+                        <span>↑</span>
+                        <span>8% from last week</span>
+                    </div>
+                </div>
+                
+                <div class="stat-card">
+                    <div class="stat-icon">💰</div>
+                    <div class="stat-value">€342</div>
+                    <div class="stat-label">Revenue Generated</div>
+                    <div class="stat-change positive">
+                        <span>↑</span>
+                        <span>18% from last week</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Views Chart -->
+            <div class="chart-container">
+                <div class="chart-header">
+                    <h2 class="chart-title">Views Over Time</h2>
+                    <div class="chart-period">
+                        <button class="period-btn" onclick="changePeriod('7d', this)">7 Days</button>
+                        <button class="period-btn active" onclick="changePeriod('30d', this)">30 Days</button>
+                        <button class="period-btn" onclick="changePeriod('90d', this)">90 Days</button>
+                    </div>
+                </div>
+                <div class="chart-canvas">
+                    <div class="bar-chart">
+                        <div class="bar" style="height: 60%;" data-value="75">
+                            <span class="bar-value">75</span>
+                            <span class="bar-label">Mon</span>
+                        </div>
+                        <div class="bar" style="height: 80%;" data-value="100">
+                            <span class="bar-value">100</span>
+                            <span class="bar-label">Tue</span>
+                        </div>
+                        <div class="bar" style="height: 45%;" data-value="56">
+                            <span class="bar-value">56</span>
+                            <span class="bar-label">Wed</span>
+                        </div>
+                        <div class="bar" style="height: 70%;" data-value="88">
+                            <span class="bar-value">88</span>
+                            <span class="bar-label">Thu</span>
+                        </div>
+                        <div class="bar" style="height: 90%;" data-value="113">
+                            <span class="bar-value">113</span>
+                            <span class="bar-label">Fri</span>
+                        </div>
+                        <div class="bar" style="height: 85%;" data-value="106">
+                            <span class="bar-value">106</span>
+                            <span class="bar-label">Sat</span>
+                        </div>
+                        <div class="bar" style="height: 55%;" data-value="69">
+                            <span class="bar-value">69</span>
+                            <span class="bar-label">Sun</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Product Performance -->
+            <div class="chart-container">
+                <div class="chart-header">
+                    <h2 class="chart-title">Product Performance</h2>
+                </div>
+                <div class="progress-item">
+                    <div class="progress-header">
+                        <span class="progress-label">🥐 Fresh Croissants</span>
+                        <span class="progress-value">38 orders</span>
+                    </div>
+                    <div class="progress-bar">
+                        <div class="progress-fill" style="width: 76%;"></div>
+                    </div>
+                </div>
+                <div class="progress-item">
+                    <div class="progress-header">
+                        <span class="progress-label">☕ Coffee Special</span>
+                        <span class="progress-value">24 orders</span>
+                    </div>
+                    <div class="progress-bar">
+                        <div class="progress-fill" style="width: 48%;"></div>
+                    </div>
+                </div>
+                <div class="progress-item">
+                    <div class="progress-header">
+                        <span class="progress-label">🥪 Club Sandwich</span>
+                        <span class="progress-value">15 orders</span>
+                    </div>
+                    <div class="progress-bar">
+                        <div class="progress-fill" style="width: 30%;"></div>
+                    </div>
+                </div>
+                <div class="progress-item">
+                    <div class="progress-header">
+                        <span class="progress-label">🍰 Fresh Pastries</span>
+                        <span class="progress-value">12 orders</span>
+                    </div>
+                    <div class="progress-bar">
+                        <div class="progress-fill" style="width: 24%;"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Recent Activity -->
+            <div class="table-container">
+                <div class="table-header">
+                    <h2 class="card-title">Recent Activity</h2>
+                </div>
+                <div style="padding: 2rem;">
+                    <div class="activity-item">
+                        <div class="activity-icon" style="background: rgba(16, 185, 129, 0.1); color: var(--success);">📦</div>
+                        <div class="activity-content">
+                            <div class="activity-title">New Order Received</div>
+                            <div class="activity-description">John Smith placed an order for Fresh Croissants (x3)</div>
+                            <div class="activity-time">2 hours ago</div>
+                        </div>
+                    </div>
+                    <div class="activity-item">
+                        <div class="activity-icon" style="background: rgba(99, 102, 241, 0.1); color: var(--primary);">👁️</div>
+                        <div class="activity-content">
+                            <div class="activity-title">Peak Traffic Detected</div>
+                            <div class="activity-description">42 visitors viewing your broadcast wall simultaneously</div>
+                            <div class="activity-time">3 hours ago</div>
+                        </div>
+                    </div>
+                    <div class="activity-item">
+                        <div class="activity-icon" style="background: rgba(245, 158, 11, 0.1); color: var(--warning);">📝</div>
+                        <div class="activity-content">
+                            <div class="activity-title">Update Published</div>
+                            <div class="activity-description">"Grand Opening Next Week!" update was published</div>
+                            <div class="activity-time">5 hours ago</div>
+                        </div>
+                    </div>
+                    <div class="activity-item">
+                        <div class="activity-icon" style="background: rgba(16, 185, 129, 0.1); color: var(--success);">💰</div>
+                        <div class="activity-content">
+                            <div class="activity-title">Revenue Milestone</div>
+                            <div class="activity-description">Daily revenue target of €300 achieved</div>
+                            <div class="activity-time">6 hours ago</div>
+                        </div>
+                    </div>
+                    <div class="activity-item">
+                        <div class="activity-icon" style="background: rgba(99, 102, 241, 0.1); color: var(--primary);">🛍️</div>
+                        <div class="activity-content">
+                            <div class="activity-title">Product Added</div>
+                            <div class="activity-description">New product "Coffee Special" was added to inventory</div>
+                            <div class="activity-time">1 day ago</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script>
+        // Change chart period
+        function changePeriod(period, button) {
+            // Remove active class from all buttons
+            document.querySelectorAll('.period-btn').forEach(btn => btn.classList.remove('active'));
+            
+            // Add active class to clicked button
+            button.classList.add('active');
+            
+            // Update chart data based on period
+            console.log('Changing period to:', period);
+            updateChartData(period);
+        }
+
+        // Update chart data
+        function updateChartData(period) {
+            const bars = document.querySelectorAll('.bar');
+            const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InB2bWJ4bmZsaGNyZGhjd3Z0ZHhjIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzAyMTY5NzQsImV4cCI6MjA4NTc5Mjk3NH0.GN4p_s8Cqod-K3S1lt_48oDZIhAroCLDrKDNs7DLjYg';
+            const SUPABASE_URL = 'https://pvmbxnflhcrdhcwvtdxc.supabase.co';
+            const data = {
+                '7d': [75, 100, 56, 88, 113, 106, 69],
+                '30d': [120, 145, 98, 132, 167, 156, 112],
+                '90d': [280, 325, 245, 298, 387, 356, 278]
+            };
+            
+            const values = data[period] || data['7d'];
+            const maxValue = Math.max(...values);
+            
+            bars.forEach((bar, index) => {
+                const height = (values[index] / maxValue) * 90; // 90% max height
+                bar.style.height = height + '%';
+                bar.querySelector('.bar-value').textContent = values[index];
+            });
+        }
+
+        // Export report
+        function exportReport() {
+            console.log('Exporting analytics report...');
+            // In a real app, you would generate and download a PDF/Excel report
+            showNotification('Analytics report exported successfully!');
+        }
+
+        // Show notification
+        function showNotification(message) {
+            const notification = document.createElement('div');
+            notification.style.cssText = `
+                position: fixed;
+                top: 2rem;
+                right: 2rem;
+                background: var(--success);
+                color: white;
+                padding: 1rem 1.5rem;
+                border-radius: 8px;
+                box-shadow: var(--shadow-lg);
+                z-index: 3000;
+                animation: slideIn 0.3s ease-out;
+            `;
+            notification.textContent = message;
+            
+            document.body.appendChild(notification);
+            
+            setTimeout(() => {
+                notification.style.animation = 'slideOut 0.3s ease-out';
+                setTimeout(() => {
+                    document.body.removeChild(notification);
+                }, 300);
+            }, 3000);
+        }
+
+        // Mobile sidebar toggle
+        function toggleSidebar() {
+            document.getElementById('sidebar').classList.toggle('open');
+        }
+
+        // Add mobile menu button for responsive design
+        if (window.innerWidth <= 1024) {
+            const mobileMenuBtn = document.createElement('button');
+            mobileMenuBtn.innerHTML = '☰';
+            mobileMenuBtn.style.cssText = `
+                position: fixed;
+                top: 1rem;
+                left: 1rem;
+                z-index: 1001;
+                background: var(--primary);
+                color: white;
+                border: none;
+                border-radius: 8px;
+                padding: 0.5rem;
+                font-size: 1.5rem;
+                cursor: pointer;
+            `;
+            mobileMenuBtn.onclick = toggleSidebar;
+            document.body.appendChild(mobileMenuBtn);
+        }
+
+        // Add animations
+        const style = document.createElement('style');
+        style.textContent = `
+            @keyframes slideIn {
+                from {
+                    transform: translateX(100%);
+                    opacity: 0;
+                }
+                to {
+                    transform: translateX(0);
+                    opacity: 1;
+                }
+            }
+            
+            @keyframes slideOut {
+                from {
+                    transform: translateX(0);
+                    opacity: 1;
+                }
+                to {
+                    transform: translateX(100%);
+                    opacity: 0;
+                }
+            }
+        `;
+        document.head.appendChild(style);
+
+        // Animate progress bars on page load
+        window.addEventListener('load', () => {
+            const progressFills = document.querySelectorAll('.progress-fill');
+            progressFills.forEach(fill => {
+                const width = fill.style.width;
+                fill.style.width = '0';
+                setTimeout(() => {
+                    fill.style.width = width;
+                }, 100);
+            });
+        });
+    </script>
+</body>
+</html>

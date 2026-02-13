@@ -1,0 +1,448 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>XBRCH Widget - Broadcast Wall</title>
+    <style>
+        :root {
+            --primary: #3b82f6;
+            --primary-dark: #2563eb;
+            --primary-light: #60a5fa;
+            --secondary: #06b6d4;
+            --card-bg: #ffffff;
+            --border-color: #e2e8f0;
+            --text-primary: #1e293b;
+            --text-secondary: #64748b;
+            --success: #10b981;
+            --warning: #f59e0b;
+            --danger: #ef4444;
+            --shadow-sm: 0 1px 3px rgba(0,0,0,0.08);
+            --shadow-md: 0 4px 12px rgba(0,0,0,0.1);
+            --shadow-lg: 0 8px 24px rgba(0,0,0,0.12);
+            --radius: 12px;
+            --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Oxygen', 'Ubuntu', sans-serif;
+            background: #f8f9fa;
+            color: var(--text-primary);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        .widget-container {
+            width: 100%;
+            height: 100vh;
+            overflow-y: auto;
+            padding: 1rem;
+        }
+
+        .widget-header {
+            background: var(--card-bg);
+            border-radius: var(--radius);
+            box-shadow: var(--shadow-sm);
+            padding: 1rem;
+            margin-bottom: 1rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .widget-title {
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: var(--primary);
+        }
+
+        .language-selector {
+            padding: 0.5rem;
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            background: var(--card-bg);
+            font-size: 0.9rem;
+        }
+
+        .items-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        .item-card {
+            background: var(--card-bg);
+            border-radius: var(--radius);
+            box-shadow: var(--shadow-md);
+            overflow: hidden;
+            transition: var(--transition);
+        }
+
+        .item-card:hover {
+            transform: translateY(-4px);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .item-image {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+            background: linear-gradient(45deg, var(--primary-light), var(--secondary));
+        }
+
+        .item-content {
+            padding: 1rem;
+        }
+
+        .item-title {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 0.5rem;
+        }
+
+        .item-description {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+            margin-bottom: 1rem;
+            line-height: 1.4;
+        }
+
+        .item-meta {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+        }
+
+        .item-category {
+            background: var(--primary-light);
+            color: white;
+            padding: 0.25rem 0.5rem;
+            border-radius: 4px;
+            font-weight: 500;
+        }
+
+        .item-date {
+            font-weight: 500;
+        }
+
+        .loading {
+            text-align: center;
+            padding: 3rem;
+        }
+
+        .spinner {
+            border: 3px solid var(--border-color);
+            border-top: 3px solid var(--primary);
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 1rem;
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 3rem;
+            color: var(--text-secondary);
+        }
+
+        .empty-state h3 {
+            margin-bottom: 0.5rem;
+            color: var(--text-primary);
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        @media (max-width: 768px) {
+            .items-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .widget-header {
+                flex-direction: column;
+                gap: 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="widget-container">
+        <div class="widget-header" id="widgetHeader">
+            <h2 class="widget-title" data-translate="widgetTitle">Business Updates & Products</h2>
+            <select class="language-selector" id="languageSelector">
+                <option value="en">🇺🇸 English</option>
+                <option value="nl">🇳🇱 Nederlands</option>
+                <option value="af">🇿🇦 Afrikaans</option>
+            </select>
+        </div>
+
+        <div class="loading" id="loadingState">
+            <div class="spinner"></div>
+            <p data-translate="loading">Loading updates...</p>
+        </div>
+
+        <div class="empty-state" id="emptyState" style="display: none;">
+            <h3 data-translate="noItems">No items yet</h3>
+            <p data-translate="checkLater">Check back later for updates and special offers!</p>
+        </div>
+
+        <div class="items-grid" id="itemsGrid">
+            <!-- Items will be loaded here -->
+        </div>
+    </div>
+
+    <script src="security-config.js"></script>
+    <script>
+        // Initialize security
+        let xbrchSecurity;
+        
+        document.addEventListener('DOMContentLoaded', () => {
+            xbrchSecurity = new XBRCHSecurity();
+            xbrchSecurity.init();
+        });
+
+        // Get widget parameters from URL
+        function getWidgetParams() {
+            const urlParams = new URLSearchParams(window.location.search);
+            return {
+                userId: urlParams.get('userId') || 'demo-user',
+                width: urlParams.get('width') || '100%',
+                theme: urlParams.get('theme') || '#3b82f6',
+                header: urlParams.get('header') || 'true',
+                items: urlParams.get('items') || '12'
+            };
+        }
+
+        // Translation system
+        const translations = {
+            en: {
+                widgetTitle: 'Business Updates & Products',
+                loading: 'Loading updates...',
+                noItems: 'No items yet',
+                checkLater: 'Check back later for updates and special offers!',
+                featured: 'Featured',
+                update: 'Update',
+                product: 'Product',
+                price: 'Price',
+                viewMore: 'View More'
+            },
+            nl: {
+                widgetTitle: 'Bedrijfsupdates & Producten',
+                loading: 'Updates laden...',
+                noItems: 'Nog geen items',
+                checkLater: 'Kom later terug voor updates en speciale aanbiedingen!',
+                featured: 'Uitgelicht',
+                update: 'Update',
+                product: 'Product',
+                price: 'Prijs',
+                viewMore: 'Bekijk Meer'
+            },
+            af: {
+                widgetTitle: 'Besigheid Opdateerings & Produkte',
+                loading: 'Laai opdateerings...',
+                noItems: 'Nog geen items',
+                checkLater: 'Kyk later terug vir opdateerings en spesiale aanbiedinge!',
+                featured: 'Uitgelig',
+                update: 'Opdatering',
+                product: 'Produk',
+                price: 'Prys',
+                viewMore: 'Sien Meer'
+            }
+        };
+
+        let currentLang = localStorage.getItem('widgetLanguage') || 'en';
+        let widgetParams = getWidgetParams();
+
+        // Apply widget customization
+        function applyWidgetCustomization() {
+            const container = document.querySelector('.widget-container');
+            
+            // Apply theme color
+            if (widgetParams.theme) {
+                document.documentElement.style.setProperty('--primary', widgetParams.theme);
+            }
+            
+            // Hide header if requested
+            if (widgetParams.header === 'false') {
+                document.getElementById('widgetHeader').style.display = 'none';
+            }
+            
+            // Apply width
+            if (widgetParams.width && widgetParams.width !== '100%') {
+                container.style.maxWidth = widgetParams.width;
+                container.style.margin = '0 auto';
+            }
+        }
+
+        // Language switching
+        function switchLanguage(lang) {
+            currentLang = lang;
+            localStorage.setItem('widgetLanguage', lang);
+            updatePageLanguage();
+        }
+
+        function updatePageLanguage() {
+            const t = translations[currentLang];
+            
+            // Update all elements with data-translate attribute
+            document.querySelectorAll('[data-translate]').forEach(element => {
+                const key = element.getAttribute('data-translate');
+                if (t[key]) {
+                    element.textContent = t[key];
+                }
+            });
+            
+            // Update language selector
+            document.getElementById('languageSelector').value = currentLang;
+        }
+
+        // Load items from Supabase
+        async function loadItems() {
+            try {
+                // Get secure Supabase configuration
+                const supabaseConfig = xbrchSecurity.getSupabaseConfig();
+                const supabase = window.supabase.createClient(supabaseConfig.url, supabaseConfig.anonKey);
+                
+                // Validate and sanitize user ID
+                const sanitizedUserId = XBRCHValidator.sanitizeInput(widgetParams.userId);
+                
+                const [updatesRes, productsRes] = await Promise.all([
+                    fetch(`${supabaseConfig.url}/rest/v1/web_updates?user_id=eq.${sanitizedUserId}&published=eq.true&order=created_at.desc`, {
+                        headers: {
+                            'apikey': supabaseConfig.anonKey,
+                            'Authorization': `Bearer ${supabaseConfig.anonKey}`,
+                            'Content-Type': 'application/json'
+                        }
+                    }),
+                    fetch(`${supabaseConfig.url}/rest/v1/shop_products?user_id=eq.${sanitizedUserId}&active=eq.true&order=created_at.desc`, {
+                        headers: {
+                            'apikey': supabaseConfig.anonKey,
+                            'Authorization': `Bearer ${supabaseConfig.anonKey}`,
+                            'Content-Type': 'application/json'
+                        }
+                    })
+                ]);
+
+                const updates = await updatesRes.json();
+                const products = await productsRes.json();
+
+                // Validate and sanitize data
+                const sanitizedUpdates = updates.map(item => ({
+                    ...item,
+                    title: XBRCHValidator.sanitizeInput(item.title, 'text'),
+                    content: XBRCHValidator.sanitizeInput(item.content, 'textarea'),
+                    image_url: XBRCHValidator.sanitizeInput(item.image_url, 'url'),
+                    category: XBRCHValidator.sanitizeInput(item.category, 'text')
+                }));
+                
+                const sanitizedProducts = products.map(item => ({
+                    ...item,
+                    name: XBRCHValidator.sanitizeInput(item.name, 'text'),
+                    description: XBRCHValidator.sanitizeInput(item.description, 'textarea'),
+                    image_url: XBRCHValidator.sanitizeInput(item.image_url, 'url'),
+                    regular_price: XBRCHValidator.sanitizeInput(item.regular_price, 'text'),
+                    sale_price: XBRCHValidator.sanitizeInput(item.sale_price, 'text')
+                }));
+
+                // Combine and sort items
+                const allItems = [
+                    ...sanitizedUpdates.map(item => ({ ...item, type: 'update' })),
+                    ...sanitizedProducts.map(item => ({ ...item, type: 'product' }))
+                ].sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
+
+                // Limit items if specified
+                const limitedItems = widgetParams.items === 'all' ? allItems : allItems.slice(0, parseInt(widgetParams.items));
+
+                displayItems(limitedItems);
+
+            } catch (error) {
+                console.error('Error loading items:', error);
+                showError();
+            }
+        }
+
+        // Display items
+        function displayItems(items) {
+            const grid = document.getElementById('itemsGrid');
+            const loading = document.getElementById('loadingState');
+            const empty = document.getElementById('emptyState');
+
+            loading.style.display = 'none';
+
+            if (items.length === 0) {
+                empty.style.display = 'block';
+                return;
+            }
+
+            empty.style.display = 'none';
+
+            const t = translations[currentLang];
+            
+            grid.innerHTML = items.map(item => {
+                if (item.type === 'update') {
+                    return `
+                        <div class="item-card">
+                            ${item.image_url ? `<img src="${item.image_url}" alt="${item.title}" class="item-image">` : '<div class="item-image"></div>'}
+                            <div class="item-content">
+                                <h3 class="item-title">${item.title}</h3>
+                                <p class="item-description">${item.content}</p>
+                                <div class="item-meta">
+                                    <span class="item-category">${t.update}</span>
+                                    <span class="item-date">${new Date(item.created_at).toLocaleDateString()}</span>
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                } else {
+                    return `
+                        <div class="item-card">
+                            ${item.image_url ? `<img src="${item.image_url}" alt="${item.name}" class="item-image">` : '<div class="item-image"></div>'}
+                            <div class="item-content">
+                                <h3 class="item-title">${item.name}</h3>
+                                <p class="item-description">${item.description}</p>
+                                <div class="item-meta">
+                                    <span class="item-category">${t.product}</span>
+                                    <span class="item-date">${item.regular_price ? `${t.price}: ${item.regular_price}` : ''}</span>
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                }
+            }).join('');
+        }
+
+        function showError() {
+            const loading = document.getElementById('loadingState');
+            loading.innerHTML = `
+                <h3 data-translate="errorLoading">Error loading content</h3>
+                <p data-translate="tryAgain">Please try again later</p>
+            `;
+        }
+
+        // Initialize widget
+        document.addEventListener('DOMContentLoaded', () => {
+            applyWidgetCustomization();
+            updatePageLanguage();
+            loadItems();
+
+            // Language selector event
+            document.getElementById('languageSelector').addEventListener('change', (e) => {
+                switchLanguage(e.target.value);
+            });
+        });
+    </script>
+</body>
+</html>

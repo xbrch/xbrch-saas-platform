@@ -1,0 +1,1175 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Settings - XBRCH Admin Dashboard</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Oxygen', 'Ubuntu', sans-serif;
+            background: #f8f9fa;
+            color: #2c3e50;
+            line-height: 1.6;
+        }
+
+        /* ============================================
+           🎨 COLOR SCHEME (from screenshots)
+           ============================================ */
+        :root {
+            --primary: #3b82f6;              /* Light blue instead of purple */
+            --primary-dark: #2563eb;         /* Darker blue */
+            --primary-light: #60a5fa;         /* Lighter blue */
+            --secondary: #06b6d4;            /* Cyan accent */
+            --sidebar-bg: #1e293b;           /* Dark sidebar */
+            --sidebar-hover: #334155;        /* Sidebar hover */
+            --card-bg: #ffffff;               /* White cards */
+            --border-color: #e2e8f0;         /* Light borders */
+            --text-primary: #000000;         /* Black text for better contrast on dark sidebar */
+            --text-secondary: #cccccc;        /* Light gray for secondary text */
+            --success: #10b981;              /* Green */
+            --warning: #f59e0b;              /* Orange */
+            --danger: #ef4444;               /* Red */
+            --shadow-sm: 0 1px 3px rgba(0,0,0,0.08);
+            --shadow-md: 0 4px 12px rgba(0,0,0,0.1);
+            --shadow-lg: 0 8px 24px rgba(0,0,0,0.12);
+            --radius: 12px;
+            --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        /* ============================================
+           📱 MAIN LAYOUT
+           ============================================ */
+        .admin-container {
+            display: flex;
+            min-height: 100vh;
+        }
+
+        /* ============================================
+           🎯 SIDEBAR
+           ============================================ */
+        .sidebar {
+            width: 280px;
+            background: var(--sidebar-bg);
+            color: white;
+            position: fixed;
+            height: 100vh;
+            overflow-y: auto;
+            z-index: 1000;
+            transition: var(--transition);
+        }
+
+        .sidebar-header {
+            padding: 2rem 1.5rem;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+        }
+
+        .brand-logo {
+            font-size: 1.5rem;
+            font-weight: 800;
+            color: white;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .brand-icon {
+            width: 40px;
+            height: 40px;
+            background: var(--primary);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 1.2rem;
+        }
+
+        .nav-menu {
+            padding: 1.5rem 0;
+        }
+
+        .nav-section {
+            margin-bottom: 2rem;
+        }
+
+        .nav-section-title {
+            font-size: 0.75rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            color: #94a3b8;
+            padding: 0 1.5rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .nav-item {
+            display: block;
+            padding: 0.75rem 1.5rem;
+            color: #cbd5e1;
+            text-decoration: none;
+            transition: var(--transition);
+            border-left: 3px solid transparent;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .nav-item:hover {
+            background: var(--sidebar-hover);
+            color: white;
+        }
+
+        .nav-item.active {
+            background: var(--sidebar-hover);
+            color: var(--primary-light);
+            border-left-color: var(--primary-light);
+        }
+
+        .nav-icon {
+            width: 20px;
+            height: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* ============================================
+           📦 MAIN CONTENT
+           ============================================ */
+        .main-content {
+            flex: 1;
+            margin-left: 280px;
+            padding: 2rem;
+            max-width: calc(100vw - 280px);
+        }
+
+        /* ============================================
+           🔝 TOP BAR
+           ============================================ */
+        .top-bar {
+            background: white;
+            border-radius: var(--radius);
+            padding: 1.5rem 2rem;
+            margin-bottom: 2rem;
+            box-shadow: var(--shadow-sm);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .page-title {
+            font-size: 1.75rem;
+            font-weight: 700;
+            color: var(--text-primary);
+        }
+
+        .page-subtitle {
+            color: var(--text-secondary);
+            font-size: 0.95rem;
+            margin-top: 0.25rem;
+        }
+
+        .top-bar-actions {
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+        }
+
+        /* ============================================
+           🎨 BUTTONS
+           ============================================ */
+        .btn {
+            padding: 0.75rem 1.5rem;
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition);
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            text-decoration: none;
+            font-size: 0.875rem;
+        }
+
+        .btn-primary {
+            background: var(--primary);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: var(--primary-dark);
+            transform: translateY(-1px);
+            box-shadow: var(--shadow-md);
+        }
+
+        .btn-secondary {
+            background: var(--border-color);
+            color: var(--text-primary);
+        }
+
+        .btn-secondary:hover {
+            background: #cbd5e1;
+        }
+
+        .btn-success {
+            background: var(--success);
+            color: white;
+        }
+
+        .btn-danger {
+            background: var(--danger);
+            color: white;
+        }
+
+        .btn-sm {
+            padding: 0.5rem 1rem;
+            font-size: 0.8rem;
+        }
+
+        /* ============================================
+           📋 FORMS
+           ============================================ */
+        .form-grid {
+            display: grid;
+            gap: 1.5rem;
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1.5rem;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        .form-label {
+            font-weight: 600;
+            color: var(--text-primary);
+            font-size: 0.875rem;
+        }
+
+        .form-input, .form-textarea, .form-select {
+            padding: 0.75rem 1rem;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            font-size: 0.875rem;
+            transition: var(--transition);
+        }
+
+        .form-input:focus, .form-textarea:focus, .form-select:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1);
+        }
+
+        .form-textarea {
+            resize: vertical;
+            min-height: 120px;
+        }
+
+        /* ============================================
+           📊 CARDS
+           ============================================ */
+        .card {
+            background: var(--card-bg);
+            border-radius: var(--radius);
+            box-shadow: var(--shadow-sm);
+            overflow: hidden;
+            transition: var(--transition);
+        }
+
+        .card:hover {
+            box-shadow: var(--shadow-md);
+        }
+
+        .card-header {
+            padding: 1.5rem 2rem;
+            border-bottom: 1px solid var(--border-color);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .card-title {
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+
+        .card-body {
+            padding: 2rem;
+        }
+
+        /* ============================================
+           🔄 TOGGLE SWITCH
+           ============================================ */
+        .toggle-switch {
+            position: relative;
+            width: 48px;
+            height: 24px;
+            background: var(--border-color);
+            border-radius: 12px;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .toggle-switch.active {
+            background: var(--primary);
+        }
+
+        .toggle-switch::after {
+            content: '';
+            position: absolute;
+            width: 20px;
+            height: 20px;
+            background: white;
+            border-radius: 50%;
+            top: 2px;
+            left: 2px;
+            transition: var(--transition);
+        }
+
+        .toggle-switch.active::after {
+            left: 26px;
+        }
+
+        /* ============================================
+           ⚙️ SETTINGS SECTIONS
+           ============================================ */
+        .settings-section {
+            margin-bottom: 2rem;
+        }
+
+        .settings-section-title {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 1rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 2px solid var(--border-color);
+        }
+
+        .settings-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 0;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .settings-item:last-child {
+            border-bottom: none;
+        }
+
+        .settings-info {
+            flex: 1;
+        }
+
+        .settings-label {
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 0.25rem;
+        }
+
+        .settings-description {
+            font-size: 0.875rem;
+            color: var(--text-secondary);
+        }
+
+        .settings-control {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        /* ============================================
+           🎨 COLOR PICKER
+           ============================================ */
+        .color-picker {
+            display: flex;
+            gap: 0.5rem;
+            align-items: center;
+        }
+
+        .color-input {
+            width: 50px;
+            height: 35px;
+            border: 2px solid var(--border-color);
+            border-radius: 8px;
+            cursor: pointer;
+        }
+
+        .color-value {
+            font-family: monospace;
+            font-size: 0.875rem;
+            color: var(--text-secondary);
+        }
+
+        /* ============================================
+           📱 RESPONSIVE
+           ============================================ */
+        @media (max-width: 1024px) {
+            .sidebar {
+                transform: translateX(-100%);
+            }
+            
+            .sidebar.open {
+                transform: translateX(0);
+            }
+            
+            .main-content {
+                margin-left: 0;
+                max-width: 100vw;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .main-content {
+                padding: 1rem;
+            }
+            
+            .top-bar {
+                flex-direction: column;
+                gap: 1rem;
+                align-items: stretch;
+            }
+            
+            .form-row {
+                grid-template-columns: 1fr;
+            }
+            
+            .settings-item {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 1rem;
+            }
+            
+            .settings-control {
+                width: 100%;
+                justify-content: flex-end;
+            }
+        }
+
+        /* ============================================
+           📄 PROFILE UPLOAD
+           ============================================ */
+        .profile-upload {
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+        }
+
+        .profile-avatar {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            background: var(--primary-light);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            font-weight: bold;
+            color: white;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .profile-avatar img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .profile-info {
+            flex: 1;
+        }
+
+        .profile-name {
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 0.25rem;
+        }
+
+        .profile-email {
+            font-size: 0.875rem;
+            color: var(--text-secondary);
+        }
+
+        /* ============================================
+           📊 BUSINESS INFO
+           ============================================ */
+        .business-hours {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            gap: 0.5rem;
+            margin-top: 1rem;
+        }
+
+        .day-hours {
+            text-align: center;
+            padding: 0.5rem;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+        }
+
+        .day-name {
+            font-weight: 600;
+            font-size: 0.75rem;
+            color: var(--text-secondary);
+            margin-bottom: 0.25rem;
+        }
+
+        .hours-input {
+            width: 100%;
+            padding: 0.25rem;
+            border: 1px solid var(--border-color);
+            border-radius: 4px;
+            font-size: 0.75rem;
+            text-align: center;
+        }
+
+        /* ============================================
+           🌐 PLATFORM INTEGRATIONS
+           ============================================ */
+        .platform-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+
+        .platform-card {
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 1rem;
+            transition: var(--transition);
+        }
+
+        .platform-card:hover {
+            border-color: var(--primary);
+            box-shadow: var(--shadow-sm);
+        }
+
+        .platform-header {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            margin-bottom: 0.75rem;
+        }
+
+        .platform-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.25rem;
+        }
+
+        .platform-name {
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+
+        .platform-status {
+            font-size: 0.75rem;
+            color: var(--text-secondary);
+            margin-bottom: 0.5rem;
+        }
+
+        .platform-actions {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .platform-actions .btn {
+            flex: 1;
+            justify-content: center;
+            font-size: 0.75rem;
+            padding: 0.5rem;
+        }
+    </style>
+</head>
+<body>
+    <div class="admin-container">
+        <!-- ============================================
+           🎯 SIDEBAR
+           ============================================ -->
+        <aside class="sidebar" id="sidebar">
+            <div class="sidebar-header">
+                <a href="admin-dashboard.html" class="brand-logo">
+                    <div class="brand-icon">X</div>
+                    <span>XBRCH Admin</span>
+                </a>
+            </div>
+            
+            <nav class="nav-menu">
+                <div class="nav-section">
+                    <div class="nav-section-title">Main</div>
+                    <a href="admin-dashboard.html" class="nav-item">
+                        <span class="nav-icon">📊</span>
+                        <span>Dashboard</span>
+                    </a>
+                    <a href="#" class="nav-item">
+                        <span class="nav-icon">📈</span>
+                        <span>Analytics</span>
+                    </a>
+                </div>
+                
+                <div class="nav-section">
+                    <div class="nav-section-title">Web Broadcast</div>
+                    <a href="admin-updates.html" class="nav-item">
+                        <span class="nav-icon">📝</span>
+                        <span>Updates</span>
+                    </a>
+                    <a href="admin-products.html" class="nav-item">
+                        <span class="nav-icon">🛍️</span>
+                        <span>Products</span>
+                    </a>
+                    <a href="admin-orders.html" class="nav-item">
+                        <span class="nav-icon">📦</span>
+                        <span>Orders</span>
+                    </a>
+                    <a href="admin-settings.html" class="nav-item active">
+                        <span class="nav-icon">⚙️</span>
+                        <span>Settings</span>
+                    </a>
+                </div>
+                
+                <div class="nav-section">
+                    <div class="nav-section-title">Account</div>
+                    <a href="#" class="nav-item">
+                        <span class="nav-icon">👤</span>
+                        <span>Profile</span>
+                    </a>
+                    <a href="#" class="nav-item">
+                        <span class="nav-icon">🚪</span>
+                        <span>Logout</span>
+                    </a>
+                </div>
+            </nav>
+        </aside>
+
+        <!-- ============================================
+           📦 MAIN CONTENT
+           ============================================ -->
+        <main class="main-content">
+            <!-- Top Bar -->
+            <div class="top-bar">
+                <div>
+                    <h1 class="page-title">Settings</h1>
+                    <p class="page-subtitle">Manage your broadcast wall configuration</p>
+                </div>
+                <div class="top-bar-actions">
+                    <button class="btn btn-primary" onclick="saveAllSettings()">
+                        <span>💾</span>
+                        <span>Save All Settings</span>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Business Profile Settings -->
+            <div class="card">
+                <div class="card-header">
+                    <h2 class="card-title">Business Profile</h2>
+                </div>
+                <div class="card-body">
+                    <div class="form-grid">
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label class="form-label">Business Name</label>
+                                <input type="text" class="form-input" id="business-name" placeholder="Enter your business name">
+                            </div>
+                            
+                            <div class="form-group">
+                                <label class="form-label">Business Category</label>
+                                <select class="form-select" id="business-category">
+                                    <option value="">Select category</option>
+                                    <option value="restaurant">Restaurant</option>
+                                    <option value="cafe">Cafe</option>
+                                    <option value="retail">Retail</option>
+                                    <option value="service">Service</option>
+                                    <option value="other">Other</option>
+                                </select>
+                            </div>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label class="form-label">Business Description</label>
+                            <textarea class="form-textarea" id="business-description" placeholder="Describe your business..."></textarea>
+                        </div>
+                        
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label class="form-label">Phone Number</label>
+                                <input type="tel" class="form-input" id="business-phone" placeholder="+31 6 12345678">
+                            </div>
+                            
+                            <div class="form-group">
+                                <label class="form-label">Email Address</label>
+                                <input type="email" class="form-input" id="business-email" placeholder="contact@business.com">
+                            </div>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label class="form-label">Business Address</label>
+                            <input type="text" class="form-input" id="business-address" placeholder="Enter your business address">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label class="form-label">Business Hours</label>
+                            <div class="business-hours">
+                                <div class="day-hours">
+                                    <div class="day-name">Mon</div>
+                                    <input type="text" class="hours-input" placeholder="9AM-6PM">
+                                </div>
+                                <div class="day-hours">
+                                    <div class="day-name">Tue</div>
+                                    <input type="text" class="hours-input" placeholder="9AM-6PM">
+                                </div>
+                                <div class="day-hours">
+                                    <div class="day-name">Wed</div>
+                                    <input type="text" class="hours-input" placeholder="9AM-6PM">
+                                </div>
+                                <div class="day-hours">
+                                    <div class="day-name">Thu</div>
+                                    <input type="text" class="hours-input" placeholder="9AM-6PM">
+                                </div>
+                                <div class="day-hours">
+                                    <div class="day-name">Fri</div>
+                                    <input type="text" class="hours-input" placeholder="9AM-6PM">
+                                </div>
+                                <div class="day-hours">
+                                    <div class="day-name">Sat</div>
+                                    <input type="text" class="hours-input" placeholder="10AM-4PM">
+                                </div>
+                                <div class="day-hours">
+                                    <div class="day-name">Sun</div>
+                                    <input type="text" class="hours-input" placeholder="Closed">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Wall Settings -->
+            <div class="card">
+                <div class="card-header">
+                    <h2 class="card-title">Wall Settings</h2>
+                </div>
+                <div class="card-body">
+                    <div class="settings-section">
+                        <h3 class="settings-section-title">Appearance</h3>
+                        
+                        <div class="settings-item">
+                            <div class="settings-info">
+                                <div class="settings-label">Primary Color</div>
+                                <div class="settings-description">Main theme color for your broadcast wall</div>
+                            </div>
+                            <div class="settings-control">
+                                <div class="color-picker">
+                                    <input type="color" class="color-input" id="primary-color" value="#6366f1">
+                                    <span class="color-value">#6366f1</span>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="settings-item">
+                            <div class="settings-info">
+                                <div class="settings-label">Show Business Logo</div>
+                                <div class="settings-description">Display your business logo on the broadcast wall</div>
+                            </div>
+                            <div class="settings-control">
+                                <div class="toggle-switch active" onclick="toggleSwitch(this)"></div>
+                            </div>
+                        </div>
+                        
+                        <div class="settings-item">
+                            <div class="settings-info">
+                                <div class="settings-label">Show Contact Information</div>
+                                <div class="settings-description">Display phone and email on the wall</div>
+                            </div>
+                            <div class="settings-control">
+                                <div class="toggle-switch active" onclick="toggleSwitch(this)"></div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="settings-section">
+                        <h3 class="settings-section-title">Content Settings</h3>
+                        
+                        <div class="settings-item">
+                            <div class="settings-info">
+                                <div class="settings-label">Auto-approve Updates</div>
+                                <div class="settings-description">Automatically publish new updates without review</div>
+                            </div>
+                            <div class="settings-control">
+                                <div class="toggle-switch" onclick="toggleSwitch(this)"></div>
+                            </div>
+                        </div>
+                        
+                        <div class="settings-item">
+                            <div class="settings-info">
+                                <div class="settings-label">Show Product Prices</div>
+                                <div class="settings-description">Display pricing information on products</div>
+                            </div>
+                            <div class="settings-control">
+                                <div class="toggle-switch active" onclick="toggleSwitch(this)"></div>
+                            </div>
+                        </div>
+                        
+                        <div class="settings-item">
+                            <div class="settings-info">
+                                <div class="settings-label">Enable Customer Reviews</div>
+                                <div class="settings-description">Allow customers to leave reviews</div>
+                            </div>
+                            <div class="settings-control">
+                                <div class="toggle-switch" onclick="toggleSwitch(this)"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Platform Integrations -->
+            <div class="card">
+                <div class="card-header">
+                    <h2 class="card-title">Platform Integrations</h2>
+                </div>
+                <div class="card-body">
+                    <div class="platform-grid">
+                        <div class="platform-card">
+                            <div class="platform-header">
+                                <div class="platform-icon" style="background: #1877f2;">📘</div>
+                                <div>
+                                    <div class="platform-name">Facebook</div>
+                                    <div class="platform-status">Not connected</div>
+                                </div>
+                            </div>
+                            <div class="platform-actions">
+                                <button class="btn btn-primary btn-sm">Connect</button>
+                                <button class="btn btn-secondary btn-sm">Configure</button>
+                            </div>
+                        </div>
+                        
+                        <div class="platform-card">
+                            <div class="platform-header">
+                                <div class="platform-icon" style="background: #1da1f2;">🐦</div>
+                                <div>
+                                    <div class="platform-name">Twitter</div>
+                                    <div class="platform-status">Not connected</div>
+                                </div>
+                            </div>
+                            <div class="platform-actions">
+                                <button class="btn btn-primary btn-sm">Connect</button>
+                                <button class="btn btn-secondary btn-sm">Configure</button>
+                            </div>
+                        </div>
+                        
+                        <div class="platform-card">
+                            <div class="platform-header">
+                                <div class="platform-icon" style="background: #e4405f;">📷</div>
+                                <div>
+                                    <div class="platform-name">Instagram</div>
+                                    <div class="platform-status">Not connected</div>
+                                </div>
+                            </div>
+                            <div class="platform-actions">
+                                <button class="btn btn-primary btn-sm">Connect</button>
+                                <button class="btn btn-secondary btn-sm">Configure</button>
+                            </div>
+                        </div>
+                        
+                        <div class="platform-card">
+                            <div class="platform-header">
+                                <div class="platform-icon" style="background: #25d366;">💬</div>
+                                <div>
+                                    <div class="platform-name">WhatsApp</div>
+                                    <div class="platform-status">Not connected</div>
+                                </div>
+                            </div>
+                            <div class="platform-actions">
+                                <button class="btn btn-primary btn-sm">Connect</button>
+                                <button class="btn btn-secondary btn-sm">Configure</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- User Profile -->
+            <div class="card">
+                <div class="card-header">
+                    <h2 class="card-title">User Profile</h2>
+                </div>
+                <div class="card-body">
+                    <div class="profile-upload">
+                        <div class="profile-avatar">
+                            <span>A</span>
+                        </div>
+                        <div class="profile-info">
+                            <div class="profile-name">Admin User</div>
+                            <div class="profile-email">admin@xbrch.com</div>
+                            <button class="btn btn-secondary btn-sm" style="margin-top: 0.5rem;">Change Avatar</button>
+                        </div>
+                    </div>
+                    
+                    <div class="form-grid" style="margin-top: 2rem;">
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label class="form-label">Full Name</label>
+                                <input type="text" class="form-input" id="user-name" value="Admin User">
+                            </div>
+                            
+                            <div class="form-group">
+                                <label class="form-label">Email Address</label>
+                                <input type="email" class="form-input" id="user-email" value="admin@xbrch.com">
+                            </div>
+                        </div>
+                        
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label class="form-label">Phone Number</label>
+                                <input type="tel" class="form-input" id="user-phone" placeholder="+31 6 12345678">
+                            </div>
+                            
+                            <div class="form-group">
+                                <label class="form-label">Role</label>
+                                <select class="form-select" id="user-role">
+                                    <option value="admin" selected>Administrator</option>
+                                    <option value="manager">Manager</option>
+                                    <option value="staff">Staff</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Data Protection -->
+            <div class="card">
+                <div class="card-header">
+                    <h2 class="card-title">Data Protection</h2>
+                </div>
+                <div class="card-body">
+                    <div class="settings-section">
+                        <h3 class="settings-section-title">Data Protection Settings</h3>
+                        
+                        <div class="settings-item">
+                            <div class="settings-info">
+                                <div class="settings-label">Data Encryption</div>
+                                <div class="settings-description">Enable encryption for sensitive data</div>
+                            </div>
+                            <div class="settings-control">
+                                <div class="toggle-switch" onclick="toggleSwitch(this)"></div>
+                            </div>
+                        </div>
+                        
+                        <div class="settings-item">
+                            <div class="settings-info">
+                                <div class="settings-label">Data Retention</div>
+                                <div class="settings-description">Set data retention period for user data</div>
+                            </div>
+                            <div class="settings-control">
+                                <select class="form-select">
+                                    <option value="30">30 days</option>
+                                    <option value="60">60 days</option>
+                                    <option value="90">90 days</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script src="security-config.js"></script>
+    <script src="admin-security.js"></script>
+    <script src="data-protection.js"></script>
+    <script>
+        // Initialize security and check authentication
+        document.addEventListener('DOMContentLoaded', () => {
+            // Wait for security to initialize
+            setTimeout(() => {
+                if (typeof adminSecurity !== 'undefined') {
+                    // Check if user can access this page
+                    if (!adminSecurity.canAccessPage('admin-settings.html')) {
+                        return;
+                    }
+                    
+                    // Load user info and privacy settings
+                    loadPrivacySettings();
+                }
+            }, 100);
+        });
+
+        async function loadPrivacySettings() {
+            // Load privacy settings from server
+            const response = await fetch('/api/privacy-settings');
+            const data = await response.json();
+            
+            // Update UI with loaded settings
+            document.querySelectorAll('.toggle-switch').forEach((switchElement, index) => {
+                switchElement.classList.toggle('active', data[index].enabled);
+            });
+        }
+
+        function toggleSwitch(element) {
+            element.classList.toggle('active');
+        }
+
+        // Color picker
+        document.getElementById('primary-color').addEventListener('input', function(e) {
+            const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InB2bWJ4bmZsaGNyZGhjd3Z0ZHhjIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzAyMTY5NzQsImV4cCI6MjA4NTc5Mjk3NH0.GN4p_s8Cqod-K3S1lt_48oDZIhAroCLDrKDNs7DLjYg';
+            const SUPABASE_URL = 'https://pvmbxnflhcrdhcwvtdxc.supabase.co';
+            const color = e.target.value;
+            document.querySelector('.color-value').textContent = color;
+            
+            // Update CSS variable in real-time
+            document.documentElement.style.setProperty('--primary', color);
+        });
+
+        // Save all settings
+        function saveAllSettings() {
+            const settings = {
+                business: {
+                    name: document.getElementById('business-name').value,
+                    category: document.getElementById('business-category').value,
+                    description: document.getElementById('business-description').value,
+                    phone: document.getElementById('business-phone').value,
+                    email: document.getElementById('business-email').value,
+                    address: document.getElementById('business-address').value,
+                    hours: getBusinessHours()
+                },
+                wall: {
+                    primaryColor: document.getElementById('primary-color').value,
+                    showLogo: document.querySelectorAll('.toggle-switch')[1].classList.contains('active'),
+                    showContact: document.querySelectorAll('.toggle-switch')[2].classList.contains('active'),
+                    autoApprove: document.querySelectorAll('.toggle-switch')[3].classList.contains('active'),
+                    showPrices: document.querySelectorAll('.toggle-switch')[4].classList.contains('active'),
+                    enableReviews: document.querySelectorAll('.toggle-switch')[5].classList.contains('active')
+                },
+                user: {
+                    name: document.getElementById('user-name').value,
+                    email: document.getElementById('user-email').value,
+                    phone: document.getElementById('user-phone').value,
+                    role: document.getElementById('user-role').value
+                }
+            };
+
+            console.log('Saving settings:', settings);
+            
+            // Here you would normally save to Supabase
+            showNotification('Settings saved successfully!');
+        }
+
+        // Get business hours
+        function getBusinessHours() {
+            const hours = {};
+            const days = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
+            const inputs = document.querySelectorAll('.hours-input');
+            
+            days.forEach((day, index) => {
+                hours[day.toLowerCase()] = inputs[index].value;
+            });
+            
+            return hours;
+        }
+
+        // Show notification
+        function showNotification(message) {
+            const notification = document.createElement('div');
+            notification.style.cssText = `
+                position: fixed;
+                top: 2rem;
+                right: 2rem;
+                background: var(--success);
+                color: white;
+                padding: 1rem 1.5rem;
+                border-radius: 8px;
+                box-shadow: var(--shadow-lg);
+                z-index: 3000;
+                animation: slideIn 0.3s ease-out;
+            `;
+            notification.textContent = message;
+            
+            document.body.appendChild(notification);
+            
+            setTimeout(() => {
+                notification.style.animation = 'slideOut 0.3s ease-out';
+                setTimeout(() => {
+                    document.body.removeChild(notification);
+                }, 300);
+            }, 3000);
+        }
+
+        // Mobile sidebar toggle
+        function toggleSidebar() {
+            document.getElementById('sidebar').classList.toggle('open');
+        }
+
+        // Add mobile menu button for responsive design
+        if (window.innerWidth <= 1024) {
+            const mobileMenuBtn = document.createElement('button');
+            mobileMenuBtn.innerHTML = '☰';
+            mobileMenuBtn.style.cssText = `
+                position: fixed;
+                top: 1rem;
+                left: 1rem;
+                z-index: 1001;
+                background: var(--primary);
+                color: white;
+                border: none;
+                border-radius: 8px;
+                padding: 0.5rem;
+                font-size: 1.5rem;
+                cursor: pointer;
+            `;
+            mobileMenuBtn.onclick = toggleSidebar;
+            document.body.appendChild(mobileMenuBtn);
+        }
+
+        // Add animations
+        const style = document.createElement('style');
+        style.textContent = `
+            @keyframes slideIn {
+                from {
+                    transform: translateX(100%);
+                    opacity: 0;
+                }
+                to {
+                    transform: translateX(0);
+                    opacity: 1;
+                }
+            }
+            
+            @keyframes slideOut {
+                from {
+                    transform: translateX(0);
+                    opacity: 1;
+                }
+                to {
+                    transform: translateX(100%);
+                    opacity: 0;
+                }
+            }
+        `;
+        document.head.appendChild(style);
+    </script>
+</body>
+</html>

@@ -1,0 +1,247 @@
+/* XBRCH Widgets Admin Styles */
+.xbrch-admin-wrapper {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+.xbrch-header {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    padding: 30px;
+    border-radius: 12px;
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+.xbrch-header h1 {
+    margin: 0 0 10px 0;
+    font-size: 2.5rem;
+    font-weight: 700;
+}
+
+.xbrch-header p {
+    margin: 0;
+    font-size: 1.1rem;
+    opacity: 0.9;
+}
+
+.xbrch-cards {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 20px;
+    margin-bottom: 30px;
+}
+
+.xbrch-card {
+    background: white;
+    border-radius: 12px;
+    padding: 25px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.xbrch-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 24px rgba(0,0,0,0.15);
+}
+
+.xbrch-card h3 {
+    margin: 0 0 15px 0;
+    color: #3b82f6;
+    font-size: 1.3rem;
+    font-weight: 600;
+}
+
+.xbrch-card p {
+    margin: 0 0 20px 0;
+    color: #64748b;
+    line-height: 1.6;
+}
+
+.xbrch-button {
+    background: #3b82f6;
+    color: white;
+    border: none;
+    padding: 12px 24px;
+    border-radius: 8px;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.3s ease;
+    text-decoration: none;
+    display: inline-block;
+}
+
+.xbrch-button:hover {
+    background: #2563eb;
+}
+
+.xbrch-button-secondary {
+    background: #64748b;
+}
+
+.xbrch-button-secondary:hover {
+    background: #475569;
+}
+
+.xbrch-form {
+    background: white;
+    border-radius: 12px;
+    padding: 30px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+}
+
+.xbrch-form-group {
+    margin-bottom: 20px;
+}
+
+.xbrch-form-group label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: 600;
+    color: #1e293b;
+}
+
+.xbrch-form-group input,
+.xbrch-form-group select,
+.xbrch-form-group textarea {
+    width: 100%;
+    padding: 12px;
+    border: 2px solid #e2e8f0;
+    border-radius: 8px;
+    font-size: 1rem;
+    transition: border-color 0.3s ease;
+}
+
+.xbrch-form-group input:focus,
+.xbrch-form-group select:focus,
+.xbrch-form-group textarea:focus {
+    outline: none;
+    border-color: #3b82f6;
+}
+
+.xbrch-form-group textarea {
+    resize: vertical;
+    min-height: 100px;
+}
+
+.xbrch-status {
+    padding: 15px;
+    border-radius: 8px;
+    margin-bottom: 20px;
+}
+
+.xbrch-status.connected {
+    background: rgba(16, 185, 129, 0.1);
+    border: 1px solid #10b981;
+    color: #10b981;
+}
+
+.xbrch-status.not-connected {
+    background: rgba(239, 68, 68, 0.1);
+    border: 1px solid #ef4444;
+    color: #ef4444;
+}
+
+.xbrch-code-preview {
+    background: #1e293b;
+    color: #e2e8f0;
+    padding: 20px;
+    border-radius: 8px;
+    font-family: 'Courier New', monospace;
+    font-size: 0.9rem;
+    line-height: 1.4;
+    overflow-x: auto;
+    position: relative;
+}
+
+.xbrch-copy-button {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background: #3b82f6;
+    color: white;
+    border: none;
+    padding: 8px 12px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 0.8rem;
+}
+
+.xbrch-copy-button:hover {
+    background: #2563eb;
+}
+
+.xbrch-widget-preview {
+    border: 2px dashed #e2e8f0;
+    border-radius: 12px;
+    padding: 20px;
+    text-align: center;
+    background: #f8f9fa;
+}
+
+.xbrch-widget-preview iframe {
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+}
+
+.xbrch-tabs {
+    display: flex;
+    border-bottom: 2px solid #e2e8f0;
+    margin-bottom: 20px;
+}
+
+.xbrch-tab {
+    padding: 12px 20px;
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-weight: 600;
+    color: #64748b;
+    transition: color 0.3s ease;
+    border-bottom: 3px solid transparent;
+}
+
+.xbrch-tab:hover {
+    color: #3b82f6;
+}
+
+.xbrch-tab.active {
+    color: #3b82f6;
+    border-bottom-color: #3b82f6;
+}
+
+.xbrch-tab-content {
+    display: none;
+}
+
+.xbrch-tab-content.active {
+    display: block;
+}
+
+@media (max-width: 768px) {
+    .xbrch-cards {
+        grid-template-columns: 1fr;
+    }
+    
+    .xbrch-form {
+        padding: 20px;
+    }
+    
+    .xbrch-tabs {
+        flex-direction: column;
+        border-bottom: none;
+        border-right: 2px solid #e2e8f0;
+    }
+    
+    .xbrch-tab {
+        border-bottom: 2px solid #e2e8f0;
+        border-right: none;
+    }
+    
+    .xbrch-tab.active {
+        border-bottom-color: #3b82f6;
+        border-right-color: transparent;
+    }
+}
