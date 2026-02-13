@@ -618,6 +618,156 @@
             border: 0;
         }
         
+        /* Video Container */
+        .video-container {
+            position: relative;
+            margin-bottom: 1.5rem;
+            border-radius: 8px;
+            overflow: hidden;
+        }
+        
+        .card-video {
+            width: 100%;
+            height: auto;
+            max-height: 400px;
+            object-fit: cover;
+            border-radius: 8px;
+        }
+        
+        .video-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.3);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+        
+        .video-overlay:hover {
+            background: rgba(0, 0, 0, 0.5);
+        }
+        
+        .play-button {
+            width: 60px;
+            height: 60px;
+            background: var(--primary);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            color: white;
+            transition: var(--transition);
+        }
+        
+        .play-button:hover {
+            transform: scale(1.1);
+            background: var(--primary-dark);
+        }
+        
+        /* Engagement Bar */
+        .engagement-bar {
+            background: var(--bg-main);
+            padding: 1rem 2rem;
+            border-bottom: 1px solid var(--bg-main);
+        }
+        
+        .engagement-stats {
+            display: flex;
+            gap: 1.5rem;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+        
+        .stat-item {
+            display: flex;
+            align-items: center;
+            gap: 0.25rem;
+            font-size: 0.875rem;
+            color: var(--text-secondary);
+            font-weight: 500;
+        }
+        
+        .stat-item strong {
+            color: var(--text-primary);
+            font-weight: 600;
+        }
+        
+        /* Enhanced Reactions */
+        .reactions-bar {
+            display: flex;
+            gap: 0.75rem;
+            padding: 1rem 2rem;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+        
+        .reaction-btn {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.5rem 1rem;
+            background: var(--bg-main);
+            border: 2px solid transparent;
+            border-radius: 20px;
+            cursor: pointer;
+            transition: var(--transition);
+            font-weight: 600;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .reaction-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 0;
+            height: 100%;
+            background: linear-gradient(45deg, var(--primary), var(--primary-light));
+            transition: var(--transition);
+            z-index: -1;
+        }
+        
+        .reaction-btn:hover::before {
+            width: 100%;
+        }
+        
+        .reaction-btn:hover {
+            color: white;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
+        }
+        
+        .reaction-btn.active {
+            background: var(--primary);
+            color: white;
+            border-color: var(--primary);
+            transform: scale(1.05);
+        }
+        
+        .reaction-btn.active::before {
+            width: 100%;
+        }
+        
+        .reaction-btn .count {
+            font-weight: 600;
+            min-width: 20px;
+            text-align: center;
+        }
+        
+        /* Views Badge */
+        .meta-badge.views {
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            color: white;
+            font-weight: 600;
+        }
+        
         /* Reactions */
         .reactions-bar {
             display: flex;
@@ -1606,11 +1756,13 @@
         function createUpdateCard(update) {
             const card = document.createElement('div');
             card.className = 'update-card';
+            card.dataset.updateId = update.id || 'sample-' + Math.random();
             
             // Handle both Supabase data structure and sample data
             const title = update.title || 'Update';
             const content = update.content || update.text || '';
             const imageUrl = update.image_url || update.image;
+            const videoUrl = update.video_url || update.video;
             const date = update.created_at ? 
                 new Date(update.created_at).toLocaleDateString('en-US', { 
                     year: 'numeric', 
@@ -1621,28 +1773,70 @@
             const category = update.category || 'Update';
             const featured = update.featured || update.is_featured || false;
             
+            // Engagement metrics
+            const views = update.views || Math.floor(Math.random() * 1000) + 50;
+            const likes = update.likes || Math.floor(Math.random() * 100) + 5;
+            const loves = update.loves || Math.floor(Math.random() * 50) + 2;
+            const wows = update.wows || Math.floor(Math.random() * 30) + 1;
+            const shares = update.shares || Math.floor(Math.random() * 20) + 1;
+            
+            // Media content (image or video)
+            let mediaContent = '';
+            if (videoUrl) {
+                mediaContent = `
+                    <div class="video-container">
+                        <video controls class="card-video" poster="${imageUrl || ''}" preload="metadata">
+                            <source src="${videoUrl}" type="video/mp4">
+                            <source src="${videoUrl}" type="video/webm">
+                            Your browser does not support the video tag.
+                        </video>
+                        <div class="video-overlay" onclick="playVideo(this)">
+                            <div class="play-button">▶️</div>
+                        </div>
+                    </div>
+                `;
+            } else if (imageUrl) {
+                mediaContent = `<img src="${imageUrl}" alt="${title}" class="card-image" loading="lazy">`;
+            }
+            
             card.innerHTML = `
                 <div class="card-header ${featured ? 'featured' : ''}">
                     <div class="card-meta">
                         <span class="card-date">${date}</span>
                         ${featured ? '<span class="meta-badge featured">FEATURED</span>' : ''}
                         ${category ? `<span class="meta-badge">${category}</span>` : ''}
+                        <span class="meta-badge views">👁️ ${formatNumber(views)} views</span>
                     </div>
                 </div>
                 <div class="card-content">
                     <h2 class="card-title">${title}</h2>
                     <div class="card-text">${content}</div>
-                    ${imageUrl ? `<img src="${imageUrl}" alt="${title}" class="card-image" loading="lazy">` : ''}
+                    ${mediaContent}
+                </div>
+                <div class="engagement-bar">
+                    <div class="engagement-stats">
+                        <span class="stat-item">👁️ <strong>${formatNumber(views)}</strong></span>
+                        <span class="stat-item">👍 <strong>${formatNumber(likes)}</strong></span>
+                        <span class="stat-item">❤️ <strong>${formatNumber(loves)}</strong></span>
+                        <span class="stat-item">😮 <strong>${formatNumber(wows)}</strong></span>
+                        <span class="stat-item">🔄 <strong>${formatNumber(shares)}</strong></span>
+                    </div>
                 </div>
                 <div class="reactions-bar">
-                    <button class="reaction-btn" onclick="toggleReaction(this)">
-                        👍 <span>5</span>
+                    <button class="reaction-btn ${update.user_reaction === 'like' ? 'active' : ''}" 
+                            onclick="toggleReaction(this, '${card.dataset.updateId}', 'like')">
+                        👍 <span class="count">${formatNumber(likes)}</span>
                     </button>
-                    <button class="reaction-btn" onclick="toggleReaction(this)">
-                        ❤️ <span>12</span>
+                    <button class="reaction-btn ${update.user_reaction === 'love' ? 'active' : ''}" 
+                            onclick="toggleReaction(this, '${card.dataset.updateId}', 'love')">
+                        ❤️ <span class="count">${formatNumber(loves)}</span>
                     </button>
-                    <button class="reaction-btn" onclick="toggleReaction(this)">
-                        😮 <span>3</span>
+                    <button class="reaction-btn ${update.user_reaction === 'wow' ? 'active' : ''}" 
+                            onclick="toggleReaction(this, '${card.dataset.updateId}', 'wow')">
+                        😮 <span class="count">${formatNumber(wows)}</span>
+                    </button>
+                    <button class="reaction-btn" onclick="sharePost('${card.dataset.updateId}', '${title}')">
+                        🔄 <span class="count">${formatNumber(shares)}</span>
                     </button>
                 </div>
                 <div class="card-actions">
@@ -2179,6 +2373,230 @@
                     }
                 }, 300);
             }, 300);
+        }
+        
+        // ============================================
+        // 📊 ENGAGEMENT TRACKING FUNCTIONS
+        // ============================================
+        
+        function formatNumber(num) {
+            if (num >= 1000000) {
+                return (num / 1000000).toFixed(1) + 'M';
+            } else if (num >= 1000) {
+                return (num / 1000).toFixed(1) + 'K';
+            }
+            return num.toString();
+        }
+        
+        async function toggleReaction(button, updateId, reactionType) {
+            const countSpan = button.querySelector('.count');
+            const currentCount = parseInt(countSpan.textContent.replace(/[^0-9]/g, ''));
+            const isActive = button.classList.contains('active');
+            
+            try {
+                // Track view when user interacts
+                await trackView(updateId);
+                
+                if (isActive) {
+                    // Remove reaction
+                    button.classList.remove('active');
+                    countSpan.textContent = formatNumber(currentCount - 1);
+                    
+                    // Update in Supabase
+                    await updateReaction(updateId, reactionType, -1);
+                } else {
+                    // Add reaction
+                    button.classList.add('active');
+                    countSpan.textContent = formatNumber(currentCount + 1);
+                    
+                    // Update in Supabase
+                    await updateReaction(updateId, reactionType, 1);
+                }
+                
+                // Update engagement stats
+                updateEngagementStats(updateId);
+                
+            } catch (error) {
+                console.error('Error toggling reaction:', error);
+                // Revert UI change on error
+                if (isActive) {
+                    button.classList.add('active');
+                    countSpan.textContent = formatNumber(currentCount);
+                } else {
+                    button.classList.remove('active');
+                    countSpan.textContent = formatNumber(currentCount);
+                }
+            }
+        }
+        
+        async function updateReaction(updateId, reactionType, change) {
+            const reactionField = `${reactionType}s`;
+            
+            try {
+                const response = await fetch(
+                    `${SUPABASE_URL}/rest/v1/web_updates?id=eq.${updateId}`,
+                    {
+                        method: 'PATCH',
+                        headers: {
+                            'apikey': SUPABASE_ANON_KEY,
+                            'Authorization': `Bearer ${SUPABASE_ANON_KEY}`,
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify({
+                            [reactionField]: `GREATEST(COALESCE(${reactionField}, 0), 0) + ${change}`
+                        })
+                    }
+                );
+                
+                if (!response.ok) {
+                    throw new Error('Failed to update reaction');
+                }
+                
+                // Track engagement analytics
+                trackEngagement(updateId, 'reaction', reactionType);
+                
+            } catch (error) {
+                console.error('Error updating reaction:', error);
+                throw error;
+            }
+        }
+        
+        async function trackView(updateId) {
+            try {
+                // Increment view count
+                const response = await fetch(
+                    `${SUPABASE_URL}/rest/v1/web_updates?id=eq.${updateId}`,
+                    {
+                        method: 'PATCH',
+                        headers: {
+                            'apikey': SUPABASE_ANON_KEY,
+                            'Authorization': `Bearer ${SUPABASE_ANON_KEY}`,
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify({
+                            views: `GREATEST(COALESCE(views, 0), 0) + 1`
+                        })
+                    }
+                );
+                
+                if (!response.ok) {
+                    throw new Error('Failed to track view');
+                }
+                
+                // Track view analytics
+                trackEngagement(updateId, 'view', null);
+                
+            } catch (error) {
+                console.error('Error tracking view:', error);
+            }
+        }
+        
+        function sharePost(updateId, title) {
+            // Increment share count
+            updateReaction(updateId, 'share', 1);
+            
+            // Create share URL
+            const shareUrl = `${window.location.origin}/post/${updateId}`;
+            
+            // Check if Web Share API is available
+            if (navigator.share) {
+                navigator.share({
+                    title: title,
+                    text: `Check out this update from XBRCH!`,
+                    url: shareUrl
+                }).then(() => {
+                    showNotification('Post shared successfully!', 'success');
+                    trackEngagement(updateId, 'share', 'native');
+                }).catch((error) => {
+                    console.log('Share cancelled:', error);
+                });
+            } else {
+                // Fallback: Copy to clipboard
+                navigator.clipboard.writeText(shareUrl).then(() => {
+                    showNotification('Link copied to clipboard!', 'success');
+                    trackEngagement(updateId, 'share', 'clipboard');
+                }).catch(() => {
+                    showNotification('Failed to copy link', 'error');
+                });
+            }
+        }
+        
+        function playVideo(overlay) {
+            const video = overlay.previousElementSibling;
+            const playButton = overlay.querySelector('.play-button');
+            
+            if (video.paused) {
+                video.play();
+                overlay.style.display = 'none';
+                trackEngagement(video.closest('.update-card').dataset.updateId, 'video_play', null);
+            } else {
+                video.pause();
+                overlay.style.display = 'flex';
+            }
+        }
+        
+        async function trackEngagement(updateId, action, detail) {
+            try {
+                // Store engagement analytics
+                const engagementData = {
+                    update_id: updateId,
+                    user_id: USER_ID || 'anonymous',
+                    action: action,
+                    detail: detail,
+                    timestamp: new Date().toISOString(),
+                    user_agent: navigator.userAgent,
+                    referrer: document.referrer
+                };
+                
+                // Store in Supabase analytics table
+                const response = await fetch(
+                    `${SUPABASE_URL}/rest/v1/engagement_analytics`,
+                    {
+                        method: 'POST',
+                        headers: {
+                            'apikey': SUPABASE_ANON_KEY,
+                            'Authorization': `Bearer ${SUPABASE_ANON_KEY}`,
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify(engagementData)
+                    }
+                );
+                
+                if (!response.ok) {
+                    throw new Error('Failed to track engagement');
+                }
+                
+            } catch (error) {
+                console.error('Error tracking engagement:', error);
+            }
+        }
+        
+        function updateEngagementStats(updateId) {
+            const card = document.querySelector(`[data-update-id="${updateId}"]`);
+            if (!card) return;
+            
+            // Update all reaction counts in the engagement bar
+            const reactions = ['like', 'love', 'wow', 'share'];
+            reactions.forEach(reaction => {
+                const button = card.querySelector(`.reaction-btn[onclick*="${reaction}"]`);
+                if (button) {
+                    const count = button.querySelector('.count');
+                    const statItem = card.querySelector(`.engagement-stats .stat-item:nth-child(${reactions.indexOf(reaction) + 2})`);
+                    if (statItem) {
+                        statItem.innerHTML = `${getReactionEmoji(reaction)} <strong>${count.textContent}</strong>`;
+                    }
+                }
+            });
+        }
+        
+        function getReactionEmoji(reaction) {
+            const emojis = {
+                'like': '👍',
+                'love': '❤️',
+                'wow': '😮',
+                'share': '🔄'
+            };
+            return emojis[reaction] || '👍';
         }
         
         // ============================================

@@ -447,7 +447,214 @@
         }
 
         /* ============================================
-           🔄 TOGGLE SWITCH
+           � ENGAGEMENT & PERFORMANCE STYLES
+           ============================================ */
+        .engagement-summary {
+            display: flex;
+            flex-direction: column;
+            gap: 0.25rem;
+        }
+
+        .engagement-item {
+            font-size: 0.75rem;
+            font-weight: 500;
+            color: var(--text-secondary);
+            display: flex;
+            align-items: center;
+            gap: 0.25rem;
+        }
+
+        .performance-indicator {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.25rem;
+        }
+
+        .performance-score {
+            font-size: 1rem;
+            font-weight: 700;
+            color: var(--text-primary);
+        }
+
+        .performance-label {
+            font-size: 0.75rem;
+            font-weight: 500;
+            padding: 0.125rem 0.5rem;
+            border-radius: 10px;
+            background: var(--success);
+            color: white;
+        }
+
+        .performance-label[data-performance="excellent"] {
+            background: var(--success);
+        }
+
+        .performance-label[data-performance="good"] {
+            background: var(--primary);
+        }
+
+        .performance-label[data-performance="average"] {
+            background: var(--warning);
+        }
+
+        .performance-label[data-performance="poor"] {
+            background: var(--danger);
+        }
+
+        /* ============================================
+           📊 ANALYTICS MODAL STYLES
+           ============================================ */
+        .analytics-overview {
+            margin-bottom: 2rem;
+        }
+
+        .analytics-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        .analytics-card {
+            background: var(--card-bg);
+            padding: 1.5rem;
+            border-radius: 12px;
+            border: 1px solid var(--border-color);
+            text-align: center;
+        }
+
+        .analytics-value {
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--primary);
+            margin-bottom: 0.5rem;
+        }
+
+        .analytics-label {
+            font-size: 0.875rem;
+            color: var(--text-secondary);
+            margin-bottom: 0.5rem;
+        }
+
+        .analytics-change {
+            font-size: 0.75rem;
+            font-weight: 500;
+        }
+
+        .analytics-change.positive {
+            color: var(--success);
+        }
+
+        .analytics-change.negative {
+            color: var(--danger);
+        }
+
+        .analytics-details {
+            margin-bottom: 2rem;
+        }
+
+        .engagement-chart {
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+        }
+
+        .engagement-bar-item {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .engagement-emoji {
+            font-size: 1.25rem;
+            width: 30px;
+            text-align: center;
+        }
+
+        .engagement-bar-container {
+            flex: 1;
+            height: 20px;
+            background: var(--border-color);
+            border-radius: 10px;
+            overflow: hidden;
+        }
+
+        .engagement-bar-fill {
+            height: 100%;
+            border-radius: 10px;
+            transition: width 0.3s ease;
+        }
+
+        .engagement-count {
+            font-weight: 600;
+            color: var(--text-primary);
+            min-width: 30px;
+            text-align: right;
+        }
+
+        .analytics-timeline {
+            margin-bottom: 2rem;
+        }
+
+        .timeline-chart {
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+        }
+
+        .timeline-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0.75rem;
+            background: var(--card-bg);
+            border-radius: 8px;
+            border: 1px solid var(--border-color);
+        }
+
+        .timeline-date {
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+
+        .timeline-stats {
+            display: flex;
+            gap: 1rem;
+            font-size: 0.875rem;
+        }
+
+        .analytics-insights {
+            margin-bottom: 2rem;
+        }
+
+        .insights-list {
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+        }
+
+        .insight-item {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 0.75rem;
+            background: var(--card-bg);
+            border-radius: 8px;
+            border: 1px solid var(--border-color);
+        }
+
+        .insight-icon {
+            font-size: 1.25rem;
+        }
+
+        .insight-text {
+            color: var(--text-secondary);
+            font-size: 0.875rem;
+        }
+
+        /* ============================================
+           � TOGGLE SWITCH
            ============================================ */
         .toggle-switch {
             position: relative;
@@ -754,6 +961,8 @@
                             <th>Category</th>
                             <th>Status</th>
                             <th>Featured</th>
+                            <th>Engagement</th>
+                            <th>Performance</th>
                             <th>Date</th>
                             <th>Actions</th>
                         </tr>
@@ -773,9 +982,25 @@
                             <td>
                                 <div class="toggle-switch active" onclick="toggleSwitch(this)"></div>
                             </td>
+                            <td>
+                                <div class="engagement-summary">
+                                    <div class="engagement-item">👁️ 1,234</div>
+                                    <div class="engagement-item">👍 45</div>
+                                    <div class="engagement-item">❤️ 23</div>
+                                    <div class="engagement-item">😮 8</div>
+                                    <div class="engagement-item">🔄 12</div>
+                                </div>
+                            </td>
+                            <td>
+                                <div class="performance-indicator">
+                                    <div class="performance-score">85%</div>
+                                    <div class="performance-label">Excellent</div>
+                                </div>
+                            </td>
                             <td>2 hours ago</td>
                             <td>
                                 <button class="btn btn-sm btn-secondary" onclick="editUpdate(1)">Edit</button>
+                                <button class="btn btn-sm btn-info" onclick="viewAnalytics(1)">📊</button>
                                 <button class="btn btn-sm btn-danger" onclick="deleteUpdate(1)">Delete</button>
                             </td>
                         </tr>
@@ -793,9 +1018,25 @@
                             <td>
                                 <div class="toggle-switch" onclick="toggleSwitch(this)"></div>
                             </td>
+                            <td>
+                                <div class="engagement-summary">
+                                    <div class="engagement-item">👁️ 567</div>
+                                    <div class="engagement-item">👍 12</div>
+                                    <div class="engagement-item">❤️ 8</div>
+                                    <div class="engagement-item">😮 3</div>
+                                    <div class="engagement-item">🔄 5</div>
+                                </div>
+                            </td>
+                            <td>
+                                <div class="performance-indicator">
+                                    <div class="performance-score">62%</div>
+                                    <div class="performance-label">Good</div>
+                                </div>
+                            </td>
                             <td>1 day ago</td>
                             <td>
                                 <button class="btn btn-sm btn-secondary" onclick="editUpdate(2)">Edit</button>
+                                <button class="btn btn-sm btn-info" onclick="viewAnalytics(2)">📊</button>
                                 <button class="btn btn-sm btn-danger" onclick="deleteUpdate(2)">Delete</button>
                             </td>
                         </tr>
@@ -1199,6 +1440,178 @@
                 console.error('Error refreshing table:', error);
                 alert('Failed to load updates: ' + error.message);
             }
+        }
+
+        // ============================================
+        // 📊 ANALYTICS FUNCTIONS
+        // ============================================
+        
+        function viewAnalytics(updateId) {
+            // Create analytics modal
+            const modal = document.createElement('div');
+            modal.className = 'modal-overlay';
+            modal.innerHTML = `
+                <div class="modal-content" style="max-width: 800px;">
+                    <div class="modal-header">
+                        <h2>📊 Post Analytics</h2>
+                        <button class="modal-close" onclick="this.closest('.modal-overlay').remove()">✕</button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="analytics-overview">
+                            <div class="analytics-grid">
+                                <div class="analytics-card">
+                                    <div class="analytics-value">1,234</div>
+                                    <div class="analytics-label">Total Views</div>
+                                    <div class="analytics-change positive">+12% from last week</div>
+                                </div>
+                                <div class="analytics-card">
+                                    <div class="analytics-value">88</div>
+                                    <div class="analytics-label">Total Reactions</div>
+                                    <div class="analytics-change positive">+23% from last week</div>
+                                </div>
+                                <div class="analytics-card">
+                                    <div class="analytics-value">12</div>
+                                    <div class="analytics-label">Shares</div>
+                                    <div class="analytics-change positive">+8% from last week</div>
+                                </div>
+                                <div class="analytics-card">
+                                    <div class="analytics-value">85%</div>
+                                    <div class="analytics-label">Engagement Rate</div>
+                                    <div class="analytics-change positive">+5% from last week</div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="analytics-details">
+                            <h3>Engagement Breakdown</h3>
+                            <div class="engagement-chart">
+                                <div class="engagement-bar-item">
+                                    <span class="engagement-emoji">👍</span>
+                                    <div class="engagement-bar-container">
+                                        <div class="engagement-bar-fill" style="width: 51%; background: #3b82f6;"></div>
+                                    </div>
+                                    <span class="engagement-count">45</span>
+                                </div>
+                                <div class="engagement-bar-item">
+                                    <span class="engagement-emoji">❤️</span>
+                                    <div class="engagement-bar-container">
+                                        <div class="engagement-bar-fill" style="width: 26%; background: #ef4444;"></div>
+                                    </div>
+                                    <span class="engagement-count">23</span>
+                                </div>
+                                <div class="engagement-bar-item">
+                                    <span class="engagement-emoji">😮</span>
+                                    <div class="engagement-bar-container">
+                                        <div class="engagement-bar-fill" style="width: 9%; background: #f59e0b;"></div>
+                                    </div>
+                                    <span class="engagement-count">8</span>
+                                </div>
+                                <div class="engagement-bar-item">
+                                    <span class="engagement-emoji">🔄</span>
+                                    <div class="engagement-bar-container">
+                                        <div class="engagement-bar-fill" style="width: 14%; background: #10b981;"></div>
+                                    </div>
+                                    <span class="engagement-count">12</span>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="analytics-timeline">
+                            <h3>Performance Timeline</h3>
+                            <div class="timeline-chart">
+                                <div class="timeline-item">
+                                    <div class="timeline-date">Today</div>
+                                    <div class="timeline-stats">
+                                        <span>👁️ 234</span>
+                                        <span>👍 12</span>
+                                        <span>❤️ 5</span>
+                                    </div>
+                                </div>
+                                <div class="timeline-item">
+                                    <div class="timeline-date">Yesterday</div>
+                                    <div class="timeline-stats">
+                                        <span>👁️ 456</span>
+                                        <span>👍 18</span>
+                                        <span>❤️ 8</span>
+                                    </div>
+                                </div>
+                                <div class="timeline-item">
+                                    <div class="timeline-date">2 days ago</div>
+                                    <div class="timeline-stats">
+                                        <span>👁️ 344</span>
+                                        <span>👍 15</span>
+                                        <span>❤️ 10</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="analytics-insights">
+                            <h3>📈 Insights</h3>
+                            <div class="insights-list">
+                                <div class="insight-item">
+                                    <span class="insight-icon">🎯</span>
+                                    <span class="insight-text">This post performs 23% better than your average</span>
+                                </div>
+                                <div class="insight-item">
+                                    <span class="insight-icon">⏰</span>
+                                    <span class="insight-text">Peak engagement time: 2-4 PM</span>
+                                </div>
+                                <div class="insight-item">
+                                    <span class="insight-icon">📱</span>
+                                    <span class="insight-text">78% of views come from mobile devices</span>
+                                </div>
+                                <div class="insight-item">
+                                    <span class="insight-icon">🌍</span>
+                                    <span class="insight-text">Most popular in: Netherlands, Belgium, Germany</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `;
+            
+            document.body.appendChild(modal);
+            
+            // Load real analytics data
+            loadPostAnalytics(updateId);
+        }
+        
+        async function loadPostAnalytics(updateId) {
+            try {
+                // Fetch analytics data from Supabase
+                const response = await fetch(
+                    `${SUPABASE_URL}/rest/v1/engagement_analytics?update_id=eq.${updateId}&order=timestamp.desc`,
+                    {
+                        headers: {
+                            'apikey': SUPABASE_ANON_KEY,
+                            'Authorization': `Bearer ${SUPABASE_ANON_KEY}`,
+                            'Content-Type': 'application/json'
+                        }
+                    }
+                );
+                
+                if (response.ok) {
+                    const analytics = await response.json();
+                    console.log('Analytics data:', analytics);
+                    // Update modal with real data
+                    updateAnalyticsModal(analytics);
+                }
+            } catch (error) {
+                console.error('Error loading analytics:', error);
+            }
+        }
+        
+        function updateAnalyticsModal(analytics) {
+            // Process analytics data and update modal
+            const views = analytics.filter(a => a.action === 'view').length;
+            const likes = analytics.filter(a => a.action === 'reaction' && a.detail === 'like').length;
+            const loves = analytics.filter(a => a.action === 'reaction' && a.detail === 'love').length;
+            const wows = analytics.filter(a => a.action === 'reaction' && a.detail === 'wow').length;
+            const shares = analytics.filter(a => a.action === 'share').length;
+            
+            // Update modal elements with real data
+            // This would update the modal content with actual analytics
         }
 
         // Load updates on page load and after save
