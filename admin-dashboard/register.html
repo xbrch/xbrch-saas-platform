@@ -301,7 +301,65 @@
             text-decoration: underline;
         }
 
-        /* Loading State */
+        /* Translator Section */
+        .translator-section {
+            background: var(--secondary-bg);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-lg);
+            padding: var(--spacing-md);
+            margin-bottom: var(--spacing-xl);
+            text-align: center;
+        }
+
+        .language-selector {
+            padding: var(--spacing-sm) var(--spacing-md);
+            border: 2px solid var(--border);
+            border-radius: var(--radius-md);
+            background: var(--primary-bg);
+            font-size: var(--font-size-base);
+            font-family: var(--font-primary);
+            color: var(--text-primary);
+            transition: var(--transition);
+            outline: none;
+            min-width: 200px;
+        }
+
+        .language-selector:focus {
+            border-color: var(--accent);
+            box-shadow: 0 0 0 3px rgba(47, 168, 231, 0.1);
+        }
+
+        .font-size-controls {
+            display: flex;
+            align-items: center;
+            gap: var(--spacing-md);
+            justify-content: center;
+            margin-top: var(--spacing-sm);
+        }
+
+        .font-size-btn {
+            padding: var(--spacing-xs) var(--spacing-sm);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-sm);
+            background: var(--primary-bg);
+            color: var(--text-primary);
+            cursor: pointer;
+            transition: var(--transition);
+            font-size: var(--font-size-sm);
+            font-weight: 500;
+        }
+
+        .font-size-btn:hover {
+            background: var(--accent);
+            color: white;
+            border-color: var(--accent);
+        }
+
+        .font-size-display {
+            font-size: var(--font-size-sm);
+            color: var(--text-secondary);
+            font-weight: 500;
+        }
         .loading-overlay {
             position: absolute;
             top: 0;

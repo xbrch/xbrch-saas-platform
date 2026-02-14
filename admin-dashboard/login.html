@@ -145,7 +145,7 @@
         }
 
         .brand-subtitle {
-            font-size: var(--font-size-base);
+            font-size: var(--font-size-lg);
             color: var(--text-secondary);
             font-weight: 400;
         }
@@ -161,7 +161,7 @@
 
         .form-label {
             display: block;
-            font-size: var(--font-size-sm);
+            font-size: var(--font-size-lg);
             font-weight: 600;
             color: var(--text-primary);
             margin-bottom: var(--spacing-sm);
@@ -173,11 +173,11 @@
 
         .form-input {
             width: 100%;
-            padding: var(--spacing-md) var(--spacing-md) var(--spacing-md) var(--spacing-xl);
+            padding: var(--spacing-md) var(--spacing-md) var(--spacing-md) var(--spacing-md);
             border: 2px solid var(--border);
             border-radius: var(--radius-lg);
             background: var(--primary-bg);
-            font-size: var(--font-size-base);
+            font-size: var(--font-size-lg);
             font-family: var(--font-primary);
             transition: var(--transition);
             outline: none;
@@ -185,7 +185,7 @@
 
         .form-input:focus {
             border-color: var(--accent);
-            box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1);
+            box-shadow: 0 0 0 3px rgba(47, 168, 231, 0.1);
             background: var(--secondary-bg);
         }
 
@@ -223,7 +223,7 @@
             padding: var(--spacing-md) var(--spacing-xl);
             border: none;
             border-radius: var(--radius-lg);
-            font-size: var(--font-size-base);
+            font-size: var(--font-size-lg);
             font-weight: 600;
             font-family: var(--font-primary);
             cursor: pointer;
@@ -292,7 +292,7 @@
             color: var(--accent);
             text-decoration: none;
             font-weight: 500;
-            font-size: var(--font-size-sm);
+            font-size: var(--font-size-lg);
             transition: var(--transition);
         }
 
@@ -301,7 +301,65 @@
             text-decoration: underline;
         }
 
-        /* Loading State */
+        /* Translator Section */
+        .translator-section {
+            background: var(--secondary-bg);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-lg);
+            padding: var(--spacing-md);
+            margin-bottom: var(--spacing-xl);
+            text-align: center;
+        }
+
+        .language-selector {
+            padding: var(--spacing-sm) var(--spacing-md);
+            border: 2px solid var(--border);
+            border-radius: var(--radius-md);
+            background: var(--primary-bg);
+            font-size: var(--font-size-base);
+            font-family: var(--font-primary);
+            color: var(--text-primary);
+            transition: var(--transition);
+            outline: none;
+            min-width: 200px;
+        }
+
+        .language-selector:focus {
+            border-color: var(--accent);
+            box-shadow: 0 0 0 3px rgba(47, 168, 231, 0.1);
+        }
+
+        .font-size-controls {
+            display: flex;
+            align-items: center;
+            gap: var(--spacing-md);
+            justify-content: center;
+            margin-top: var(--spacing-sm);
+        }
+
+        .font-size-btn {
+            padding: var(--spacing-xs) var(--spacing-sm);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-sm);
+            background: var(--primary-bg);
+            color: var(--text-primary);
+            cursor: pointer;
+            transition: var(--transition);
+            font-size: var(--font-size-sm);
+            font-weight: 500;
+        }
+
+        .font-size-btn:hover {
+            background: var(--accent);
+            color: white;
+            border-color: var(--accent);
+        }
+
+        .font-size-display {
+            font-size: var(--font-size-sm);
+            color: var(--text-secondary);
+            font-weight: 500;
+        }
         .loading-overlay {
             position: absolute;
             top: 0;
@@ -419,7 +477,21 @@
                 <div class="spinner"></div>
             </div>
 
-            <!-- Brand Section -->
+            <!-- Translator Section -->
+        <div class="translator-section">
+            <select class="language-selector" id="languageSelector" onchange="switchLanguage(this.value)">
+                <option value="en">English</option>
+                <option value="af">Afrikaans</option>
+                <option value="nl">Nederlands</option>
+            </select>
+            <div class="font-size-controls">
+                <button class="font-size-btn" onclick="changeFontSize(-1)">A-</button>
+                <span class="font-size-display" id="fontSizeDisplay">100%</span>
+                <button class="font-size-btn" onclick="changeFontSize(1)">A+</button>
+            </div>
+        </div>
+
+        <!-- Brand Section -->
             <div class="brand-section">
                 <div class="brand-logo">X</div>
                 <h1 class="brand-title">Welcome Back</h1>
@@ -431,7 +503,6 @@
                 <div class="form-group">
                     <label class="form-label">Email Address</label>
                     <div class="form-input-wrapper">
-                        <span class="input-icon">📧</span>
                         <input type="email" class="form-input" placeholder="Enter your email" required>
                     </div>
                 </div>
@@ -439,7 +510,6 @@
                 <div class="form-group">
                     <label class="form-label">Password</label>
                     <div class="form-input-wrapper">
-                        <span class="input-icon">🔒</span>
                         <input type="password" class="form-input" id="passwordInput" placeholder="Enter your password" required>
                         <button type="button" class="password-toggle" onclick="togglePassword()">👁</button>
                     </div>
@@ -448,33 +518,119 @@
                 <button type="submit" class="btn btn-primary">
                     Sign In
                 </button>
-            </form>
 
-            <!-- Divider -->
-            <div class="divider">
-                <div class="divider-line"></div>
-                <span>OR</span>
-                <div class="divider-line"></div>
-            </div>
+                <!-- Divider -->
+                <div class="divider">
+                    <div class="divider-line"></div>
+                    <span>OR</span>
+                    <div class="divider-line"></div>
+                </div>
 
-            <!-- Social Login -->
-            <button type="button" class="btn btn-secondary" onclick="handleSocialLogin()">
-                Continue with Google
-            </button>
+                <!-- Social Login -->
+                <button type="button" class="btn btn-secondary" onclick="handleSocialLogin()">
+                    Continue with Google
+                </button>
 
-            <!-- Links -->
-            <div class="link-section">
-                <p>
-                    Don't have an account? <a href="register.html" class="link">Sign up here</a>
-                </p>
-                <p style="margin-top: var(--spacing-sm);">
-                    <a href="#" class="link">Forgot your password?</a>
-                </p>
-            </div>
+                <!-- Links -->
+                <div class="link-section">
+                    <p>
+                        Don't have an account? <a href="register.html" class="link">Sign up here</a>
+                    </p>
+                    <p style="margin-top: var(--spacing-sm);">
+                        <a href="#" class="link">Forgot your password?</a>
+                    </p>
+                </div>
         </div>
     </div>
 
     <script>
+        // Translation System
+        const translations = {
+            'en': {
+                'welcome-title': 'Welcome Back',
+                'welcome-subtitle': 'Sign in to your XBRCH dashboard',
+                'email-label': 'Email Address',
+                'email-placeholder': 'Enter your email',
+                'password-label': 'Password',
+                'password-placeholder': 'Enter your password',
+                'sign-in': 'Sign In',
+                'or': 'OR',
+                'continue-google': 'Continue with Google',
+                'no-account': "Don't have an account? Sign up here",
+                'forgot-password': 'Forgot your password?'
+            },
+            'af': {
+                'welcome-title': 'Welkom Terug',
+                'welcome-subtitle': 'Teken in by jou XBRCH dashboard',
+                'email-label': 'E-posadres',
+                'email-placeholder': 'Voer jou e-pos in',
+                'password-label': 'Wagwoord',
+                'password-placeholder': 'Voer jou wagwoord in',
+                'sign-in': 'Teken In',
+                'or': 'OF',
+                'continue-google': 'Gaan voort met Google',
+                'no-account': "Het jy nie 'n rekening nie? Teken hier in",
+                'forgot-password': 'Wagwoord vergeet?'
+            },
+            'nl': {
+                'welcome-title': 'Welkom Terug',
+                'welcome-subtitle': 'Log in op uw XBRCH dashboard',
+                'email-label': 'E-mailadres',
+                'email-placeholder': 'Voer uw e-mail in',
+                'password-label': 'Wachtwoord',
+                'password-placeholder': 'Voer uw wachtwoord in',
+                'sign-in': 'Log In',
+                'or': 'OF',
+                'continue-google': 'Ga verder met Google',
+                'no-account': 'Heeft u geen account? Registreer hier',
+                'forgot-password': 'Wachtwoord vergeten?'
+            }
+        };
+
+        let currentLang = 'en';
+        let currentFontSize = 100;
+
+        // Switch Language
+        function switchLanguage(lang) {
+            currentLang = lang;
+            updateTexts();
+            localStorage.setItem('selectedLanguage', lang);
+        }
+
+        // Update Texts
+        function updateTexts() {
+            const texts = translations[currentLang];
+            
+            // Update brand section
+            document.querySelector('.brand-title').textContent = texts['welcome-title'];
+            document.querySelector('.brand-subtitle').textContent = texts['welcome-subtitle'];
+            
+            // Update form labels
+            document.querySelectorAll('.form-label')[0].textContent = texts['email-label'];
+            document.querySelectorAll('.form-label')[1].textContent = texts['password-label'];
+            
+            // Update placeholders
+            document.querySelector('input[type="email"]').placeholder = texts['email-placeholder'];
+            document.querySelector('input[type="password"]').placeholder = texts['password-placeholder'];
+            
+            // Update buttons
+            document.querySelector('.btn-primary').textContent = texts['sign-in'];
+            document.querySelector('.btn-secondary').textContent = texts['continue-google'];
+            
+            // Update other texts
+            document.querySelector('.divider span').textContent = texts['or'];
+            document.querySelectorAll('.link-section p')[0].innerHTML = texts['no-account'].replace('Sign up here', '<a href="register.html" class="link">Sign up here</a>').replace('Teken hier in', '<a href="register.html" class="link">Teken hier in</a>').replace('Registreer hier', '<a href="register.html" class="link">Registreer hier</a>');
+            document.querySelectorAll('.link-section p')[1].innerHTML = `<a href="#" class="link">${texts['forgot-password']}</a>`;
+        }
+
+        // Change Font Size
+        function changeFontSize(delta) {
+            currentFontSize = Math.max(80, Math.min(120, currentFontSize + delta * 10));
+            document.documentElement.style.fontSize = currentFontSize + '%';
+            document.getElementById('fontSizeDisplay').textContent = currentFontSize + '%';
+            localStorage.setItem('fontSize', currentFontSize);
+        }
+
         // Password Toggle
         function togglePassword() {
             const passwordInput = document.getElementById('passwordInput');
@@ -520,15 +676,23 @@
             }, 2000);
         }
 
-        // Add input focus effects
-        document.querySelectorAll('.form-input').forEach(input => {
-            input.addEventListener('focus', function() {
-                this.parentElement.querySelector('.input-icon').style.color = 'var(--accent)';
-            });
+        // Initialize on page load
+        window.addEventListener('load', function() {
+            // Load saved language
+            const savedLang = localStorage.getItem('selectedLanguage');
+            if (savedLang && translations[savedLang]) {
+                currentLang = savedLang;
+                document.getElementById('languageSelector').value = savedLang;
+                updateTexts();
+            }
             
-            input.addEventListener('blur', function() {
-                this.parentElement.querySelector('.input-icon').style.color = 'var(--text-muted)';
-            });
+            // Load saved font size
+            const savedFontSize = localStorage.getItem('fontSize');
+            if (savedFontSize) {
+                currentFontSize = parseInt(savedFontSize);
+                document.documentElement.style.fontSize = currentFontSize + '%';
+                document.getElementById('fontSizeDisplay').textContent = currentFontSize + '%';
+            }
         });
     </script>
 </body>
