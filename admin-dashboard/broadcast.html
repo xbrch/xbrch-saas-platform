@@ -1,0 +1,791 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>XBRCH Social Broadcast</title>
+    <style>
+        /* Modern 2026 Design System - #F4F2ED Theme */
+        :root {
+            --primary-bg: #F4F2ED;
+            --secondary-bg: #FFFFFF;
+            --accent: #2FA8E7;
+            --accent-dark: #2FA8E7;
+            --text-primary: #000000;
+            --text-secondary: #000000;
+            --text-muted: #000000;
+            --border: #E5E3E0;
+            --shadow-sm: 0 1px 3px rgba(0,0,0,0.05);
+            --shadow-md: 0 4px 6px rgba(0,0,0,0.07);
+            --shadow-lg: 0 10px 25px rgba(0,0,0,0.1);
+            --shadow-xl: 0 20px 40px rgba(0,0,0,0.15);
+            --radius-sm: 8px;
+            --radius-md: 12px;
+            --radius-lg: 16px;
+            --radius-xl: 24px;
+            --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            --font-primary: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            --font-size-xs: 0.75rem;
+            --font-size-sm: 0.875rem;
+            --font-size-base: 1rem;
+            --font-size-lg: 1.125rem;
+            --font-size-xl: 1.25rem;
+            --font-size-2xl: 1.5rem;
+            --font-size-3xl: 2rem;
+            --spacing-xs: 0.25rem;
+            --spacing-sm: 0.5rem;
+            --spacing-md: 1rem;
+            --spacing-lg: 1.5rem;
+            --spacing-xl: 2rem;
+            --spacing-2xl: 3rem;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: var(--font-primary);
+            background: var(--primary-bg);
+            color: var(--text-primary);
+            line-height: 1.6;
+            font-size: var(--font-size-base);
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+
+        /* Modern Layout */
+        .app-container {
+            display: flex;
+            min-height: 100vh;
+            background: var(--primary-bg);
+        }
+
+        /* Modern Sidebar */
+        .sidebar {
+            width: 280px;
+            background: var(--secondary-bg);
+            border-right: 1px solid var(--border);
+            display: flex;
+            flex-direction: column;
+            transition: var(--transition);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .sidebar::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, var(--border), transparent);
+        }
+
+        .sidebar-header {
+            padding: var(--spacing-xl);
+            border-bottom: 1px solid var(--border);
+            background: linear-gradient(135deg, var(--secondary-bg) 0%, #FAFAFA 100%);
+        }
+
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: var(--spacing-md);
+            font-weight: 700;
+            font-size: var(--font-size-xl);
+            color: var(--text-primary);
+            text-decoration: none;
+            transition: var(--transition);
+        }
+
+        .brand-icon {
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(135deg, var(--accent) 0%, var(--accent-dark) 100%);
+            border-radius: var(--radius-md);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 700;
+            font-size: var(--font-size-lg);
+            box-shadow: var(--shadow-md);
+        }
+
+        .nav-menu {
+            flex: 1;
+            padding: var(--spacing-lg) 0;
+            overflow-y: auto;
+        }
+
+        .nav-item {
+            display: block;
+            padding: var(--spacing-md) var(--spacing-xl);
+            color: var(--text-secondary);
+            text-decoration: none;
+            transition: var(--transition);
+            position: relative;
+            font-weight: 500;
+            font-size: var(--font-size-sm);
+        }
+
+        .nav-item::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 3px;
+            height: 0;
+            background: var(--accent);
+            transition: var(--transition);
+            border-radius: 0 3px 3px 0;
+        }
+
+        .nav-item:hover {
+            color: var(--text-primary);
+            background: rgba(99, 102, 241, 0.05);
+        }
+
+        .nav-item.active {
+            color: var(--accent);
+            background: rgba(99, 102, 241, 0.1);
+        }
+
+        .nav-item.active::before {
+            height: 24px;
+        }
+
+        /* Main Content */
+        .main-content {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            background: var(--primary-bg);
+            min-height: 100vh;
+        }
+
+        /* Modern Header */
+        .header {
+            background: var(--secondary-bg);
+            border-bottom: 1px solid var(--border);
+            padding: var(--spacing-lg) var(--spacing-xl);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            backdrop-filter: blur(10px);
+            background: rgba(255, 255, 255, 0.95);
+        }
+
+        .header-left {
+            display: flex;
+            align-items: center;
+            gap: var(--spacing-lg);
+        }
+
+        .mobile-menu-toggle {
+            display: none;
+            width: 40px;
+            height: 40px;
+            border: none;
+            background: var(--primary-bg);
+            border-radius: var(--radius-md);
+            align-items: center;
+            justify-content: center;
+            color: var(--text-secondary);
+            cursor: pointer;
+            transition: var(--transition);
+            font-size: var(--font-size-lg);
+        }
+
+        .mobile-menu-toggle:hover {
+            background: var(--accent);
+            color: white;
+        }
+
+        .header-right {
+            display: flex;
+            align-items: center;
+            gap: var(--spacing-md);
+        }
+
+        .header-btn {
+            width: 40px;
+            height: 40px;
+            border: none;
+            background: var(--primary-bg);
+            border-radius: var(--radius-md);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--text-secondary);
+            cursor: pointer;
+            transition: var(--transition);
+            font-size: var(--font-size-lg);
+        }
+
+        .header-btn:hover {
+            background: var(--accent);
+            color: white;
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-md);
+        }
+
+        /* Page Content */
+        .page-content {
+            padding: var(--spacing-xl);
+            flex: 1;
+        }
+
+        .page-header {
+            margin-bottom: var(--spacing-2xl);
+        }
+
+        .page-title {
+            font-size: var(--font-size-3xl);
+            font-weight: 700;
+            color: var(--text-primary);
+            margin-bottom: var(--spacing-sm);
+            letter-spacing: -0.02em;
+        }
+
+        .page-subtitle {
+            font-size: var(--font-size-lg);
+            color: var(--text-secondary);
+            font-weight: 400;
+        }
+
+        /* Broadcast Form */
+        .broadcast-form {
+            background: var(--secondary-bg);
+            border-radius: var(--radius-lg);
+            padding: var(--spacing-xl);
+            box-shadow: var(--shadow-sm);
+            border: 1px solid var(--border);
+            margin-bottom: var(--spacing-xl);
+        }
+
+        .form-group {
+            margin-bottom: var(--spacing-lg);
+        }
+
+        .form-label {
+            display: block;
+            font-size: var(--font-size-sm);
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: var(--spacing-sm);
+        }
+
+        .form-input {
+            width: 100%;
+            padding: var(--spacing-md);
+            border: 2px solid var(--border);
+            border-radius: var(--radius-lg);
+            background: var(--primary-bg);
+            font-size: var(--font-size-base);
+            font-family: var(--font-primary);
+            transition: var(--transition);
+            outline: none;
+            resize: vertical;
+        }
+
+        .form-input:focus {
+            border-color: var(--accent);
+            box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1);
+            background: var(--secondary-bg);
+        }
+
+        textarea.form-input {
+            min-height: 120px;
+        }
+
+        /* Platform Selection */
+        .platform-section {
+            margin-bottom: var(--spacing-xl);
+        }
+
+        .section-title {
+            font-size: var(--font-size-xl);
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: var(--spacing-lg);
+        }
+
+        .platform-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: var(--spacing-md);
+        }
+
+        .platform-card {
+            background: var(--secondary-bg);
+            border: 2px solid var(--border);
+            border-radius: var(--radius-lg);
+            padding: var(--spacing-lg);
+            text-align: center;
+            cursor: pointer;
+            transition: var(--transition);
+            position: relative;
+        }
+
+        .platform-card:hover {
+            border-color: var(--accent);
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-md);
+        }
+
+        .platform-card.selected {
+            border-color: var(--accent);
+            background: rgba(99, 102, 241, 0.05);
+        }
+
+        .platform-card.selected::before {
+            content: '✓';
+            position: absolute;
+            top: var(--spacing-sm);
+            right: var(--spacing-sm);
+            background: var(--accent);
+            color: white;
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: var(--font-size-xs);
+            font-weight: 700;
+        }
+
+        .platform-icon {
+            font-size: var(--font-size-2xl);
+            margin-bottom: var(--spacing-sm);
+        }
+
+        .platform-name {
+            font-size: var(--font-size-sm);
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+
+        /* AI Suggestions */
+        .ai-section {
+            background: linear-gradient(135deg, rgba(99, 102, 241, 0.05) 0%, rgba(99, 102, 241, 0.02) 100%);
+            border: 1px solid rgba(99, 102, 241, 0.2);
+            border-radius: var(--radius-lg);
+            padding: var(--spacing-xl);
+            margin-bottom: var(--spacing-xl);
+        }
+
+        .ai-header {
+            display: flex;
+            align-items: center;
+            gap: var(--spacing-md);
+            margin-bottom: var(--spacing-lg);
+        }
+
+        .ai-icon {
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(135deg, var(--accent) 0%, var(--accent-dark) 100%);
+            border-radius: var(--radius-md);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: var(--font-size-lg);
+        }
+
+        .ai-title {
+            font-size: var(--font-size-lg);
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+
+        .ai-suggestions {
+            list-style: none;
+        }
+
+        .ai-suggestion {
+            padding: var(--spacing-sm) 0;
+            color: var(--text-secondary);
+            font-size: var(--font-size-sm);
+            display: flex;
+            align-items: flex-start;
+            gap: var(--spacing-sm);
+        }
+
+        .ai-suggestion::before {
+            content: '💡';
+            flex-shrink: 0;
+        }
+
+        /* Action Buttons */
+        .action-buttons {
+            display: flex;
+            gap: var(--spacing-md);
+            margin-top: var(--spacing-xl);
+        }
+
+        .btn {
+            padding: var(--spacing-md) var(--spacing-xl);
+            border: none;
+            border-radius: var(--radius-lg);
+            font-size: var(--font-size-base);
+            font-weight: 600;
+            font-family: var(--font-primary);
+            cursor: pointer;
+            transition: var(--transition);
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: var(--spacing-sm);
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--accent) 0%, var(--accent-dark) 100%);
+            color: white;
+            box-shadow: var(--shadow-md);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .btn-secondary {
+            background: var(--primary-bg);
+            color: var(--text-primary);
+            border: 2px solid var(--border);
+        }
+
+        .btn-secondary:hover {
+            background: var(--accent);
+            color: white;
+            border-color: var(--accent);
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-md);
+        }
+
+        /* Character Counter */
+        .char-counter {
+            text-align: right;
+            font-size: var(--font-size-xs);
+            color: var(--text-muted);
+            margin-top: var(--spacing-xs);
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .mobile-menu-toggle {
+                display: flex;
+            }
+
+            .sidebar {
+                position: fixed;
+                left: -280px;
+                top: 0;
+                height: 100vh;
+                z-index: 1000;
+                box-shadow: var(--shadow-lg);
+            }
+
+            .sidebar.active {
+                left: 0;
+            }
+
+            .main-content {
+                margin-left: 0;
+            }
+
+            .page-content {
+                padding: var(--spacing-lg);
+            }
+
+            .platform-grid {
+                grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+            }
+
+            .action-buttons {
+                flex-direction: column;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .page-content {
+                padding: var(--spacing-md);
+            }
+
+            .page-title {
+                font-size: var(--font-size-2xl);
+            }
+
+            .platform-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        /* Animations */
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .broadcast-form {
+            animation: fadeIn 0.6s ease-out;
+        }
+
+        .platform-card {
+            animation: fadeIn 0.6s ease-out;
+        }
+
+        .platform-card:nth-child(1) { animation-delay: 0.1s; }
+        .platform-card:nth-child(2) { animation-delay: 0.2s; }
+        .platform-card:nth-child(3) { animation-delay: 0.3s; }
+        .platform-card:nth-child(4) { animation-delay: 0.4s; }
+        .platform-card:nth-child(5) { animation-delay: 0.5s; }
+        .platform-card:nth-child(6) { animation-delay: 0.6s; }
+    </style>
+</head>
+<body>
+    <div class="app-container">
+        <!-- Modern Sidebar -->
+        <aside class="sidebar" id="sidebar">
+            <div class="sidebar-header">
+                <a href="index.html" class="brand">
+                    <div class="brand-icon">X</div>
+                    <span>XBRCH</span>
+                </a>
+            </div>
+            <nav class="nav-menu">
+                <a href="index.html" class="nav-item">📊 Dashboard</a>
+                <a href="#" class="nav-item active">📡 Social Broadcast</a>
+                <a href="#" class="nav-item">📝 Website Content</a>
+                <a href="#" class="nav-item">📈 Analytics</a>
+                <a href="#" class="nav-item">👥 Users</a>
+                <a href="#" class="nav-item">⚙️ Settings</a>
+            </nav>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- Modern Header -->
+            <header class="header">
+                <div class="header-left">
+                    <button class="mobile-menu-toggle" onclick="toggleSidebar()">☰</button>
+                </div>
+                <div class="header-right">
+                    <button class="header-btn">🔔</button>
+                    <button class="header-btn">👤</button>
+                    <button class="header-btn">⚙️</button>
+                </div>
+            </header>
+
+            <!-- Page Content -->
+            <div class="page-content">
+                <div class="page-header">
+                    <h1 class="page-title">Social Broadcast</h1>
+                    <p class="page-subtitle">Create and manage your social media content across multiple platforms</p>
+                </div>
+
+                <!-- Broadcast Form -->
+                <div class="broadcast-form">
+                    <div class="form-group">
+                        <label class="form-label">Message Content</label>
+                        <textarea class="form-input" id="messageInput" placeholder="Write your message here..." oninput="updateCharCounter()"></textarea>
+                        <div class="char-counter" id="charCounter">0 / 280 characters</div>
+                    </div>
+                </div>
+
+                <!-- Platform Selection -->
+                <div class="platform-section">
+                    <h2 class="section-title">Select Platforms</h2>
+                    <div class="platform-grid">
+                        <div class="platform-card" onclick="togglePlatform(this)">
+                            <div class="platform-icon">𝕏</div>
+                            <div class="platform-name">X (Twitter)</div>
+                        </div>
+                        <div class="platform-card" onclick="togglePlatform(this)">
+                            <div class="platform-icon">📘</div>
+                            <div class="platform-name">Facebook</div>
+                        </div>
+                        <div class="platform-card" onclick="togglePlatform(this)">
+                            <div class="platform-icon">📷</div>
+                            <div class="platform-name">Instagram</div>
+                        </div>
+                        <div class="platform-card" onclick="togglePlatform(this)">
+                            <div class="platform-icon">💼</div>
+                            <div class="platform-name">LinkedIn</div>
+                        </div>
+                        <div class="platform-card" onclick="togglePlatform(this)">
+                            <div class="platform-icon">💬</div>
+                            <div class="platform-name">WhatsApp</div>
+                        </div>
+                        <div class="platform-card" onclick="togglePlatform(this)">
+                            <div class="platform-icon">📱</div>
+                            <div class="platform-name">SMS</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- AI Suggestions -->
+                <div class="ai-section">
+                    <div class="ai-header">
+                        <div class="ai-icon">🤖</div>
+                        <h3 class="ai-title">AI Content Suggestions</h3>
+                    </div>
+                    <ul class="ai-suggestions">
+                        <li class="ai-suggestion">Use a professional tone with local SEO focus for better engagement</li>
+                        <li class="ai-suggestion">Add a clear call-to-action to encourage user interaction</li>
+                        <li class="ai-suggestion">Include relevant hashtags to increase visibility</li>
+                        <li class="ai-suggestion">Optimize content length for each platform's character limits</li>
+                    </ul>
+                </div>
+
+                <!-- Action Buttons -->
+                <div class="action-buttons">
+                    <button class="btn btn-primary" onclick="generateContent()">
+                        🤖 Generate Content
+                    </button>
+                    <button class="btn btn-secondary" onclick="saveDraft()">
+                        💾 Save Draft
+                    </button>
+                    <button class="btn btn-primary" onclick="publishBroadcast()">
+                        📡 Publish Now
+                    </button>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script>
+        // Mobile Menu Toggle
+        function toggleSidebar() {
+            const sidebar = document.getElementById('sidebar');
+            sidebar.classList.toggle('active');
+        }
+
+        // Close sidebar when clicking outside
+        document.addEventListener('click', function(event) {
+            const sidebar = document.getElementById('sidebar');
+            const toggle = document.querySelector('.mobile-menu-toggle');
+            
+            if (!sidebar.contains(event.target) && !toggle.contains(event.target)) {
+                sidebar.classList.remove('active');
+            }
+        });
+
+        // Platform Selection
+        function togglePlatform(card) {
+            card.classList.toggle('selected');
+        }
+
+        // Character Counter
+        function updateCharCounter() {
+            const input = document.getElementById('messageInput');
+            const counter = document.getElementById('charCounter');
+            const length = input.value.length;
+            const maxLength = 280;
+            
+            counter.textContent = `${length} / ${maxLength} characters`;
+            
+            if (length > maxLength) {
+                counter.style.color = 'var(--danger)';
+            } else if (length > maxLength * 0.8) {
+                counter.style.color = 'var(--warning)';
+            } else {
+                counter.style.color = 'var(--text-muted)';
+            }
+        }
+
+        // Generate Content
+        function generateContent() {
+            const input = document.getElementById('messageInput');
+            const suggestions = [
+                "🚀 Exciting news! We're launching something amazing that will transform your business experience. Stay tuned for updates! #Innovation #BusinessGrowth",
+                "💡 Did you know? Our platform helps businesses increase their reach by up to 300%. Discover the power of strategic social media management! #Success #Marketing",
+                "🎯 Target the right audience, amplify your message, grow your business. That's what we do best. Let's achieve your goals together! #Strategy #Results"
+            ];
+            
+            input.value = suggestions[Math.floor(Math.random() * suggestions.length)];
+            updateCharCounter();
+        }
+
+        // Save Draft
+        function saveDraft() {
+            const message = document.getElementById('messageInput').value;
+            const selectedPlatforms = Array.from(document.querySelectorAll('.platform-card.selected')).map(card => 
+                card.querySelector('.platform-name').textContent
+            );
+            
+            const draft = {
+                message: message,
+                platforms: selectedPlatforms,
+                timestamp: new Date().toISOString()
+            };
+            
+            localStorage.setItem('broadcastDraft', JSON.stringify(draft));
+            alert('Draft saved successfully!');
+        }
+
+        // Publish Broadcast
+        function publishBroadcast() {
+            const message = document.getElementById('messageInput').value;
+            const selectedPlatforms = document.querySelectorAll('.platform-card.selected');
+            
+            if (!message.trim()) {
+                alert('Please enter a message to publish.');
+                return;
+            }
+            
+            if (selectedPlatforms.length === 0) {
+                alert('Please select at least one platform to publish to.');
+                return;
+            }
+            
+            const platforms = Array.from(selectedPlatforms).map(card => 
+                card.querySelector('.platform-name').textContent
+            );
+            
+            // Simulate publishing
+            alert(`Publishing to: ${platforms.join(', ')}\n\nMessage: ${message}`);
+            
+            // Clear form
+            document.getElementById('messageInput').value = '';
+            updateCharCounter();
+            document.querySelectorAll('.platform-card').forEach(card => {
+                card.classList.remove('selected');
+            });
+        }
+
+        // Load draft on page load
+        window.addEventListener('load', function() {
+            const draft = localStorage.getItem('broadcastDraft');
+            if (draft) {
+                const draftData = JSON.parse(draft);
+                document.getElementById('messageInput').value = draftData.message;
+                updateCharCounter();
+                
+                // Restore platform selections
+                draftData.platforms.forEach(platformName => {
+                    document.querySelectorAll('.platform-card').forEach(card => {
+                        if (card.querySelector('.platform-name').textContent === platformName) {
+                            card.classList.add('selected');
+                        }
+                    });
+                });
+            }
+        });
+    </script>
+</body>
+</html>

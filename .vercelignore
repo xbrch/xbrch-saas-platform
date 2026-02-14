@@ -1,0 +1,15 @@
+node_modules
+.env
+.env.local
+.env.production
+.git
+.gitignore
+README.md
+*.md
+backend/
+wordpress-plugin/
+test-system.js
+SYSTEM-TESTING-GUIDE.md
+MODERN-UI-DEPLOYMENT-GUIDE.md
+MODERN-UI-VISUAL.txt
+XBRCH-MODERN-UI-DESIGN.jpg
