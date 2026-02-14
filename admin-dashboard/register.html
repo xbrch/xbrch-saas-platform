@@ -87,15 +87,18 @@
         }
 
         .register-card {
+            width: 100%;
+            max-width: 480px;
             background: var(--secondary-bg);
             border-radius: var(--radius-xl);
             box-shadow: var(--shadow-xl);
             border: 1px solid var(--border);
             padding: var(--spacing-2xl);
             position: relative;
-            overflow: hidden;
             backdrop-filter: blur(10px);
             background: rgba(255, 255, 255, 0.95);
+            max-height: none;
+            overflow-y: auto;
         }
 
         .register-card::before {
@@ -173,11 +176,11 @@
 
         .form-input {
             width: 100%;
-            padding: var(--spacing-md) var(--spacing-md) var(--spacing-md) var(--spacing-xl);
+            padding: var(--spacing-md);
             border: 2px solid var(--border);
             border-radius: var(--radius-lg);
             background: var(--primary-bg);
-            font-size: var(--font-size-base);
+            font-size: var(--font-size-lg);
             font-family: var(--font-primary);
             transition: var(--transition);
             outline: none;
@@ -185,18 +188,8 @@
 
         .form-input:focus {
             border-color: var(--accent);
-            box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1);
+            box-shadow: 0 0 0 3px rgba(47, 168, 231, 0.1);
             background: var(--secondary-bg);
-        }
-
-        .input-icon {
-            position: absolute;
-            left: var(--spacing-md);
-            top: 50%;
-            transform: translateY(-50%);
-            color: var(--text-muted);
-            font-size: var(--font-size-lg);
-            pointer-events: none;
         }
 
         .password-toggle {
@@ -211,6 +204,7 @@
             font-size: var(--font-size-lg);
             padding: var(--spacing-xs);
             transition: var(--transition);
+            z-index: 10;
         }
 
         .password-toggle:hover {
@@ -515,7 +509,6 @@
                 <div class="form-group">
                     <label class="form-label">Business Name</label>
                     <div class="form-input-wrapper">
-                        <span class="input-icon">🏢</span>
                         <input type="text" class="form-input" placeholder="Enter your business name" required>
                     </div>
                 </div>
@@ -523,7 +516,6 @@
                 <div class="form-group">
                     <label class="form-label">Email Address</label>
                     <div class="form-input-wrapper">
-                        <span class="input-icon">📧</span>
                         <input type="email" class="form-input" placeholder="Enter your email" required>
                     </div>
                 </div>
@@ -531,7 +523,6 @@
                 <div class="form-group">
                     <label class="form-label">Password</label>
                     <div class="form-input-wrapper">
-                        <span class="input-icon">🔒</span>
                         <input type="password" class="form-input" id="passwordInput" placeholder="Create a strong password" required>
                         <button type="button" class="password-toggle" onclick="togglePassword()">👁</button>
                     </div>
@@ -540,7 +531,6 @@
                 <div class="form-group">
                     <label class="form-label">Confirm Password</label>
                     <div class="form-input-wrapper">
-                        <span class="input-icon">🔒</span>
                         <input type="password" class="form-input" id="confirmPasswordInput" placeholder="Confirm your password" required>
                         <button type="button" class="password-toggle" onclick="toggleConfirmPassword()">👁</button>
                     </div>
