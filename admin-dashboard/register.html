@@ -82,8 +82,9 @@
             z-index: 1;
             min-height: 100vh;
             display: flex;
-            align-items: center;
+            align-items: flex-start;
             justify-content: center;
+            padding-top: 5vh;
         }
 
         .register-card {
@@ -131,12 +132,6 @@
             font-size: var(--font-size-2xl);
             box-shadow: var(--shadow-lg);
             position: relative;
-            animation: float 3s ease-in-out infinite;
-        }
-
-        @keyframes float {
-            0%, 100% { transform: translateY(0px); }
-            50% { transform: translateY(-10px); }
         }
 
         .brand-title {
