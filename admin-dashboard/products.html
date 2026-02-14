@@ -1,0 +1,552 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>XBRCH Products Dashboard</title>
+    <meta name="description" content="Manage your products and inventory on XBRCH platform">
+    <meta property="og:title" content="XBRCH Products Dashboard">
+    <meta property="og:description" content="Manage your products and inventory on XBRCH platform">
+    <meta property="og:type" content="website">
+    <style>
+        /* Modern 2026 Design System - #F4F2ED Theme */
+        :root {
+            --primary-bg: #F4F2ED;
+            --secondary-bg: #FFFFFF;
+            --accent: #2FA8E7;
+            --accent-dark: #2FA8E7;
+            --text-primary: #000000;
+            --text-secondary: #000000;
+            --text-muted: #000000;
+            --border: #E5E3E0;
+            --shadow-sm: 0 1px 3px rgba(0,0,0,0.05);
+            --shadow-md: 0 4px 6px rgba(0,0,0,0.07);
+            --shadow-lg: 0 10px 25px rgba(0,0,0,0.1);
+            --radius-md: 12px;
+            --radius-lg: 16px;
+            --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            --font-primary: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            --font-size-xs: 0.75rem;
+            --font-size-sm: 0.875rem;
+            --font-size-base: 1rem;
+            --font-size-lg: 1.125rem;
+            --font-size-xl: 1.25rem;
+            --font-size-2xl: 1.5rem;
+            --font-size-3xl: 2rem;
+            --spacing-xs: 0.25rem;
+            --spacing-sm: 0.5rem;
+            --spacing-md: 1rem;
+            --spacing-lg: 1.5rem;
+            --spacing-xl: 2rem;
+            --spacing-2xl: 3rem;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: var(--font-primary);
+            background: var(--primary-bg);
+            color: var(--text-primary);
+            line-height: 1.6;
+            font-size: var(--font-size-base);
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+
+        /* Layout */
+        .dashboard-container {
+            display: flex;
+            min-height: 100vh;
+        }
+
+        /* Sidebar */
+        .sidebar {
+            width: 280px;
+            background: var(--secondary-bg);
+            border-right: 1px solid var(--border);
+            padding: var(--spacing-xl);
+            position: fixed;
+            height: 100vh;
+            overflow-y: auto;
+            z-index: 100;
+            left: 0;
+            top: 0;
+            box-shadow: var(--shadow-md);
+        }
+
+        .sidebar-header {
+            display: flex;
+            align-items: center;
+            gap: var(--spacing-md);
+            margin-bottom: var(--spacing-2xl);
+        }
+
+        .logo {
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(135deg, var(--accent) 0%, var(--accent-dark) 100%);
+            border-radius: var(--radius-md);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 700;
+            font-size: var(--font-size-lg);
+        }
+
+        .brand-name {
+            font-size: var(--font-size-xl);
+            font-weight: 700;
+            color: var(--text-primary);
+        }
+
+        .nav-menu {
+            list-style: none;
+        }
+
+        .nav-item {
+            display: flex;
+            align-items: center;
+            gap: var(--spacing-md);
+            padding: var(--spacing-md);
+            color: var(--text-secondary);
+            text-decoration: none;
+            border-radius: var(--radius-md);
+            transition: var(--transition);
+            margin-bottom: var(--spacing-sm);
+        }
+
+        .nav-item:hover {
+            background: var(--primary-bg);
+            color: var(--accent);
+        }
+
+        .nav-item.active {
+            background: var(--primary-bg);
+            color: var(--accent);
+            font-weight: 600;
+        }
+
+        /* Main Content */
+        .main-content {
+            margin-left: 280px;
+            flex: 1;
+            background: var(--primary-bg);
+        }
+
+        /* Modern Header */
+        .header {
+            background: var(--secondary-bg);
+            border-bottom: 1px solid var(--border);
+            padding: var(--spacing-lg) var(--spacing-xl);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .header-left {
+            display: flex;
+            align-items: center;
+            gap: var(--spacing-lg);
+        }
+
+        .header-right {
+            display: flex;
+            align-items: center;
+            gap: var(--spacing-md);
+        }
+
+        .header-link {
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-weight: 500;
+            font-size: var(--font-size-base);
+            transition: var(--transition);
+            padding: var(--spacing-sm) var(--spacing-md);
+            border-radius: var(--radius-sm);
+        }
+
+        .header-link:hover {
+            color: var(--accent);
+            background: rgba(47, 168, 231, 0.1);
+        }
+
+        /* Page Content */
+        .page-content {
+            padding: var(--spacing-xl);
+        }
+
+        .page-header {
+            margin-bottom: var(--spacing-2xl);
+        }
+
+        .page-title {
+            font-size: var(--font-size-3xl);
+            font-weight: 700;
+            color: var(--text-primary);
+            margin-bottom: var(--spacing-sm);
+        }
+
+        .page-subtitle {
+            font-size: var(--font-size-lg);
+            color: var(--text-secondary);
+        }
+
+        /* Products Grid */
+        .products-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: var(--spacing-xl);
+            flex-wrap: wrap;
+            gap: var(--spacing-md);
+        }
+
+        .add-product-btn {
+            padding: var(--spacing-md) var(--spacing-lg);
+            background: linear-gradient(135deg, var(--accent) 0%, var(--accent-dark) 100%);
+            color: white;
+            border: none;
+            border-radius: var(--radius-md);
+            font-weight: 600;
+            font-size: var(--font-size-base);
+            cursor: pointer;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            gap: var(--spacing-sm);
+        }
+
+        .add-product-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .products-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: var(--spacing-xl);
+            margin-bottom: var(--spacing-2xl);
+        }
+
+        .product-card {
+            background: var(--secondary-bg);
+            border-radius: var(--radius-lg);
+            box-shadow: var(--shadow-md);
+            border: 1px solid var(--border);
+            overflow: hidden;
+            transition: var(--transition);
+        }
+
+        .product-card:hover {
+            transform: translateY(-4px);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .product-image {
+            width: 100%;
+            height: 200px;
+            background: var(--primary-bg);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--text-muted);
+            font-size: var(--font-size-lg);
+        }
+
+        .product-info {
+            padding: var(--spacing-lg);
+        }
+
+        .product-name {
+            font-size: var(--font-size-xl);
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: var(--spacing-sm);
+        }
+
+        .product-price {
+            font-size: var(--font-size-2xl);
+            font-weight: 700;
+            color: var(--accent);
+            margin-bottom: var(--spacing-md);
+        }
+
+        .product-description {
+            font-size: var(--font-size-base);
+            color: var(--text-secondary);
+            margin-bottom: var(--spacing-lg);
+            line-height: 1.5;
+        }
+
+        .product-actions {
+            display: flex;
+            gap: var(--spacing-sm);
+        }
+
+        .btn-edit, .btn-delete {
+            padding: var(--spacing-sm) var(--spacing-md);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-md);
+            font-size: var(--font-size-sm);
+            font-weight: 500;
+            cursor: pointer;
+            transition: var(--transition);
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: var(--spacing-xs);
+        }
+
+        .btn-edit {
+            background: var(--primary-bg);
+            color: var(--text-primary);
+        }
+
+        .btn-edit:hover {
+            background: var(--accent);
+            color: white;
+        }
+
+        .btn-delete {
+            background: #dc3545;
+            color: white;
+            border-color: #dc3545;
+        }
+
+        .btn-delete:hover {
+            background: #c82333;
+            border-color: #c82333;
+        }
+
+        /* Stats Cards */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: var(--spacing-xl);
+            margin-bottom: var(--spacing-2xl);
+        }
+
+        .stat-card {
+            background: var(--secondary-bg);
+            border-radius: var(--radius-lg);
+            box-shadow: var(--shadow-md);
+            border: 1px solid var(--border);
+            padding: var(--spacing-xl);
+            text-align: center;
+        }
+
+        .stat-value {
+            font-size: var(--font-size-3xl);
+            font-weight: 700;
+            color: var(--accent);
+            margin-bottom: var(--spacing-sm);
+        }
+
+        .stat-label {
+            font-size: var(--font-size-base);
+            color: var(--text-secondary);
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .sidebar {
+                transform: translateX(-100%);
+                transition: var(--transition);
+            }
+
+            .sidebar.active {
+                transform: translateX(0);
+            }
+
+            .main-content {
+                margin-left: 0;
+            }
+
+            .products-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="dashboard-container">
+        <!-- Sidebar -->
+        <aside class="sidebar" id="sidebar">
+            <div class="sidebar-header">
+                <div class="logo">X</div>
+                <div class="brand-name">XBRCH</div>
+            </div>
+            <nav>
+                <ul class="nav-menu">
+                    <a href="index.html" class="nav-item">📊 Dashboard</a>
+                    <a href="products.html" class="nav-item active">📦 Products</a>
+                    <a href="broadcast.html" class="nav-item">📡 Broadcast</a>
+                    <a href="analytics.html" class="nav-item">📈 Analytics</a>
+                    <a href="#" class="nav-item">👥 Audience</a>
+                    <a href="#" class="nav-item">⚙️ Settings</a>
+                </ul>
+            </nav>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- Modern Header -->
+            <header class="header">
+                <div class="header-left">
+                <div class="search-bar">
+                    <span class="search-icon">🔍</span>
+                    <input type="text" class="search-input" placeholder="Search products...">
+                </div>
+                </div>
+                <div class="header-right">
+                    <a href="#" class="header-link">Notifications</a>
+                    <a href="#" class="header-link">Profile</a>
+                    <a href="#" class="header-link">Settings</a>
+                </div>
+            </header>
+
+            <!-- Page Content -->
+            <div class="page-content">
+                <div class="page-header">
+                    <h1 class="page-title">Products Management</h1>
+                    <p class="page-subtitle">Manage your product catalog and inventory</p>
+                </div>
+
+                <!-- Stats Overview -->
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-value">24</div>
+                        <div class="stat-label">Total Products</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-value">8</div>
+                        <div class="stat-label">Active Listings</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-value">156</div>
+                        <div class="stat-label">Total Sales</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-value">4.8</div>
+                        <div class="stat-label">Avg Rating</div>
+                    </div>
+                </div>
+
+                <!-- Products Header -->
+                <div class="products-header">
+                    <h2>Your Products</h2>
+                    <button class="add-product-btn" onclick="addProduct()">
+                        <span>➕</span>
+                        Add New Product
+                    </button>
+                </div>
+
+                <!-- Products Grid -->
+                <div class="products-grid" id="productsGrid">
+                    <!-- Sample Products -->
+                    <div class="product-card">
+                        <div class="product-image">📷 Product Image</div>
+                        <div class="product-info">
+                            <h3 class="product-name">Premium Business Package</h3>
+                            <div class="product-price">$299.99</div>
+                            <p class="product-description">Complete business solution with advanced features for growing companies.</p>
+                            <div class="product-actions">
+                                <a href="#" class="btn-edit">✏️ Edit</a>
+                                <a href="#" class="btn-delete">🗑️ Delete</a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="product-card">
+                        <div class="product-image">📷 Product Image</div>
+                        <div class="product-info">
+                            <h3 class="product-name">Starter Plan</h3>
+                            <div class="product-price">$99.99</div>
+                            <p class="product-description">Perfect for small businesses and startups looking to establish their presence.</p>
+                            <div class="product-actions">
+                                <a href="#" class="btn-edit">✏️ Edit</a>
+                                <a href="#" class="btn-delete">🗑️ Delete</a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="product-card">
+                        <div class="product-image">📷 Product Image</div>
+                        <div class="product-info">
+                            <h3 class="product-name">Marketing Bundle</h3>
+                            <div class="product-price">$199.99</div>
+                            <p class="product-description">Comprehensive marketing tools to boost your business visibility and reach.</p>
+                            <div class="product-actions">
+                                <a href="#" class="btn-edit">✏️ Edit</a>
+                                <a href="#" class="btn-delete">🗑️ Delete</a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="product-card">
+                        <div class="product-image">📷 Product Image</div>
+                        <div class="product-info">
+                            <h3 class="product-name">Analytics Pro</h3>
+                            <div class="product-price">$149.99</div>
+                            <p class="product-description">Advanced analytics and insights to optimize your business performance.</p>
+                            <div class="product-actions">
+                                <a href="#" class="btn-edit">✏️ Edit</a>
+                                <a href="#" class="btn-delete">🗑️ Delete</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script>
+        // Add Product Function
+        function addProduct() {
+            console.log('Adding new product...');
+            // In a real application, this would open a modal or navigate to add product page
+            alert('Add Product feature would open here in a real application.');
+        }
+
+        // Edit Product Function
+        function editProduct(productId) {
+            console.log('Editing product:', productId);
+            // In a real application, this would open edit modal or navigate to edit page
+            alert('Edit Product feature would open here for product: ' + productId);
+        }
+
+        // Delete Product Function
+        function deleteProduct(productId) {
+            console.log('Deleting product:', productId);
+            // In a real application, this would show confirmation and delete the product
+            if (confirm('Are you sure you want to delete this product?')) {
+                alert('Delete Product feature would execute here for product: ' + productId);
+            }
+        }
+
+        // Search functionality
+        document.querySelector('.search-input').addEventListener('input', function(e) {
+            console.log('Searching products for:', e.target.value);
+            // In a real application, this would filter the products grid
+        });
+
+        // Active navigation state
+        document.querySelectorAll('.nav-item').forEach(item => {
+            item.addEventListener('click', function(e) {
+                e.preventDefault();
+                document.querySelectorAll('.nav-item').forEach(nav => nav.classList.remove('active'));
+                this.classList.add('active');
+            });
+        });
+    </script>
+</body>
+</html>
