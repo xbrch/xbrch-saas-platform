@@ -387,12 +387,12 @@
             </div>
             <nav>
                 <ul class="nav-menu">
-                    <a href="index.html" class="nav-item">📊 Dashboard</a>
-                    <a href="products.html" class="nav-item active">📦 Products</a>
-                    <a href="broadcast.html" class="nav-item">📡 Broadcast</a>
-                    <a href="analytics.html" class="nav-item">📈 Analytics</a>
-                    <a href="#" class="nav-item">👥 Audience</a>
-                    <a href="#" class="nav-item">⚙️ Settings</a>
+                    <li><a href="index.html" class="nav-item">📊 Dashboard</a></li>
+                    <li><a href="products.html" class="nav-item active">📦 Products</a></li>
+                    <li><a href="broadcast.html" class="nav-item">📡 Broadcast</a></li>
+                    <li><a href="analytics.html" class="nav-item">📈 Analytics</a></li>
+                    <li><a href="#" class="nav-item">👥 Audience</a></li>
+                    <li><a href="#" class="nav-item">⚙️ Settings</a></li>
                 </ul>
             </nav>
         </aside>
@@ -545,6 +545,14 @@
                 e.preventDefault();
                 document.querySelectorAll('.nav-item').forEach(nav => nav.classList.remove('active'));
                 this.classList.add('active');
+            });
+        });
+
+        // Make header links work
+        document.querySelectorAll('.header-link').forEach(link => {
+            link.addEventListener('click', function(e) {
+                console.log('Header link clicked:', this.textContent);
+                // In a real application, these would navigate to respective pages
             });
         });
     </script>
