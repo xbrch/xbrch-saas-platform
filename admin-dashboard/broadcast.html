@@ -372,23 +372,23 @@
             color: var(--text-primary);
         }
 
-        /* AI Suggestions */
-        .ai-section {
-            background: linear-gradient(135deg, rgba(99, 102, 241, 0.05) 0%, rgba(99, 102, 241, 0.02) 100%);
-            border: 1px solid rgba(99, 102, 241, 0.2);
+        /* Content Suggestions */
+        .suggestions-section {
+            background: linear-gradient(135deg, rgba(47, 168, 231, 0.05) 0%, rgba(47, 168, 231, 0.02) 100%);
+            border: 1px solid rgba(47, 168, 231, 0.2);
             border-radius: var(--radius-lg);
             padding: var(--spacing-xl);
             margin-bottom: var(--spacing-xl);
         }
 
-        .ai-header {
+        .suggestions-header {
             display: flex;
             align-items: center;
             gap: var(--spacing-md);
             margin-bottom: var(--spacing-lg);
         }
 
-        .ai-icon {
+        .suggestions-icon {
             width: 40px;
             height: 40px;
             background: linear-gradient(135deg, var(--accent) 0%, var(--accent-dark) 100%);
@@ -400,17 +400,17 @@
             font-size: var(--font-size-lg);
         }
 
-        .ai-title {
+        .suggestions-title {
             font-size: var(--font-size-lg);
             font-weight: 600;
             color: var(--text-primary);
         }
 
-        .ai-suggestions {
+        .suggestions-list {
             list-style: none;
         }
 
-        .ai-suggestion {
+        .suggestion-item {
             padding: var(--spacing-sm) 0;
             color: var(--text-secondary);
             font-size: var(--font-size-sm);
@@ -419,7 +419,7 @@
             gap: var(--spacing-sm);
         }
 
-        .ai-suggestion::before {
+        .suggestion-item::before {
             content: '💡';
             flex-shrink: 0;
         }
@@ -569,10 +569,10 @@
             </div>
             <nav class="nav-menu">
                 <a href="index.html" class="nav-item">📊 Dashboard</a>
-                <a href="#" class="nav-item active">📡 Social Broadcast</a>
-                <a href="#" class="nav-item">📝 Website Content</a>
-                <a href="#" class="nav-item">📈 Analytics</a>
-                <a href="#" class="nav-item">👥 Users</a>
+                <a href="#" class="nav-item active">📡 Broadcast</a>
+                <a href="#" class="nav-item">📝 Content</a>
+                <a href="analytics.html" class="nav-item">📈 Analytics</a>
+                <a href="#" class="nav-item">👥 Audience</a>
                 <a href="#" class="nav-item">⚙️ Settings</a>
             </nav>
         </aside>
@@ -638,24 +638,24 @@
                     </div>
                 </div>
 
-                <!-- AI Suggestions -->
-                <div class="ai-section">
-                    <div class="ai-header">
-                        <div class="ai-icon">🤖</div>
-                        <h3 class="ai-title">AI Content Suggestions</h3>
+                <!-- Content Suggestions -->
+                <div class="suggestions-section">
+                    <div class="suggestions-header">
+                        <div class="suggestions-icon">💡</div>
+                        <h3 class="suggestions-title">Content Suggestions</h3>
                     </div>
-                    <ul class="ai-suggestions">
-                        <li class="ai-suggestion">Use a professional tone with local SEO focus for better engagement</li>
-                        <li class="ai-suggestion">Add a clear call-to-action to encourage user interaction</li>
-                        <li class="ai-suggestion">Include relevant hashtags to increase visibility</li>
-                        <li class="ai-suggestion">Optimize content length for each platform's character limits</li>
+                    <ul class="suggestions-list">
+                        <li class="suggestion-item">Use a professional tone with local SEO focus for better engagement</li>
+                        <li class="suggestion-item">Add a clear call-to-action to encourage user interaction</li>
+                        <li class="suggestion-item">Include relevant hashtags to increase visibility</li>
+                        <li class="suggestion-item">Optimize content length for each platform's character limits</li>
                     </ul>
                 </div>
 
                 <!-- Action Buttons -->
                 <div class="action-buttons">
                     <button class="btn btn-primary" onclick="generateContent()">
-                        🤖 Generate Content
+                        💡 Get Suggestions
                     </button>
                     <button class="btn btn-secondary" onclick="saveDraft()">
                         💾 Save Draft
@@ -708,7 +708,7 @@
             }
         }
 
-        // Generate Content
+        // Get Content Suggestions
         function generateContent() {
             const input = document.getElementById('messageInput');
             const suggestions = [

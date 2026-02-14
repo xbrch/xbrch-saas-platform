@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>XBRCH Dashboard</title>
+    <title>XBRCH Analytics</title>
     <style>
         /* Modern 2026 Design System - #F4F2ED Theme */
         :root {
@@ -18,6 +18,7 @@
             --shadow-sm: 0 1px 3px rgba(0,0,0,0.05);
             --shadow-md: 0 4px 6px rgba(0,0,0,0.07);
             --shadow-lg: 0 10px 25px rgba(0,0,0,0.1);
+            --shadow-xl: 0 20px 40px rgba(0,0,0,0.15);
             --radius-sm: 8px;
             --radius-md: 12px;
             --radius-lg: 16px;
@@ -147,12 +148,12 @@
 
         .nav-item:hover {
             color: var(--text-primary);
-            background: rgba(99, 102, 241, 0.05);
+            background: rgba(47, 168, 231, 0.05);
         }
 
         .nav-item.active {
             color: var(--accent);
-            background: rgba(99, 102, 241, 0.1);
+            background: rgba(47, 168, 231, 0.1);
         }
 
         .nav-item.active::before {
@@ -186,34 +187,24 @@
             gap: var(--spacing-lg);
         }
 
-        .search-bar {
-            position: relative;
-            width: 400px;
-        }
-
-        .search-input {
-            width: 100%;
-            padding: var(--spacing-sm) var(--spacing-md) var(--spacing-sm) var(--spacing-xl);
-            border: 1px solid var(--border);
-            border-radius: var(--radius-lg);
+        .mobile-menu-toggle {
+            display: none;
+            width: 40px;
+            height: 40px;
+            border: none;
             background: var(--primary-bg);
-            font-size: var(--font-size-sm);
+            border-radius: var(--radius-md);
+            align-items: center;
+            justify-content: center;
+            color: var(--text-secondary);
+            cursor: pointer;
             transition: var(--transition);
-            outline: none;
+            font-size: var(--font-size-lg);
         }
 
-        .search-input:focus {
-            border-color: var(--accent);
-            box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1);
-        }
-
-        .search-icon {
-            position: absolute;
-            left: var(--spacing-md);
-            top: 50%;
-            transform: translateY(-50%);
-            color: var(--text-muted);
-            pointer-events: none;
+        .mobile-menu-toggle:hover {
+            background: var(--accent);
+            color: white;
         }
 
         .header-right {
@@ -268,15 +259,28 @@
             font-weight: 400;
         }
 
-        /* Modern Stats Grid */
-        .stats-grid {
+        /* Date Range Selector */
+        .date-range-selector {
+            background: var(--secondary-bg);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-lg);
+            padding: var(--spacing-sm) var(--spacing-md);
+            display: flex;
+            align-items: center;
+            gap: var(--spacing-sm);
+            font-size: var(--font-size-sm);
+            color: var(--text-primary);
+        }
+
+        /* Analytics Grid */
+        .analytics-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
             gap: var(--spacing-lg);
             margin-bottom: var(--spacing-2xl);
         }
 
-        .stat-card {
+        .analytics-card {
             background: var(--secondary-bg);
             border-radius: var(--radius-lg);
             padding: var(--spacing-xl);
@@ -287,7 +291,7 @@
             overflow: hidden;
         }
 
-        .stat-card::before {
+        .analytics-card::before {
             content: '';
             position: absolute;
             top: 0;
@@ -299,23 +303,23 @@
             transition: var(--transition);
         }
 
-        .stat-card:hover {
+        .analytics-card:hover {
             transform: translateY(-4px);
             box-shadow: var(--shadow-lg);
         }
 
-        .stat-card:hover::before {
+        .analytics-card:hover::before {
             transform: scaleX(1);
         }
 
-        .stat-header {
+        .analytics-header {
             display: flex;
             align-items: center;
             justify-content: space-between;
             margin-bottom: var(--spacing-md);
         }
 
-        .stat-icon {
+        .analytics-icon {
             width: 48px;
             height: 48px;
             background: linear-gradient(135deg, var(--accent) 0%, var(--accent-dark) 100%);
@@ -328,101 +332,146 @@
             box-shadow: var(--shadow-sm);
         }
 
-        .stat-value {
+        .analytics-value {
             font-size: var(--font-size-2xl);
             font-weight: 700;
             color: var(--text-primary);
             margin-bottom: var(--spacing-xs);
         }
 
-        .stat-label {
+        .analytics-label {
             font-size: var(--font-size-sm);
             color: var(--text-secondary);
             font-weight: 500;
         }
 
-        /* Modern Actions */
-        .actions-section {
+        .analytics-change {
+            font-size: var(--font-size-xs);
+            font-weight: 600;
+            padding: var(--spacing-xs) var(--spacing-sm);
+            border-radius: var(--radius-sm);
+            display: inline-block;
+            margin-top: var(--spacing-sm);
+        }
+
+        .analytics-change.positive {
+            background: rgba(34, 197, 94, 0.1);
+            color: #22c55e;
+        }
+
+        .analytics-change.negative {
+            background: rgba(239, 68, 68, 0.1);
+            color: #ef4444;
+        }
+
+        /* Chart Container */
+        .chart-section {
             background: var(--secondary-bg);
             border-radius: var(--radius-lg);
             padding: var(--spacing-xl);
             box-shadow: var(--shadow-sm);
             border: 1px solid var(--border);
-            margin-bottom: var(--spacing-2xl);
+            margin-bottom: var(--spacing-xl);
         }
 
-        .actions-header {
+        .chart-header {
             display: flex;
             align-items: center;
             justify-content: space-between;
             margin-bottom: var(--spacing-lg);
         }
 
-        .actions-title {
+        .chart-title {
             font-size: var(--font-size-xl);
             font-weight: 600;
             color: var(--text-primary);
         }
 
-        .actions-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: var(--spacing-md);
-        }
-
-        .action-btn {
-            padding: var(--spacing-md) var(--spacing-lg);
+        .chart-container {
+            height: 300px;
             background: var(--primary-bg);
-            border: 1px solid var(--border);
             border-radius: var(--radius-md);
-            color: var(--text-primary);
-            text-decoration: none;
-            font-weight: 500;
-            font-size: var(--font-size-sm);
-            transition: var(--transition);
             display: flex;
-            align-items: center;
-            gap: var(--spacing-sm);
-            text-align: center;
-            justify-content: center;
-        }
-
-        .action-btn:hover {
-            background: var(--accent);
-            color: white;
-            border-color: var(--accent);
-            transform: translateY(-2px);
-            box-shadow: var(--shadow-md);
-        }
-
-        /* Mobile Menu Toggle */
-        .mobile-menu-toggle {
-            display: none;
-            width: 40px;
-            height: 40px;
-            border: none;
-            background: var(--primary-bg);
-            border-radius: var(--radius-md);
             align-items: center;
             justify-content: center;
             color: var(--text-secondary);
-            cursor: pointer;
-            transition: var(--transition);
-            font-size: var(--font-size-lg);
+            font-size: var(--font-size-sm);
         }
 
-        .mobile-menu-toggle:hover {
-            background: var(--accent);
-            color: white;
+        /* Platform Performance */
+        .platform-table {
+            background: var(--secondary-bg);
+            border-radius: var(--radius-lg);
+            padding: var(--spacing-xl);
+            box-shadow: var(--shadow-sm);
+            border: 1px solid var(--border);
+            overflow-x: auto;
+        }
+
+        .platform-table-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: var(--spacing-lg);
+        }
+
+        .platform-table-title {
+            font-size: var(--font-size-xl);
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+
+        .platform-table-content {
+            overflow-x: auto;
+        }
+
+        .platform-table-grid {
+            display: grid;
+            grid-template-columns: 200px 1fr 1fr 1fr 1fr;
+            gap: var(--spacing-md);
+            min-width: 600px;
+        }
+
+        .platform-table-header-row {
+            font-weight: 600;
+            color: var(--text-primary);
+            font-size: var(--font-size-sm);
+            padding-bottom: var(--spacing-md);
+            border-bottom: 1px solid var(--border);
+        }
+
+        .platform-table-row {
+            display: contents;
+        }
+
+        .platform-table-row:hover > * {
+            background: var(--primary-bg);
+        }
+
+        .platform-table-cell {
+            padding: var(--spacing-md) 0;
+            font-size: var(--font-size-sm);
+            color: var(--text-secondary);
+            border-bottom: 1px solid var(--border);
+        }
+
+        .platform-table-cell:first-child {
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+
+        .platform-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: var(--spacing-xs);
+            padding: var(--spacing-xs) var(--spacing-sm);
+            background: var(--primary-bg);
+            border-radius: var(--radius-sm);
+            font-size: var(--font-size-xs);
+            font-weight: 500;
         }
 
         /* Responsive Design */
-        @media (max-width: 1024px) {
-            .search-bar {
-                width: 300px;
-            }
-        }
-
         @media (max-width: 768px) {
             .mobile-menu-toggle {
                 display: flex;
@@ -445,28 +494,20 @@
                 margin-left: 0;
             }
 
-            .search-bar {
-                display: none;
-            }
-
             .page-content {
                 padding: var(--spacing-lg);
             }
 
-            .stats-grid {
+            .analytics-grid {
                 grid-template-columns: 1fr;
             }
 
-            .actions-grid {
-                grid-template-columns: 1fr;
+            .platform-table-grid {
+                grid-template-columns: 150px 1fr 1fr;
             }
         }
 
         @media (max-width: 480px) {
-            .header {
-                padding: var(--spacing-md);
-            }
-
             .page-content {
                 padding: var(--spacing-md);
             }
@@ -475,7 +516,7 @@
                 font-size: var(--font-size-2xl);
             }
 
-            .stat-card {
+            .analytics-card {
                 padding: var(--spacing-lg);
             }
         }
@@ -492,14 +533,14 @@
             }
         }
 
-        .stat-card {
+        .analytics-card {
             animation: fadeIn 0.6s ease-out forwards;
         }
 
-        .stat-card:nth-child(1) { animation-delay: 0.1s; }
-        .stat-card:nth-child(2) { animation-delay: 0.2s; }
-        .stat-card:nth-child(3) { animation-delay: 0.3s; }
-        .stat-card:nth-child(4) { animation-delay: 0.4s; }
+        .analytics-card:nth-child(1) { animation-delay: 0.1s; }
+        .analytics-card:nth-child(2) { animation-delay: 0.2s; }
+        .analytics-card:nth-child(3) { animation-delay: 0.3s; }
+        .analytics-card:nth-child(4) { animation-delay: 0.4s; }
     </style>
 </head>
 <body>
@@ -507,16 +548,16 @@
         <!-- Modern Sidebar -->
         <aside class="sidebar" id="sidebar">
             <div class="sidebar-header">
-                <a href="#" class="brand">
+                <a href="index.html" class="brand">
                     <div class="brand-icon">X</div>
                     <span>XBRCH</span>
                 </a>
             </div>
             <nav class="nav-menu">
-                <a href="#" class="nav-item active">📊 Dashboard</a>
+                <a href="index.html" class="nav-item">📊 Dashboard</a>
                 <a href="broadcast.html" class="nav-item">📡 Broadcast</a>
                 <a href="#" class="nav-item">📝 Content</a>
-                <a href="analytics.html" class="nav-item">📈 Analytics</a>
+                <a href="#" class="nav-item active">📈 Analytics</a>
                 <a href="#" class="nav-item">👥 Audience</a>
                 <a href="#" class="nav-item">⚙️ Settings</a>
             </nav>
@@ -528,9 +569,8 @@
             <header class="header">
                 <div class="header-left">
                     <button class="mobile-menu-toggle" onclick="toggleSidebar()">☰</button>
-                    <div class="search-bar">
-                        <span class="search-icon">🔍</span>
-                        <input type="text" class="search-input" placeholder="Search anything...">
+                    <div class="date-range-selector">
+                        📅 Last 30 Days
                     </div>
                 </div>
                 <div class="header-right">
@@ -543,52 +583,115 @@
             <!-- Page Content -->
             <div class="page-content">
                 <div class="page-header">
-                    <h1 class="page-title">Dashboard Overview</h1>
-                    <p class="page-subtitle">Welcome back! Here's what's happening with your broadcasts.</p>
+                    <h1 class="page-title">Analytics Overview</h1>
+                    <p class="page-subtitle">Track your broadcast performance and audience engagement</p>
                 </div>
 
-                <!-- Modern Stats Grid -->
-                <div class="stats-grid">
-                    <div class="stat-card">
-                        <div class="stat-header">
-                            <div class="stat-icon">📊</div>
+                <!-- Analytics Grid -->
+                <div class="analytics-grid">
+                    <div class="analytics-card">
+                        <div class="analytics-header">
+                            <div class="analytics-icon">📊</div>
                         </div>
-                        <div class="stat-value">1,234</div>
-                        <div class="stat-label">Total Broadcasts</div>
+                        <div class="analytics-value">12,458</div>
+                        <div class="analytics-label">Total Reach</div>
+                        <div class="analytics-change positive">+23.5% vs last month</div>
                     </div>
-                    <div class="stat-card">
-                        <div class="stat-header">
-                            <div class="stat-icon">👥</div>
+                    <div class="analytics-card">
+                        <div class="analytics-header">
+                            <div class="analytics-icon">💬</div>
                         </div>
-                        <div class="stat-value">8,901</div>
-                        <div class="stat-label">Total Reach</div>
+                        <div class="analytics-value">3,847</div>
+                        <div class="analytics-label">Engagements</div>
+                        <div class="analytics-change positive">+18.2% vs last month</div>
                     </div>
-                    <div class="stat-card">
-                        <div class="stat-header">
-                            <div class="stat-icon">📈</div>
+                    <div class="analytics-card">
+                        <div class="analytics-header">
+                            <div class="analytics-icon">👥</div>
                         </div>
-                        <div class="stat-value">94.2%</div>
-                        <div class="stat-label">Engagement Rate</div>
+                        <div class="analytics-value">892</div>
+                        <div class="analytics-label">New Followers</div>
+                        <div class="analytics-change positive">+45.7% vs last month</div>
                     </div>
-                    <div class="stat-card">
-                        <div class="stat-header">
-                            <div class="stat-icon">🎯</div>
+                    <div class="analytics-card">
+                        <div class="analytics-header">
+                            <div class="analytics-icon">📈</div>
                         </div>
-                        <div class="stat-value">89</div>
-                        <div class="stat-label">Performance Score</div>
+                        <div class="analytics-value">30.9%</div>
+                        <div class="analytics-label">Engagement Rate</div>
+                        <div class="analytics-change negative">-2.1% vs last month</div>
                     </div>
                 </div>
 
-                <!-- Modern Actions Section -->
-                <div class="actions-section">
-                    <div class="actions-header">
-                        <h2 class="actions-title">Quick Actions</h2>
+                <!-- Chart Section -->
+                <div class="chart-section">
+                    <div class="chart-header">
+                        <h2 class="chart-title">Performance Trends</h2>
+                        <div class="date-range-selector">
+                            📊 Weekly View
+                        </div>
                     </div>
-                    <div class="actions-grid">
-                        <a href="broadcast.html" class="action-btn">📡 Create Broadcast</a>
-                        <a href="#" class="action-btn">📝 Create Content</a>
-                        <a href="analytics.html" class="action-btn">📊 View Analytics</a>
-                        <a href="#" class="action-btn">⚙️ Settings</a>
+                    <div class="chart-container">
+                        📈 Interactive performance chart would be displayed here
+                    </div>
+                </div>
+
+                <!-- Platform Performance -->
+                <div class="platform-table">
+                    <div class="platform-table-header">
+                        <h2 class="platform-table-title">Platform Performance</h2>
+                        <button class="date-range-selector">
+                            📊 Export Data
+                        </button>
+                    </div>
+                    <div class="platform-table-content">
+                        <div class="platform-table-grid">
+                            <div class="platform-table-header-row">Platform</div>
+                            <div class="platform-table-header-row">Reach</div>
+                            <div class="platform-table-header-row">Engagement</div>
+                            <div class="platform-table-header-row">Rate</div>
+                            <div class="platform-table-header-row">Growth</div>
+                            
+                            <div class="platform-table-row">
+                                <div class="platform-table-cell">
+                                    <span class="platform-badge">𝕏 X</span>
+                                </div>
+                                <div class="platform-table-cell">4,521</div>
+                                <div class="platform-table-cell">1,234</div>
+                                <div class="platform-table-cell">27.3%</div>
+                                <div class="platform-table-cell">+15.2%</div>
+                            </div>
+                            
+                            <div class="platform-table-row">
+                                <div class="platform-table-cell">
+                                    <span class="platform-badge">📘 Facebook</span>
+                                </div>
+                                <div class="platform-table-cell">3,892</div>
+                                <div class="platform-table-cell">987</div>
+                                <div class="platform-table-cell">25.4%</div>
+                                <div class="platform-table-cell">+8.7%</div>
+                            </div>
+                            
+                            <div class="platform-table-row">
+                                <div class="platform-table-cell">
+                                    <span class="platform-badge">📷 Instagram</span>
+                                </div>
+                                <div class="platform-table-cell">2,847</div>
+                                <div class="platform-table-cell">1,023</div>
+                                <div class="platform-table-cell">35.9%</div>
+                                <div class="platform-table-cell">+22.1%</div>
+                            </div>
+                            
+                            <div class="platform-table-row">
+                                <div class="platform-table-cell">
+                                    <span class="platform-badge">💼 LinkedIn</span>
+                                </div>
+                                <div class="platform-table-cell">1,198</div>
+                                <div class="platform-table-cell">603</div>
+                                <div class="platform-table-cell">50.3%</div>
+                                <div class="platform-table-cell">+31.4%</div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -621,10 +724,24 @@
             });
         });
 
-        // Search functionality
-        document.querySelector('.search-input').addEventListener('input', function(e) {
-            console.log('Searching for:', e.target.value);
-        });
+        // Simulate real-time analytics updates
+        function updateAnalytics() {
+            const values = document.querySelectorAll('.analytics-value');
+            values.forEach(value => {
+                const currentValue = parseInt(value.textContent.replace(/[^0-9]/g, ''));
+                const change = Math.floor(Math.random() * 10) - 5;
+                const newValue = Math.max(0, currentValue + change);
+                
+                if (value.textContent.includes('%')) {
+                    value.textContent = (newValue / 100).toFixed(1) + '%';
+                } else {
+                    value.textContent = newValue.toLocaleString();
+                }
+            });
+        }
+
+        // Update analytics every 5 seconds
+        setInterval(updateAnalytics, 5000);
     </script>
 </body>
 </html>
