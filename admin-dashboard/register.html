@@ -55,11 +55,7 @@
             -webkit-font-smoothing: antialiased;
             -moz-osx-font-smoothing: grayscale;
             min-height: 100vh;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            position: relative;
-            overflow: hidden;
+            overflow-y: auto;
         }
 
         /* Background Pattern */
@@ -84,6 +80,10 @@
             padding: var(--spacing-xl);
             position: relative;
             z-index: 1;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
 
         .register-card {
@@ -97,7 +97,7 @@
             position: relative;
             backdrop-filter: blur(10px);
             background: rgba(255, 255, 255, 0.95);
-            max-height: none;
+            max-height: 90vh;
             overflow-y: auto;
         }
 
