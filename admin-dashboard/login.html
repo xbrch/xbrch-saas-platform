@@ -738,8 +738,20 @@
             const savedFontSize = localStorage.getItem('fontSize');
             if (savedFontSize) {
                 currentFontSize = parseInt(savedFontSize);
+                if (isNaN(currentFontSize)) {
+                    currentFontSize = 100; // Fallback for NaN
+                }
                 document.documentElement.style.fontSize = currentFontSize + '%';
-                document.getElementById('fontSizeDisplay').textContent = currentFontSize + '%';
+                const display = document.getElementById('fontSizeDisplay');
+                if (display) {
+                    display.textContent = currentFontSize + '%';
+                }
+            } else {
+                // Initialize display to 100% if no saved value
+                const display = document.getElementById('fontSizeDisplay');
+                if (display) {
+                    display.textContent = '100%';
+                }
             }
         });
     </script>
