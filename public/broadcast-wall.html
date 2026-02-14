@@ -14,8 +14,10 @@
             --primary-bg: #F4F2ED;
             --secondary-bg: #FFFFFF;
             --accent: #2FA8E7;
+            --accent-dark: #2FA8E7;
             --text-primary: #000000;
             --text-secondary: #000000;
+            --text-muted: #000000;
             --border: #E5E3E0;
             --shadow-sm: 0 1px 3px rgba(0,0,0,0.05);
             --shadow-md: 0 4px 6px rgba(0,0,0,0.07);
@@ -24,6 +26,19 @@
             --radius-lg: 16px;
             --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
             --font-primary: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            --font-size-xs: 0.75rem;
+            --font-size-sm: 0.875rem;
+            --font-size-base: 1rem;
+            --font-size-lg: 1.125rem;
+            --font-size-xl: 1.25rem;
+            --font-size-2xl: 1.5rem;
+            --font-size-3xl: 2rem;
+            --spacing-xs: 0.25rem;
+            --spacing-sm: 0.5rem;
+            --spacing-md: 1rem;
+            --spacing-lg: 1.5rem;
+            --spacing-xl: 2rem;
+            --spacing-2xl: 3rem;
         }
 
         * {
@@ -38,6 +53,74 @@
             color: var(--text-primary);
             line-height: 1.6;
             -webkit-font-smoothing: antialiased;
+        }
+
+        /* Translator Section */
+        .translator-section {
+            background: var(--secondary-bg);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-lg);
+            padding: var(--spacing-lg);
+            margin: var(--spacing-xl) auto;
+            max-width: 600px;
+            text-align: center;
+            box-shadow: var(--shadow-sm);
+        }
+
+        .language-selector {
+            padding: var(--spacing-md);
+            border: 2px solid var(--border);
+            border-radius: var(--radius-md);
+            background: var(--primary-bg);
+            font-size: var(--font-size-lg);
+            font-family: var(--font-primary);
+            color: var(--text-primary);
+            transition: var(--transition);
+            outline: none;
+            min-width: 250px;
+            margin-bottom: var(--spacing-md);
+        }
+
+        .language-selector:focus {
+            border-color: var(--accent);
+            box-shadow: 0 0 0 3px rgba(47, 168, 231, 0.1);
+        }
+
+        .font-size-controls {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: var(--spacing-md);
+        }
+
+        .font-size-btn {
+            padding: var(--spacing-md) var(--spacing-lg);
+            border: 2px solid var(--border);
+            border-radius: var(--radius-md);
+            background: var(--primary-bg);
+            color: var(--text-primary);
+            cursor: pointer;
+            transition: var(--transition);
+            font-size: var(--font-size-lg);
+            font-weight: 600;
+            min-width: 50px;
+            height: 50px;
+        }
+
+        .font-size-btn:hover {
+            background: var(--accent);
+            color: white;
+            border-color: var(--accent);
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-md);
+        }
+
+        .font-size-display {
+            font-size: var(--font-size-lg);
+            color: var(--text-primary);
+            font-weight: 600;
+            min-width: 60px;
+            text-align: center;
         }
 
         .container {
@@ -62,20 +145,20 @@
             justify-content: center;
             color: white;
             font-weight: 700;
-            font-size: 24px;
+            font-size: var(--font-size-2xl);
             margin: 0 auto 20px;
             box-shadow: var(--shadow-md);
         }
 
         .header h1 {
-            font-size: 2.5rem;
+            font-size: var(--font-size-3xl);
             font-weight: 700;
             color: var(--text-primary);
             margin-bottom: 10px;
         }
 
         .header p {
-            font-size: 1.2rem;
+            font-size: var(--font-size-xl);
             color: var(--text-secondary);
             max-width: 600px;
             margin: 0 auto;
@@ -121,20 +204,20 @@
         }
 
         .business-name {
-            font-size: 1.1rem;
+            font-size: var(--font-size-lg);
             font-weight: 600;
             color: var(--accent);
             margin-bottom: 8px;
         }
 
         .broadcast-time {
-            font-size: 0.9rem;
+            font-size: var(--font-size-base);
             color: var(--text-secondary);
             margin-bottom: 16px;
         }
 
         .broadcast-content {
-            font-size: 1rem;
+            font-size: var(--font-size-base);
             line-height: 1.6;
             margin-bottom: 16px;
         }
@@ -149,7 +232,7 @@
             align-items: center;
             justify-content: center;
             color: var(--text-secondary);
-            font-size: 0.9rem;
+            font-size: var(--font-size-base);
         }
 
         .broadcast-link {
@@ -158,7 +241,8 @@
             gap: 8px;
             color: var(--accent);
             text-decoration: none;
-            font-weight: 500;
+            font-weight: 600;
+            font-size: var(--font-size-base);
             transition: var(--transition);
         }
 
@@ -180,13 +264,14 @@
         }
 
         .footer h3 {
-            font-size: 1.5rem;
+            font-size: var(--font-size-2xl);
             color: var(--text-primary);
             margin-bottom: 16px;
         }
 
         .footer p {
             color: var(--text-secondary);
+            font-size: var(--font-size-lg);
             margin-bottom: 24px;
         }
 
@@ -236,83 +321,97 @@
     </style>
 </head>
 <body>
+    <!-- Translator Section -->
+    <div class="translator-section">
+        <select class="language-selector" id="languageSelector" onchange="switchLanguage(this.value)">
+            <option value="en">English</option>
+            <option value="af">Afrikaans</option>
+            <option value="nl">Nederlands</option>
+        </select>
+        <div class="font-size-controls">
+            <button class="font-size-btn" onclick="changeFontSize(-1)">A-</button>
+            <span class="font-size-display" id="fontSizeDisplay">100%</span>
+            <button class="font-size-btn" onclick="changeFontSize(1)">A+</button>
+        </div>
+    </div>
+
     <div class="container">
         <header class="header">
             <div class="logo">X</div>
-            <h1>XBRCH Broadcast Wall</h1>
-            <p>Latest updates and announcements from businesses using XBRCH platform</p>
+            <h1 id="pageTitle">XBRCH Broadcast Wall</h1>
+            <p id="pageSubtitle">Latest updates and announcements from businesses using XBRCH platform</p>
         </header>
 
         <main>
             <div class="broadcast-grid" id="broadcastGrid">
                 <!-- Sample broadcasts - in production this would load from API -->
                 <div class="broadcast-card">
-                    <div class="business-name">Tech Solutions Inc</div>
-                    <div class="broadcast-time">2 hours ago</div>
-                    <div class="broadcast-content">
+                    <div class="business-name" data-translate="tech-solutions">Tech Solutions Inc</div>
+                    <div class="broadcast-time" data-translate="time-2h">2 hours ago</div>
+                    <div class="broadcast-content" data-translate="tech-content">
                         🚀 Exciting news! We're launching our new AI-powered business automation platform next week. Transform your business operations with cutting-edge technology!
                     </div>
                     <div class="broadcast-image">📸 Business Image</div>
-                    <a href="#" class="broadcast-link">Learn More →</a>
+                    <a href="#" class="broadcast-link" data-translate="learn-more">Learn More →</a>
                 </div>
 
                 <div class="broadcast-card">
-                    <div class="business-name">Local Cafe Co</div>
-                    <div class="broadcast-time">5 hours ago</div>
-                    <div class="broadcast-content">
+                    <div class="business-name" data-translate="local-cafe">Local Cafe Co</div>
+                    <div class="broadcast-time" data-translate="time-5h">5 hours ago</div>
+                    <div class="broadcast-content" data-translate="cafe-content">
                         ☕ Weekend special! Buy one coffee, get one free. Bring a friend and enjoy our new pastry collection together!
                     </div>
                     <div class="broadcast-image">📸 Cafe Image</div>
-                    <a href="#" class="broadcast-link">View Menu →</a>
+                    <a href="#" class="broadcast-link" data-translate="view-menu">View Menu →</a>
                 </div>
 
                 <div class="broadcast-card">
-                    <div class="business-name">Fitness Studio</div>
-                    <div class="broadcast-time">1 day ago</div>
-                    <div class="broadcast-content">
+                    <div class="business-name" data-translate="fitness-studio">Fitness Studio</div>
+                    <div class="broadcast-time" data-translate="time-1d">1 day ago</div>
+                    <div class="broadcast-content" data-translate="fitness-content">
                         💪 New year, new you! Join our 30-day fitness challenge. Special membership rates for January - transform your health journey!
                     </div>
                     <div class="broadcast-image">📸 Fitness Image</div>
-                    <a href="#" class="broadcast-link">Join Challenge →</a>
+                    <a href="#" class="broadcast-link" data-translate="join-challenge">Join Challenge →</a>
                 </div>
 
                 <div class="broadcast-card">
-                    <div class="business-name">Digital Marketing Pro</div>
-                    <div class="broadcast-time">2 days ago</div>
-                    <div class="broadcast-content">
+                    <div class="business-name" data-translate="digital-marketing">Digital Marketing Pro</div>
+                    <div class="broadcast-time" data-translate="time-2d">2 days ago</div>
+                    <div class="broadcast-content" data-translate="marketing-content">
                         📈 Free webinar: Social Media Mastery for Small Businesses. Learn proven strategies to grow your online presence!
                     </div>
                     <div class="broadcast-image">📸 Marketing Image</div>
-                    <a href="#" class="broadcast-link">Register Free →</a>
+                    <a href="#" class="broadcast-link" data-translate="register-free">Register Free →</a>
                 </div>
 
                 <div class="broadcast-card">
-                    <div class="business-name">Restaurant Hub</div>
-                    <div class="broadcast-time">3 days ago</div>
-                    <div class="broadcast-content">
+                    <div class="business-name" data-translate="restaurant-hub">Restaurant Hub</div>
+                    <div class="broadcast-time" data-translate="time-3d">3 days ago</div>
+                    <div class="broadcast-content" data-translate="restaurant-content">
                         🍽 Introducing our new seasonal menu! Fresh ingredients, bold flavors, and unforgettable dining experiences.
                     </div>
                     <div class="broadcast-image">📸 Food Image</div>
-                    <a href="#" class="broadcast-link">View Menu →</a>
+                    <a href="#" class="broadcast-link" data-translate="view-menu-alt">View Menu →</a>
                 </div>
 
                 <div class="broadcast-card">
-                    <div class="business-name">Auto Care Center</div>
-                    <div class="broadcast-time">4 days ago</div>
-                    <div class="broadcast-content">
+                    <div class="business-name" data-translate="auto-care">Auto Care Center</div>
+                    <div class="broadcast-time" data-translate="time-4d">4 days ago</div>
+                    <div class="broadcast-content" data-translate="auto-content">
                         🔧 Winter special! Complete vehicle health check for just $99. Keep your car running smoothly this season.
                     </div>
                     <div class="broadcast-image">📸 Auto Image</div>
-                    <a href="#" class="broadcast-link">Book Service →</a>
+                    <a href="#" class="broadcast-link" data-translate="book-service">Book Service →</a>
                 </div>
             </div>
         </main>
 
         <footer class="footer">
             <div class="footer-content">
-                <h3>Share Your Business Updates</h3>
-                <p>Join XBRCH platform and broadcast your message to multiple social platforms from one place.</p>
-                <a href="../admin-dashboard/login.html" class="cta-button">
+                <h3 id="footerTitle">Share Your Business Updates</h3>
+                <p id="footerSubtitle">Join XBRCH platform and broadcast your message to multiple social platforms from one place.</p>
+                <a href="../admin-dashboard/login.html" class="cta-button" id="ctaButton">
                     Get Started with XBRCH
                 </a>
             </div>
@@ -320,6 +419,165 @@
     </div>
 
     <script>
+        // Translation System
+        const translations = {
+            'en': {
+                'pageTitle': 'XBRCH Broadcast Wall',
+                'pageSubtitle': 'Latest updates and announcements from businesses using XBRCH platform',
+                'footerTitle': 'Share Your Business Updates',
+                'footerSubtitle': 'Join XBRCH platform and broadcast your message to multiple social platforms from one place.',
+                'ctaButton': 'Get Started with XBRCH',
+                'tech-solutions': 'Tech Solutions Inc',
+                'local-cafe': 'Local Cafe Co',
+                'fitness-studio': 'Fitness Studio',
+                'digital-marketing': 'Digital Marketing Pro',
+                'restaurant-hub': 'Restaurant Hub',
+                'auto-care': 'Auto Care Center',
+                'time-2h': '2 hours ago',
+                'time-5h': '5 hours ago',
+                'time-1d': '1 day ago',
+                'time-2d': '2 days ago',
+                'time-3d': '3 days ago',
+                'time-4d': '4 days ago',
+                'learn-more': 'Learn More →',
+                'view-menu': 'View Menu →',
+                'join-challenge': 'Join Challenge →',
+                'register-free': 'Register Free →',
+                'view-menu-alt': 'View Menu →',
+                'book-service': 'Book Service →',
+                'tech-content': '🚀 Exciting news! We\'re launching our new AI-powered business automation platform next week. Transform your business operations with cutting-edge technology!',
+                'cafe-content': '☕ Weekend special! Buy one coffee, get one free. Bring a friend and enjoy our new pastry collection together!',
+                'fitness-content': '💪 New year, new you! Join our 30-day fitness challenge. Special membership rates for January - transform your health journey!',
+                'marketing-content': '📈 Free webinar: Social Media Mastery for Small Businesses. Learn proven strategies to grow your online presence!',
+                'restaurant-content': '🍽 Introducing our new seasonal menu! Fresh ingredients, bold flavors, and unforgettable dining experiences.',
+                'auto-content': '🔧 Winter special! Complete vehicle health check for just $99. Keep your car running smoothly this season.'
+            },
+            'af': {
+                'pageTitle': 'XBRCH Uitsaaing Muur',
+                'pageSubtitle': 'Nuutste opdaterings en aankondigings van besighede wat die XBRCH platform gebruik',
+                'footerTitle': 'Deel Jou Besigheid Opdaterings',
+                'footerSubtitle': 'Sluit aan by XBRCH platform en uitsaag jou boodskap na verskeie sosiale platforme vanaf een plek.',
+                'ctaButton': 'Begin met XBRCH',
+                'tech-solutions': 'Tegnologie Oplossings BK',
+                'local-cafe': 'Plaaslike Koffie BK',
+                'fitness-studio': 'Fitness Studio',
+                'digital-marketing': 'Digitale Bemarking Pro',
+                'restaurant-hub': 'Restaurant Sentrum',
+                'auto-care': 'Motor Versorgingsentrum',
+                'time-2h': '2 ure gelede',
+                'time-5h': '5 ure gelede',
+                'time-1d': '1 dag gelede',
+                'time-2d': '2 dae gelede',
+                'time-3d': '3 dae gelede',
+                'time-4d': '4 dae gelede',
+                'learn-more': 'Leer Meer →',
+                'view-menu': 'Besoek Kieskaart →',
+                'join-challenge': 'Sluit aan by Uitdaging →',
+                'register-free': 'Registeer Gratis →',
+                'view-menu-alt': 'Besoek Kieskaart →',
+                'book-service': 'Boek Diens →',
+                'tech-content': '🚀 Opwindende nuus! Ons lanseer ons nuwe KI-aangedrewe besigheid automatiseeringsplatform volgende week. Transformeer jou besigheidsbedrywighede met voorste tegnologie!',
+                'cafe-content': '☕ Weekend spesiaal! Koop een koffie, kry een gratis. Bring \'n vriend en geniet ons nuwe versameling gebak saam!',
+                'fitness-content': '💪 Nuwe jaar, nuwe jy! Sluit aan by ons 30-dag fitness uitdaging. Spesiale lidmaatskap tariewe vir Januarie - transformeer jou gesondheid reis!',
+                'marketing-content': '📈 Gratis webinaar: Sosiale Media Meesterskap vir Klein Besighede. Leer bewese strategieë om jou aanlyn teenwoordigheid te groei!',
+                'restaurant-content': '🍽 Ons stel ons nuwe seisoenale kieskaart voor! Vars bestanddele, bold geure en onvergeetlike eetervarings.',
+                'auto-content': '🔧 Winter spesiaal! Volledige voertuig gesondheidskontrole vir slegs $99. Hou jou motor gladlopend hierdie seisoen.'
+            },
+            'nl': {
+                'pageTitle': 'XBRCH Uitzending Muur',
+                'pageSubtitle': 'Laatste updates en aankondigingen van bedrijven die het XBRCH platform gebruiken',
+                'footerTitle': 'Deel Uw Bedrijfsupdates',
+                'footerSubtitle': 'Sluit u aan bij XBRCH platform en broadcast uw bericht naar meerdere sociale platforms vanaf één plek.',
+                'ctaButton': 'Start met XBRCH',
+                'tech-solutions': 'Tech Solutions BV',
+                'local-cafe': 'Lokale Koffie BV',
+                'fitness-studio': 'Fitness Studio',
+                'digital-marketing': 'Digitale Marketing Pro',
+                'restaurant-hub': 'Restaurant Hub',
+                'auto-care': 'Auto Care Center',
+                'time-2h': '2 uur geleden',
+                'time-5h': '5 uur geleden',
+                'time-1d': '1 dag geleden',
+                'time-2d': '2 dagen geleden',
+                'time-3d': '3 dagen geleden',
+                'time-4d': '4 dagen geleden',
+                'learn-more': 'Meer Leren →',
+                'view-menu': 'Bekijk Menu →',
+                'join-challenge': 'Doe Mee aan Uitdaging →',
+                'register-free': 'Registreer Gratis →',
+                'view-menu-alt': 'Bekijk Menu →',
+                'book-service': 'Boek Service →',
+                'tech-content': '🚀 Spannend nieuws! We lanceren volgende week onze nieuwe AI-aangedreven bedrijfsautomatiseringsplatform. Transformeer uw bedrijfsactiviteiten met cutting-edge technologie!',
+                'cafe-content': '☕ Weekend aanbieding! Koop één koffie, krijg één gratis. Breng een vriend mee en geniet van onze nieuwe gebakcollectie samen!',
+                'fitness-content': '💪 Nieuw jaar, nieuwe u! Doe mee aan onze 30-dagen fitness challenge. Speciale lidmaatschapstarieven voor januari - transformeer uw gezondheidsreis!',
+                'marketing-content': '📈 Gratis webinar: Social Media Meesterschap voor Kleine Bedrijven. Leer bewezen strategieën om uw online aanwezigheid te vergroten!',
+                'restaurant-content': '🍽 We introduceren ons nieuwe seizoensmenu! Verse ingrediënten, gedurfde smaken en onvergetelijke eetervaringen.',
+                'auto-content': '🔧 Winter special! Complete voertuig gezondheidscheck voor slechts €99. Houd uw auto soepel rijdend dit seizoen.'
+            }
+        };
+
+        let currentLang = 'en';
+        let currentFontSize = 100;
+
+        // Switch Language
+        function switchLanguage(lang) {
+            console.log('Switching language to:', lang);
+            currentLang = lang;
+            updateTexts();
+            localStorage.setItem('selectedLanguage', lang);
+        }
+
+        // Update Texts
+        function updateTexts() {
+            console.log('Updating texts for language:', currentLang);
+            const texts = translations[currentLang];
+            
+            if (!texts) {
+                console.error('No texts found for language:', currentLang);
+                return;
+            }
+            
+            try {
+                // Update main elements
+                const pageTitle = document.getElementById('pageTitle');
+                const pageSubtitle = document.getElementById('pageSubtitle');
+                const footerTitle = document.getElementById('footerTitle');
+                const footerSubtitle = document.getElementById('footerSubtitle');
+                const ctaButton = document.getElementById('ctaButton');
+                
+                if (pageTitle) pageTitle.textContent = texts['pageTitle'];
+                if (pageSubtitle) pageSubtitle.textContent = texts['pageSubtitle'];
+                if (footerTitle) footerTitle.textContent = texts['footerTitle'];
+                if (footerSubtitle) footerSubtitle.textContent = texts['footerSubtitle'];
+                if (ctaButton) ctaButton.textContent = texts['ctaButton'];
+                
+                // Update all translatable elements
+                document.querySelectorAll('[data-translate]').forEach(element => {
+                    const key = element.getAttribute('data-translate');
+                    if (texts[key]) {
+                        element.textContent = texts[key];
+                    }
+                });
+                
+                console.log('Texts updated successfully');
+            } catch (error) {
+                console.error('Error updating texts:', error);
+            }
+        }
+
+        // Change Font Size
+        function changeFontSize(delta) {
+            console.log('Changing font size by:', delta);
+            currentFontSize = Math.max(80, Math.min(120, currentFontSize + delta * 10));
+            document.documentElement.style.fontSize = currentFontSize + '%';
+            const display = document.getElementById('fontSizeDisplay');
+            if (display) {
+                display.textContent = currentFontSize + '%';
+            }
+            localStorage.setItem('fontSize', currentFontSize);
+            console.log('Font size changed to:', currentFontSize + '%');
+        }
+
         // Simulate real-time updates
         function addNewBroadcast() {
             const grid = document.getElementById('broadcastGrid');
@@ -344,6 +602,25 @@
                 newBroadcast.style.opacity = '1';
             }, 100);
         }
+
+        // Initialize on page load
+        window.addEventListener('load', function() {
+            // Load saved language
+            const savedLang = localStorage.getItem('selectedLanguage');
+            if (savedLang && translations[savedLang]) {
+                currentLang = savedLang;
+                document.getElementById('languageSelector').value = savedLang;
+                updateTexts();
+            }
+            
+            // Load saved font size
+            const savedFontSize = localStorage.getItem('fontSize');
+            if (savedFontSize) {
+                currentFontSize = parseInt(savedFontSize);
+                document.documentElement.style.fontSize = currentFontSize + '%';
+                document.getElementById('fontSizeDisplay').textContent = currentFontSize + '%';
+            }
+        });
 
         // Add new broadcast every 30 seconds for demo
         setInterval(addNewBroadcast, 30000);
