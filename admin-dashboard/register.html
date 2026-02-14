@@ -477,7 +477,21 @@
                 <div class="spinner"></div>
             </div>
 
-            <!-- Brand Section -->
+            <!-- Translator Section -->
+        <div class="translator-section">
+            <select class="language-selector" id="languageSelector" onchange="switchLanguage(this.value)">
+                <option value="en">English</option>
+                <option value="af">Afrikaans</option>
+                <option value="nl">Nederlands</option>
+            </select>
+            <div class="font-size-controls">
+                <button class="font-size-btn" onclick="changeFontSize(-1)">A-</button>
+                <span class="font-size-display" id="fontSizeDisplay">100%</span>
+                <button class="font-size-btn" onclick="changeFontSize(1)">A+</button>
+            </div>
+        </div>
+
+        <!-- Brand Section -->
             <div class="brand-section">
                 <div class="brand-logo">X</div>
                 <h1 class="brand-title">Create Account</h1>
@@ -565,30 +579,104 @@
         }
 
         function toggleConfirmPassword() {
-            const confirmPasswordInput = document.getElementById('confirmPasswordInput');
-            const toggle = document.querySelectorAll('.password-toggle')[1];
+            const confirmInput = document.querySelector('input[name="confirmPassword"]');
+            const toggle = confirmInput.parentElement.querySelector('.password-toggle');
             
-            if (confirmPasswordInput.type === 'password') {
-                confirmPasswordInput.type = 'text';
+            if (confirmInput.type === 'password') {
+                confirmInput.type = 'text';
                 toggle.textContent = '👁‍🗨';
             } else {
-                confirmPasswordInput.type = 'password';
+                confirmInput.type = 'password';
                 toggle.textContent = '👁';
             }
         }
 
-        // Handle Registration
-        function handleRegister(event) {
-            event.preventDefault();
+        // Switch Language
+        function switchLanguage(lang) {
+            console.log('Switching language to:', lang);
+            currentLang = lang;
+            updateTexts();
+            localStorage.setItem('selectedLanguage', lang);
+        }
+
+        // Update Texts
+        function updateTexts() {
+            console.log('Updating texts for language:', currentLang);
+            const texts = translations[currentLang];
             
-            const password = document.getElementById('passwordInput').value;
-            const confirmPassword = document.getElementById('confirmPasswordInput').value;
-            
-            if (password !== confirmPassword) {
-                alert('Passwords do not match!');
+            if (!texts) {
+                console.error('No texts found for language:', currentLang);
                 return;
             }
             
+            try {
+                // Update brand section
+                const brandTitle = document.querySelector('.brand-title');
+                const brandSubtitle = document.querySelector('.brand-subtitle');
+                if (brandTitle) brandTitle.textContent = texts['create-title'];
+                if (brandSubtitle) brandSubtitle.textContent = texts['create-subtitle'];
+                
+                // Update form labels
+                const formLabels = document.querySelectorAll('.form-label');
+                if (formLabels[0]) formLabels[0].textContent = texts['business-label'];
+                if (formLabels[1]) formLabels[1].textContent = texts['email-label'];
+                if (formLabels[2]) formLabels[2].textContent = texts['password-label'];
+                if (formLabels[3]) formLabels[3].textContent = texts['confirm-label'];
+                
+                // Update placeholders
+                const businessInput = document.querySelector('input[name="business"]');
+                const emailInput = document.querySelector('input[type="email"]');
+                const passwordInput = document.querySelector('input[name="password"]');
+                const confirmInput = document.querySelector('input[name="confirmPassword"]');
+                
+                if (businessInput) businessInput.placeholder = texts['business-placeholder'];
+                if (emailInput) emailInput.placeholder = texts['email-placeholder'];
+                if (passwordInput) passwordInput.placeholder = texts['password-placeholder'];
+                if (confirmInput) confirmInput.placeholder = texts['confirm-placeholder'];
+                
+                // Update buttons
+                const primaryBtn = document.querySelector('.btn-primary');
+                const secondaryBtn = document.querySelector('.btn-secondary');
+                if (primaryBtn) primaryBtn.textContent = texts['create-account'];
+                if (secondaryBtn) secondaryBtn.textContent = texts['continue-google'];
+                
+                // Update other texts
+                const dividerSpan = document.querySelector('.divider span');
+                if (dividerSpan) dividerSpan.textContent = texts['or'];
+                
+                const linkSections = document.querySelectorAll('.link-section p');
+                if (linkSections[0]) {
+                    linkSections[0].innerHTML = texts['has-account']
+                        .replace('Sign in here', '<a href="login.html" class="link">Sign in here</a>')
+                        .replace('Teken hier in', '<a href="login.html" class="link">Teken hier in</a>')
+                        .replace('Log hier in', '<a href="login.html" class="link">Log hier in</a>');
+                }
+                if (linkSections[1]) {
+                    linkSections[1].innerHTML = texts['terms'];
+                }
+                
+                console.log('Texts updated successfully');
+            } catch (error) {
+                console.error('Error updating texts:', error);
+            }
+        }
+
+        // Change Font Size
+        function changeFontSize(delta) {
+            console.log('Changing font size by:', delta);
+            currentFontSize = Math.max(80, Math.min(120, currentFontSize + delta * 10));
+            document.documentElement.style.fontSize = currentFontSize + '%';
+            const display = document.getElementById('fontSizeDisplay');
+            if (display) {
+                display.textContent = currentFontSize + '%';
+            }
+            localStorage.setItem('fontSize', currentFontSize);
+            console.log('Font size changed to:', currentFontSize + '%');
+        }
+
+        // Handle Register
+        function handleRegister(event) {
+            event.preventDefault();
             const loadingOverlay = document.getElementById('loadingOverlay');
             
             // Show loading
@@ -602,7 +690,7 @@
             }, 2000);
         }
 
-        // Handle Social Registration
+        // Handle Social Register
         function handleSocialRegister() {
             const loadingOverlay = document.getElementById('loadingOverlay');
             
@@ -617,15 +705,23 @@
             }, 2000);
         }
 
-        // Add input focus effects
-        document.querySelectorAll('.form-input').forEach(input => {
-            input.addEventListener('focus', function() {
-                this.parentElement.querySelector('.input-icon').style.color = 'var(--accent)';
-            });
+        // Initialize on page load
+        window.addEventListener('load', function() {
+            // Load saved language
+            const savedLang = localStorage.getItem('selectedLanguage');
+            if (savedLang && translations[savedLang]) {
+                currentLang = savedLang;
+                document.getElementById('languageSelector').value = savedLang;
+                updateTexts();
+            }
             
-            input.addEventListener('blur', function() {
-                this.parentElement.querySelector('.input-icon').style.color = 'var(--text-muted)';
-            });
+            // Load saved font size
+            const savedFontSize = localStorage.getItem('fontSize');
+            if (savedFontSize) {
+                currentFontSize = parseInt(savedFontSize);
+                document.documentElement.style.fontSize = currentFontSize + '%';
+                document.getElementById('fontSizeDisplay').textContent = currentFontSize + '%';
+            }
         });
     </script>
 </body>

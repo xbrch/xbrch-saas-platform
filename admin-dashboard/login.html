@@ -592,6 +592,7 @@
 
         // Switch Language
         function switchLanguage(lang) {
+            console.log('Switching language to:', lang);
             currentLang = lang;
             updateTexts();
             localStorage.setItem('selectedLanguage', lang);
@@ -599,36 +600,70 @@
 
         // Update Texts
         function updateTexts() {
+            console.log('Updating texts for language:', currentLang);
             const texts = translations[currentLang];
             
-            // Update brand section
-            document.querySelector('.brand-title').textContent = texts['welcome-title'];
-            document.querySelector('.brand-subtitle').textContent = texts['welcome-subtitle'];
+            if (!texts) {
+                console.error('No texts found for language:', currentLang);
+                return;
+            }
             
-            // Update form labels
-            document.querySelectorAll('.form-label')[0].textContent = texts['email-label'];
-            document.querySelectorAll('.form-label')[1].textContent = texts['password-label'];
-            
-            // Update placeholders
-            document.querySelector('input[type="email"]').placeholder = texts['email-placeholder'];
-            document.querySelector('input[type="password"]').placeholder = texts['password-placeholder'];
-            
-            // Update buttons
-            document.querySelector('.btn-primary').textContent = texts['sign-in'];
-            document.querySelector('.btn-secondary').textContent = texts['continue-google'];
-            
-            // Update other texts
-            document.querySelector('.divider span').textContent = texts['or'];
-            document.querySelectorAll('.link-section p')[0].innerHTML = texts['no-account'].replace('Sign up here', '<a href="register.html" class="link">Sign up here</a>').replace('Teken hier in', '<a href="register.html" class="link">Teken hier in</a>').replace('Registreer hier', '<a href="register.html" class="link">Registreer hier</a>');
-            document.querySelectorAll('.link-section p')[1].innerHTML = `<a href="#" class="link">${texts['forgot-password']}</a>`;
+            try {
+                // Update brand section
+                const brandTitle = document.querySelector('.brand-title');
+                const brandSubtitle = document.querySelector('.brand-subtitle');
+                if (brandTitle) brandTitle.textContent = texts['welcome-title'];
+                if (brandSubtitle) brandSubtitle.textContent = texts['welcome-subtitle'];
+                
+                // Update form labels
+                const formLabels = document.querySelectorAll('.form-label');
+                if (formLabels[0]) formLabels[0].textContent = texts['email-label'];
+                if (formLabels[1]) formLabels[1].textContent = texts['password-label'];
+                
+                // Update placeholders
+                const emailInput = document.querySelector('input[type="email"]');
+                const passwordInput = document.querySelector('input[type="password"]');
+                if (emailInput) emailInput.placeholder = texts['email-placeholder'];
+                if (passwordInput) passwordInput.placeholder = texts['password-placeholder'];
+                
+                // Update buttons
+                const primaryBtn = document.querySelector('.btn-primary');
+                const secondaryBtn = document.querySelector('.btn-secondary');
+                if (primaryBtn) primaryBtn.textContent = texts['sign-in'];
+                if (secondaryBtn) secondaryBtn.textContent = texts['continue-google'];
+                
+                // Update other texts
+                const dividerSpan = document.querySelector('.divider span');
+                if (dividerSpan) dividerSpan.textContent = texts['or'];
+                
+                const linkSections = document.querySelectorAll('.link-section p');
+                if (linkSections[0]) {
+                    linkSections[0].innerHTML = texts['no-account']
+                        .replace('Sign up here', '<a href="register.html" class="link">Sign up here</a>')
+                        .replace('Teken hier in', '<a href="register.html" class="link">Teken hier in</a>')
+                        .replace('Registreer hier', '<a href="register.html" class="link">Registreer hier</a>');
+                }
+                if (linkSections[1]) {
+                    linkSections[1].innerHTML = `<a href="#" class="link">${texts['forgot-password']}</a>`;
+                }
+                
+                console.log('Texts updated successfully');
+            } catch (error) {
+                console.error('Error updating texts:', error);
+            }
         }
 
         // Change Font Size
         function changeFontSize(delta) {
+            console.log('Changing font size by:', delta);
             currentFontSize = Math.max(80, Math.min(120, currentFontSize + delta * 10));
             document.documentElement.style.fontSize = currentFontSize + '%';
-            document.getElementById('fontSizeDisplay').textContent = currentFontSize + '%';
+            const display = document.getElementById('fontSizeDisplay');
+            if (display) {
+                display.textContent = currentFontSize + '%';
+            }
             localStorage.setItem('fontSize', currentFontSize);
+            console.log('Font size changed to:', currentFontSize + '%');
         }
 
         // Password Toggle
