@@ -1,0 +1,377 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>XBRCH Platform Demo</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            background: #F4F2ED;
+            color: #000000;
+            line-height: 1.6;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: #FFFFFF;
+            border-radius: 16px;
+            padding: 40px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .logo {
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(135deg, #2FA8E7 0%, #2FA8E7 100%);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 700;
+            font-size: 24px;
+            margin: 0 auto 20px;
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            color: #000000;
+            margin-bottom: 10px;
+        }
+
+        .subtitle {
+            color: #000000;
+            font-size: 1.2rem;
+            margin-bottom: 30px;
+        }
+
+        .demo-section {
+            margin-bottom: 30px;
+            padding: 20px;
+            background: #F4F2ED;
+            border-radius: 12px;
+        }
+
+        .demo-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin-bottom: 15px;
+            color: #000000;
+        }
+
+        .demo-content {
+            margin-bottom: 15px;
+        }
+
+        .translator-demo {
+            display: flex;
+            gap: 15px;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+        .language-select {
+            padding: 8px 12px;
+            border: 2px solid #E5E3E0;
+            border-radius: 8px;
+            background: #FFFFFF;
+            font-size: 16px;
+            color: #000000;
+        }
+
+        .font-controls {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+        }
+
+        .font-btn {
+            padding: 8px 12px;
+            border: 1px solid #E5E3E0;
+            border-radius: 6px;
+            background: #FFFFFF;
+            color: #000000;
+            cursor: pointer;
+            font-size: 14px;
+            transition: all 0.3s ease;
+        }
+
+        .font-btn:hover {
+            background: #2FA8E7;
+            color: white;
+            border-color: #2FA8E7;
+        }
+
+        .font-display {
+            font-size: 14px;
+            color: #000000;
+            min-width: 40px;
+        }
+
+        .form-demo {
+            margin-top: 20px;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        .form-label {
+            display: block;
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 5px;
+            color: #000000;
+        }
+
+        .form-input {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #E5E3E0;
+            border-radius: 8px;
+            font-size: 18px;
+            background: #F4F2ED;
+            color: #000000;
+        }
+
+        .form-input:focus {
+            border-color: #2FA8E7;
+            outline: none;
+            background: #FFFFFF;
+        }
+
+        .btn {
+            padding: 12px 24px;
+            border: none;
+            border-radius: 8px;
+            font-size: 18px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin: 5px;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #2FA8E7 0%, #2FA8E7 100%);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(47, 168, 231, 0.3);
+        }
+
+        .btn-secondary {
+            background: #F4F2ED;
+            color: #000000;
+            border: 2px solid #E5E3E0;
+        }
+
+        .btn-secondary:hover {
+            background: #2FA8E7;
+            color: white;
+            border-color: #2FA8E7;
+        }
+
+        .links {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin-top: 30px;
+        }
+
+        .link-card {
+            background: #FFFFFF;
+            border: 2px solid #E5E3E0;
+            border-radius: 12px;
+            padding: 20px;
+            text-decoration: none;
+            color: #000000;
+            transition: all 0.3s ease;
+            text-align: center;
+        }
+
+        .link-card:hover {
+            border-color: #2FA8E7;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(47, 168, 231, 0.2);
+        }
+
+        .status {
+            padding: 15px;
+            border-radius: 8px;
+            margin: 20px 0;
+        }
+
+        .status.warning {
+            background: #fff3cd;
+            border: 1px solid #ffeaa7;
+            color: #856404;
+        }
+
+        .status.success {
+            background: #d4edda;
+            border: 1px solid #c3e6cb;
+            color: #155724;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <div class="logo">X</div>
+            <h1>XBRCH Platform Demo</h1>
+            <p class="subtitle">Modern Business Dashboard & Social Media Management</p>
+        </div>
+
+        <div class="status warning">
+            <strong>⚠️ GitHub Pages Issue:</strong> The main deployment is experiencing technical difficulties. This demo page shows all the features that are ready.
+        </div>
+
+        <div class="demo-section">
+            <h2 class="demo-title">🌍 Language Translator</h2>
+            <div class="demo-content">
+                <div class="translator-demo">
+                    <select class="language-select" id="langSelect" onchange="changeLanguage()">
+                        <option value="en">English</option>
+                        <option value="af">Afrikaans</option>
+                        <option value="nl">Nederlands</option>
+                    </select>
+                    <div class="font-controls">
+                        <button class="font-btn" onclick="changeFontSize(-1)">A-</button>
+                        <span class="font-display" id="fontSizeDisplay">100%</span>
+                        <button class="font-btn" onclick="changeFontSize(1)">A+</button>
+                    </div>
+                </div>
+                <div id="translatedText">
+                    <h3>Welcome to XBRCH</h3>
+                    <p>Your modern business management platform</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="demo-section">
+            <h2 class="demo-title">🔐 Login Form Demo</h2>
+            <div class="form-demo">
+                <div class="form-group">
+                    <label class="form-label" id="emailLabel">Email Address</label>
+                    <input type="email" class="form-input" id="emailInput" placeholder="Enter your email">
+                </div>
+                <div class="form-group">
+                    <label class="form-label" id="passwordLabel">Password</label>
+                    <input type="password" class="form-input" id="passwordInput" placeholder="Enter your password">
+                </div>
+                <button class="btn btn-primary" id="loginBtn">Sign In</button>
+                <button class="btn btn-secondary" id="googleBtn">Continue with Google</button>
+            </div>
+        </div>
+
+        <div class="demo-section">
+            <h2 class="demo-title">📱 Platform Features</h2>
+            <div class="links">
+                <a href="#dashboard" class="link-card">
+                    <h3>🎨 Dashboard</h3>
+                    <p>Main control panel</p>
+                </a>
+                <a href="#broadcast" class="link-card">
+                    <h3>📡 Broadcast</h3>
+                    <p>Social media posts</p>
+                </a>
+                <a href="#analytics" class="link-card">
+                    <h3>📈 Analytics</h3>
+                    <p>Performance metrics</p>
+                </a>
+                <a href="#wall" class="link-card">
+                    <h3>📢 Broadcast Wall</h3>
+                    <p>Public updates</p>
+                </a>
+            </div>
+        </div>
+
+        <div class="status success">
+            <strong>✅ All Features Ready:</strong> The complete XBRCH platform is built and functional. The issue is only with GitHub Pages deployment.
+        </div>
+    </div>
+
+    <script>
+        const translations = {
+            'en': {
+                title: 'Welcome to XBRCH',
+                subtitle: 'Your modern business management platform',
+                emailLabel: 'Email Address',
+                emailPlaceholder: 'Enter your email',
+                passwordLabel: 'Password',
+                passwordPlaceholder: 'Enter your password',
+                loginBtn: 'Sign In',
+                googleBtn: 'Continue with Google'
+            },
+            'af': {
+                title: 'Welkom by XBRCH',
+                subtitle: 'Jou moderne besigheidsbestuurplatform',
+                emailLabel: 'E-posadres',
+                emailPlaceholder: 'Voer jou e-pos in',
+                passwordLabel: 'Wagwoord',
+                passwordPlaceholder: 'Voer jou wagwoord in',
+                loginBtn: 'Teken In',
+                googleBtn: 'Gaan voort met Google'
+            },
+            'nl': {
+                title: 'Welkom bij XBRCH',
+                subtitle: 'Uw moderne bedrijfsbeheerplatform',
+                emailLabel: 'E-mailadres',
+                emailPlaceholder: 'Voer uw e-mail in',
+                passwordLabel: 'Wachtwoord',
+                passwordPlaceholder: 'Voer uw wachtwoord in',
+                loginBtn: 'Log In',
+                googleBtn: 'Ga verder met Google'
+            }
+        };
+
+        let currentLang = 'en';
+        let currentFontSize = 100;
+
+        function changeLanguage() {
+            currentLang = document.getElementById('langSelect').value;
+            updateTexts();
+            console.log('Language changed to:', currentLang);
+        }
+
+        function updateTexts() {
+            const texts = translations[currentLang];
+            const textDiv = document.getElementById('translatedText');
+            textDiv.innerHTML = `<h3>${texts.title}</h3><p>${texts.subtitle}</p>`;
+            
+            document.getElementById('emailLabel').textContent = texts.emailLabel;
+            document.getElementById('emailInput').placeholder = texts.emailPlaceholder;
+            document.getElementById('passwordLabel').textContent = texts.passwordLabel;
+            document.getElementById('passwordInput').placeholder = texts.passwordPlaceholder;
+            document.getElementById('loginBtn').textContent = texts.loginBtn;
+            document.getElementById('googleBtn').textContent = texts.googleBtn;
+        }
+
+        function changeFontSize(delta) {
+            currentFontSize = Math.max(80, Math.min(120, currentFontSize + delta * 10));
+            document.documentElement.style.fontSize = currentFontSize + '%';
+            document.getElementById('fontSizeDisplay').textContent = currentFontSize + '%';
+            console.log('Font size changed to:', currentFontSize + '%');
+        }
+
+        // Initialize
+        updateTexts();
+    </script>
+</body>
+</html>
