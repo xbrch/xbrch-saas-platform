@@ -1,0 +1,352 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>XBRCH Broadcast Wall</title>
+    <meta name="description" content="Latest updates and announcements from XBRCH businesses">
+    <meta property="og:title" content="XBRCH Broadcast Wall">
+    <meta property="og:description" content="Latest updates and announcements from XBRCH businesses">
+    <meta property="og:type" content="website">
+    <style>
+        /* Modern 2026 Design System - #F4F2ED Theme */
+        :root {
+            --primary-bg: #F4F2ED;
+            --secondary-bg: #FFFFFF;
+            --accent: #2FA8E7;
+            --text-primary: #000000;
+            --text-secondary: #000000;
+            --border: #E5E3E0;
+            --shadow-sm: 0 1px 3px rgba(0,0,0,0.05);
+            --shadow-md: 0 4px 6px rgba(0,0,0,0.07);
+            --shadow-lg: 0 10px 25px rgba(0,0,0,0.1);
+            --radius-md: 12px;
+            --radius-lg: 16px;
+            --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            --font-primary: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: var(--font-primary);
+            background: var(--primary-bg);
+            color: var(--text-primary);
+            line-height: 1.6;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+            padding: 40px 0;
+        }
+
+        .logo {
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(135deg, var(--accent) 0%, var(--accent) 100%);
+            border-radius: var(--radius-md);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 700;
+            font-size: 24px;
+            margin: 0 auto 20px;
+            box-shadow: var(--shadow-md);
+        }
+
+        .header h1 {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: var(--text-primary);
+            margin-bottom: 10px;
+        }
+
+        .header p {
+            font-size: 1.2rem;
+            color: var(--text-secondary);
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .broadcast-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 24px;
+            margin-bottom: 40px;
+        }
+
+        .broadcast-card {
+            background: var(--secondary-bg);
+            border-radius: var(--radius-lg);
+            padding: 24px;
+            box-shadow: var(--shadow-sm);
+            border: 1px solid var(--border);
+            transition: var(--transition);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .broadcast-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, var(--accent) 0%, var(--accent) 100%);
+            transform: scaleX(0);
+            transition: var(--transition);
+        }
+
+        .broadcast-card:hover {
+            transform: translateY(-4px);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .broadcast-card:hover::before {
+            transform: scaleX(1);
+        }
+
+        .business-name {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: var(--accent);
+            margin-bottom: 8px;
+        }
+
+        .broadcast-time {
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+            margin-bottom: 16px;
+        }
+
+        .broadcast-content {
+            font-size: 1rem;
+            line-height: 1.6;
+            margin-bottom: 16px;
+        }
+
+        .broadcast-image {
+            width: 100%;
+            height: 200px;
+            background: var(--primary-bg);
+            border-radius: var(--radius-md);
+            margin-bottom: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+        }
+
+        .broadcast-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            color: var(--accent);
+            text-decoration: none;
+            font-weight: 500;
+            transition: var(--transition);
+        }
+
+        .broadcast-link:hover {
+            color: var(--accent);
+            text-decoration: underline;
+        }
+
+        .footer {
+            text-align: center;
+            padding: 40px 0;
+            border-top: 1px solid var(--border);
+            margin-top: 60px;
+        }
+
+        .footer-content {
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .footer h3 {
+            font-size: 1.5rem;
+            color: var(--text-primary);
+            margin-bottom: 16px;
+        }
+
+        .footer p {
+            color: var(--text-secondary);
+            margin-bottom: 24px;
+        }
+
+        .cta-button {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 12px 24px;
+            background: linear-gradient(135deg, var(--accent) 0%, var(--accent) 100%);
+            color: white;
+            text-decoration: none;
+            border-radius: var(--radius-md);
+            font-weight: 600;
+            transition: var(--transition);
+            box-shadow: var(--shadow-md);
+        }
+
+        .cta-button:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .loading {
+            text-align: center;
+            padding: 40px;
+            color: var(--text-secondary);
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 16px;
+            }
+
+            .broadcast-grid {
+                grid-template-columns: 1fr;
+                gap: 16px;
+            }
+
+            .header h1 {
+                font-size: 2rem;
+            }
+
+            .header p {
+                font-size: 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header class="header">
+            <div class="logo">X</div>
+            <h1>XBRCH Broadcast Wall</h1>
+            <p>Latest updates and announcements from businesses using XBRCH platform</p>
+        </header>
+
+        <main>
+            <div class="broadcast-grid" id="broadcastGrid">
+                <!-- Sample broadcasts - in production this would load from API -->
+                <div class="broadcast-card">
+                    <div class="business-name">Tech Solutions Inc</div>
+                    <div class="broadcast-time">2 hours ago</div>
+                    <div class="broadcast-content">
+                        🚀 Exciting news! We're launching our new AI-powered business automation platform next week. Transform your business operations with cutting-edge technology!
+                    </div>
+                    <div class="broadcast-image">📸 Business Image</div>
+                    <a href="#" class="broadcast-link">Learn More →</a>
+                </div>
+
+                <div class="broadcast-card">
+                    <div class="business-name">Local Cafe Co</div>
+                    <div class="broadcast-time">5 hours ago</div>
+                    <div class="broadcast-content">
+                        ☕ Weekend special! Buy one coffee, get one free. Bring a friend and enjoy our new pastry collection together!
+                    </div>
+                    <div class="broadcast-image">📸 Cafe Image</div>
+                    <a href="#" class="broadcast-link">View Menu →</a>
+                </div>
+
+                <div class="broadcast-card">
+                    <div class="business-name">Fitness Studio</div>
+                    <div class="broadcast-time">1 day ago</div>
+                    <div class="broadcast-content">
+                        💪 New year, new you! Join our 30-day fitness challenge. Special membership rates for January - transform your health journey!
+                    </div>
+                    <div class="broadcast-image">📸 Fitness Image</div>
+                    <a href="#" class="broadcast-link">Join Challenge →</a>
+                </div>
+
+                <div class="broadcast-card">
+                    <div class="business-name">Digital Marketing Pro</div>
+                    <div class="broadcast-time">2 days ago</div>
+                    <div class="broadcast-content">
+                        📈 Free webinar: Social Media Mastery for Small Businesses. Learn proven strategies to grow your online presence!
+                    </div>
+                    <div class="broadcast-image">📸 Marketing Image</div>
+                    <a href="#" class="broadcast-link">Register Free →</a>
+                </div>
+
+                <div class="broadcast-card">
+                    <div class="business-name">Restaurant Hub</div>
+                    <div class="broadcast-time">3 days ago</div>
+                    <div class="broadcast-content">
+                        🍽 Introducing our new seasonal menu! Fresh ingredients, bold flavors, and unforgettable dining experiences.
+                    </div>
+                    <div class="broadcast-image">📸 Food Image</div>
+                    <a href="#" class="broadcast-link">View Menu →</a>
+                </div>
+
+                <div class="broadcast-card">
+                    <div class="business-name">Auto Care Center</div>
+                    <div class="broadcast-time">4 days ago</div>
+                    <div class="broadcast-content">
+                        🔧 Winter special! Complete vehicle health check for just $99. Keep your car running smoothly this season.
+                    </div>
+                    <div class="broadcast-image">📸 Auto Image</div>
+                    <a href="#" class="broadcast-link">Book Service →</a>
+                </div>
+            </div>
+        </main>
+
+        <footer class="footer">
+            <div class="footer-content">
+                <h3>Share Your Business Updates</h3>
+                <p>Join XBRCH platform and broadcast your message to multiple social platforms from one place.</p>
+                <a href="../admin-dashboard/login.html" class="cta-button">
+                    Get Started with XBRCH
+                </a>
+            </div>
+        </footer>
+    </div>
+
+    <script>
+        // Simulate real-time updates
+        function addNewBroadcast() {
+            const grid = document.getElementById('broadcastGrid');
+            const newBroadcast = document.createElement('div');
+            newBroadcast.className = 'broadcast-card';
+            newBroadcast.style.opacity = '0';
+            newBroadcast.innerHTML = `
+                <div class="business-name">New Business</div>
+                <div class="broadcast-time">Just now</div>
+                <div class="broadcast-content">
+                    🎉 This is a live broadcast update from the XBRCH platform!
+                </div>
+                <div class="broadcast-image">📸 Live Image</div>
+                <a href="#" class="broadcast-link">Learn More →</a>
+            `;
+            
+            grid.insertBefore(newBroadcast, grid.firstChild);
+            
+            // Animate in
+            setTimeout(() => {
+                newBroadcast.style.transition = 'opacity 0.5s ease-in';
+                newBroadcast.style.opacity = '1';
+            }, 100);
+        }
+
+        // Add new broadcast every 30 seconds for demo
+        setInterval(addNewBroadcast, 30000);
+    </script>
+</body>
+</html>
