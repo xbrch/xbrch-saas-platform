@@ -108,6 +108,67 @@
             list-style: none;
         }
 
+        .nav-category {
+            margin-bottom: var(--spacing-sm);
+        }
+
+        .category-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: var(--spacing-md);
+            color: var(--text-secondary);
+            font-weight: 600;
+            cursor: pointer;
+            border-radius: var(--radius-md);
+            transition: var(--transition);
+            margin-bottom: var(--spacing-xs);
+        }
+
+        .category-header:hover {
+            background: var(--primary-bg);
+            color: var(--accent);
+        }
+
+        .category-title {
+            font-size: var(--font-size-base);
+        }
+
+        .category-toggle {
+            font-size: var(--font-size-sm);
+            transition: var(--transition);
+        }
+
+        .category-links {
+            list-style: none;
+            padding-left: var(--spacing-lg);
+            margin-top: var(--spacing-xs);
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease-out;
+        }
+
+        .category-links.expanded {
+            max-height: 500px;
+            transition: max-height 0.3s ease-in;
+        }
+
+        .sub-item {
+            padding: var(--spacing-sm) var(--spacing-md);
+            color: var(--text-muted);
+            font-size: var(--font-size-sm);
+            text-decoration: none;
+            display: block;
+            border-radius: var(--radius-sm);
+            transition: var(--transition);
+            margin-bottom: var(--spacing-xs);
+        }
+
+        .sub-item:hover {
+            background: var(--primary-bg);
+            color: var(--accent);
+        }
+
         .nav-item {
             display: flex;
             align-items: center;
@@ -389,7 +450,37 @@
                 <ul class="nav-menu">
                     <li><a href="index.html" class="nav-item">📊 Dashboard</a></li>
                     <li><a href="products.html" class="nav-item active">📦 Products</a></li>
-                    <li><a href="broadcast.html" class="nav-item">📡 Broadcast</a></li>
+                    
+                    <!-- Social Broadcast Category -->
+                    <li class="nav-category">
+                        <div class="category-header">
+                            <span class="category-title">📡 Social Broadcast</span>
+                            <span class="category-toggle">▼</span>
+                        </div>
+                        <ul class="category-links">
+                            <li><a href="broadcast.html" class="nav-item sub-item">📱 Create Broadcast</a></li>
+                            <li><a href="#" class="nav-item sub-item">📝 Manage Content</a></li>
+                            <li><a href="#" class="nav-item sub-item">📊 Social Analytics</a></li>
+                            <li><a href="#" class="nav-item sub-item">👥 Audience Insights</a></li>
+                            <li><a href="#" class="nav-item sub-item">🎯 Campaign Manager</a></li>
+                        </ul>
+                    </li>
+                    
+                    <!-- Local Broadcast Category -->
+                    <li class="nav-category">
+                        <div class="category-header">
+                            <span class="category-title">📍 Local Broadcast</span>
+                            <span class="category-toggle">▼</span>
+                        </div>
+                        <ul class="category-links">
+                            <li><a href="#" class="nav-item sub-item">🏢 Local Businesses</a></li>
+                            <li><a href="#" class="nav-item sub-item">� Radio Broadcast</a></li>
+                            <li><a href="#" class="nav-item sub-item">📺 TV Channels</a></li>
+                            <li><a href="#" class="nav-item sub-item">🗞️ Print Media</a></li>
+                            <li><a href="#" class="nav-item sub-item">🎪 Events & Promotions</a></li>
+                        </ul>
+                    </li>
+                    
                     <li><a href="analytics.html" class="nav-item">📈 Analytics</a></li>
                     <li><a href="#" class="nav-item">👥 Audience</a></li>
                     <li><a href="#" class="nav-item">⚙️ Settings</a></li>
@@ -537,6 +628,24 @@
         document.querySelector('.search-input').addEventListener('input', function(e) {
             console.log('Searching products for:', e.target.value);
             // In a real application, this would filter the products grid
+        });
+
+        // Category toggle functionality
+        document.querySelectorAll('.category-header').forEach(header => {
+            header.addEventListener('click', function() {
+                const categoryLinks = this.nextElementSibling;
+                const toggle = this.querySelector('.category-toggle');
+                
+                // Toggle category expansion
+                categoryLinks.classList.toggle('expanded');
+                
+                // Rotate toggle icon
+                if (categoryLinks.classList.contains('expanded')) {
+                    toggle.textContent = '▲';
+                } else {
+                    toggle.textContent = '▼';
+                }
+            });
         });
 
         // Active navigation state
