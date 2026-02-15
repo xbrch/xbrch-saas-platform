@@ -1,0 +1,602 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>XBRCH Notifications</title>
+    <meta name="description" content="Manage your notifications and alerts on XBRCH platform">
+    <meta property="og:title" content="XBRCH Notifications">
+    <meta property="og:description" content="Manage your notifications and alerts on XBRCH platform">
+    <meta property="og:type" content="website">
+    <style>
+        /* Modern 2026 Design System - #F4F2ED Theme */
+        :root {
+            --primary-bg: #F4F2ED;
+            --secondary-bg: #FFFFFF;
+            --accent: #2FA8E7;
+            --accent-dark: #2FA8E7;
+            --text-primary: #000000;
+            --text-secondary: #000000;
+            --text-muted: #000000;
+            --border: #E5E3E0;
+            --shadow-sm: 0 1px 3px rgba(0,0,0,0.05);
+            --shadow-md: 0 4px 6px rgba(0,0,0,0.07);
+            --shadow-lg: 0 10px 25px rgba(0,0,0,0.1);
+            --radius-md: 12px;
+            --radius-lg: 16px;
+            --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            --font-primary: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            --font-size-xs: 0.75rem;
+            --font-size-sm: 0.875rem;
+            --font-size-base: 1rem;
+            --font-size-lg: 1.125rem;
+            --font-size-xl: 1.25rem;
+            --font-size-2xl: 1.5rem;
+            --font-size-3xl: 2rem;
+            --spacing-xs: 0.25rem;
+            --spacing-sm: 0.5rem;
+            --spacing-md: 1rem;
+            --spacing-lg: 1.5rem;
+            --spacing-xl: 2rem;
+            --spacing-2xl: 3rem;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: var(--font-primary);
+            background: var(--primary-bg);
+            color: var(--text-primary);
+            line-height: 1.6;
+            font-size: var(--font-size-base);
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+
+        /* Layout */
+        .dashboard-container {
+            display: flex;
+            min-height: 100vh;
+        }
+
+        /* Sidebar */
+        .sidebar {
+            width: 280px;
+            background: var(--secondary-bg);
+            border-right: 1px solid var(--border);
+            padding: var(--spacing-xl);
+            position: fixed;
+            height: 100vh;
+            overflow-y: auto;
+            z-index: 100;
+            left: 0;
+            top: 0;
+            box-shadow: var(--shadow-md);
+        }
+
+        .sidebar-header {
+            display: flex;
+            align-items: center;
+            gap: var(--spacing-md);
+            margin-bottom: var(--spacing-2xl);
+        }
+
+        .logo {
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(135deg, var(--accent) 0%, var(--accent-dark) 100%);
+            border-radius: var(--radius-md);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 700;
+            font-size: var(--font-size-lg);
+        }
+
+        .brand-name {
+            font-size: var(--font-size-xl);
+            font-weight: 700;
+            color: var(--text-primary);
+        }
+
+        .nav-menu {
+            list-style: none;
+        }
+
+        .nav-category {
+            margin-bottom: var(--spacing-sm);
+        }
+
+        .category-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: var(--spacing-md);
+            color: var(--text-secondary);
+            font-weight: 600;
+            cursor: pointer;
+            border-radius: var(--radius-md);
+            transition: var(--transition);
+            margin-bottom: var(--spacing-xs);
+        }
+
+        .category-header:hover {
+            background: var(--primary-bg);
+            color: var(--accent);
+        }
+
+        .category-title {
+            font-size: var(--font-size-base);
+        }
+
+        .category-toggle {
+            font-size: var(--font-size-sm);
+            transition: var(--transition);
+        }
+
+        .category-links {
+            list-style: none;
+            padding-left: var(--spacing-lg);
+            margin-top: var(--spacing-xs);
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease-out;
+        }
+
+        .category-links.expanded {
+            max-height: 500px;
+            transition: max-height 0.3s ease-in;
+        }
+
+        .sub-item {
+            padding: var(--spacing-sm) var(--spacing-md);
+            color: var(--text-muted);
+            font-size: var(--font-size-sm);
+            text-decoration: none;
+            display: block;
+            border-radius: var(--radius-sm);
+            transition: var(--transition);
+            margin-bottom: var(--spacing-xs);
+        }
+
+        .sub-item:hover {
+            background: var(--primary-bg);
+            color: var(--accent);
+        }
+
+        .nav-item {
+            display: block;
+            padding: var(--spacing-md) var(--spacing-xl);
+            color: var(--text-secondary);
+            text-decoration: none;
+            transition: var(--transition);
+            position: relative;
+            font-weight: 500;
+            font-size: var(--font-size-sm);
+        }
+
+        .nav-item:hover {
+            background: var(--primary-bg);
+            color: var(--accent);
+        }
+
+        .nav-item.active {
+            background: var(--primary-bg);
+            color: var(--accent);
+            font-weight: 600;
+        }
+
+        /* Main Content */
+        .main-content {
+            margin-left: 280px;
+            flex: 1;
+            background: var(--primary-bg);
+        }
+
+        /* Header */
+        .header {
+            background: var(--secondary-bg);
+            border-bottom: 1px solid var(--border);
+            padding: var(--spacing-lg) var(--spacing-xl);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .header-left {
+            display: flex;
+            align-items: center;
+            gap: var(--spacing-lg);
+        }
+
+        .header-right {
+            display: flex;
+            align-items: center;
+            gap: var(--spacing-md);
+        }
+
+        .header-link {
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-weight: 500;
+            font-size: var(--font-size-base);
+            transition: var(--transition);
+            padding: var(--spacing-sm) var(--spacing-md);
+            border-radius: var(--radius-sm);
+        }
+
+        .header-link:hover {
+            color: var(--accent);
+            background: rgba(47, 168, 231, 0.1);
+        }
+
+        /* Page Content */
+        .page-content {
+            padding: var(--spacing-xl);
+        }
+
+        .page-header {
+            margin-bottom: var(--spacing-2xl);
+        }
+
+        .page-title {
+            font-size: var(--font-size-3xl);
+            font-weight: 700;
+            color: var(--text-primary);
+            margin-bottom: var(--spacing-sm);
+        }
+
+        .page-subtitle {
+            font-size: var(--font-size-lg);
+            color: var(--text-secondary);
+        }
+
+        /* Notifications */
+        .notifications-container {
+            background: var(--secondary-bg);
+            border-radius: var(--radius-lg);
+            box-shadow: var(--shadow-md);
+            border: 1px solid var(--border);
+            overflow: hidden;
+        }
+
+        .notifications-header {
+            padding: var(--spacing-lg);
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .notifications-title {
+            font-size: var(--font-size-xl);
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+
+        .mark-all-read {
+            padding: var(--spacing-sm) var(--spacing-md);
+            background: var(--accent);
+            color: white;
+            border: none;
+            border-radius: var(--radius-md);
+            font-size: var(--font-size-sm);
+            font-weight: 500;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .mark-all-read:hover {
+            background: var(--accent-dark);
+        }
+
+        .notification-item {
+            padding: var(--spacing-lg);
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            gap: var(--spacing-md);
+            align-items: flex-start;
+            transition: var(--transition);
+        }
+
+        .notification-item:hover {
+            background: var(--primary-bg);
+        }
+
+        .notification-item.unread {
+            background: rgba(47, 168, 231, 0.05);
+        }
+
+        .notification-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: var(--radius-md);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: var(--font-size-lg);
+            flex-shrink: 0;
+        }
+
+        .notification-icon.info {
+            background: rgba(47, 168, 231, 0.1);
+            color: var(--accent);
+        }
+
+        .notification-icon.success {
+            background: rgba(34, 197, 94, 0.1);
+            color: #22c55e;
+        }
+
+        .notification-icon.warning {
+            background: rgba(245, 158, 11, 0.1);
+            color: #f59e0b;
+        }
+
+        .notification-icon.error {
+            background: rgba(239, 68, 68, 0.1);
+            color: #ef4444;
+        }
+
+        .notification-content {
+            flex: 1;
+        }
+
+        .notification-title {
+            font-size: var(--font-size-base);
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: var(--spacing-xs);
+        }
+
+        .notification-message {
+            font-size: var(--font-size-sm);
+            color: var(--text-secondary);
+            line-height: 1.5;
+            margin-bottom: var(--spacing-sm);
+        }
+
+        .notification-time {
+            font-size: var(--font-size-xs);
+            color: var(--text-muted);
+        }
+
+        .notification-actions {
+            display: flex;
+            gap: var(--spacing-sm);
+        }
+
+        .btn-small {
+            padding: var(--spacing-xs) var(--spacing-sm);
+            font-size: var(--font-size-xs);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-sm);
+            background: var(--secondary-bg);
+            color: var(--text-secondary);
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .btn-small:hover {
+            background: var(--primary-bg);
+            color: var(--accent);
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .sidebar {
+                transform: translateX(-100%);
+                transition: var(--transition);
+            }
+
+            .sidebar.active {
+                transform: translateX(0);
+            }
+
+            .main-content {
+                margin-left: 0;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="dashboard-container">
+        <!-- Sidebar -->
+        <aside class="sidebar" id="sidebar">
+            <div class="sidebar-header">
+                <div class="logo">X</div>
+                <div class="brand-name">XBRCH</div>
+            </div>
+            <nav>
+                <ul class="nav-menu">
+                    <li><a href="index.html" class="nav-item">📊 Dashboard</a></li>
+                    <li><a href="products.html" class="nav-item">📦 Products</a></li>
+                    
+                    <!-- Social Broadcast Category -->
+                    <li class="nav-category">
+                        <div class="category-header">
+                            <span class="category-title">📡 Social Broadcast</span>
+                            <span class="category-toggle">▼</span>
+                        </div>
+                        <ul class="category-links">
+                            <li><a href="broadcast.html" class="nav-item sub-item">📱 Create Broadcast</a></li>
+                            <li><a href="#" class="nav-item sub-item">📝 Manage Content</a></li>
+                            <li><a href="#" class="nav-item sub-item">📊 Social Analytics</a></li>
+                            <li><a href="#" class="nav-item sub-item">👥 Audience Insights</a></li>
+                            <li><a href="#" class="nav-item sub-item">🎯 Campaign Manager</a></li>
+                        </ul>
+                    </li>
+                    
+                    <!-- Local Broadcast Category -->
+                    <li class="nav-category">
+                        <div class="category-header">
+                            <span class="category-title">📍 Local Broadcast</span>
+                            <span class="category-toggle">▼</span>
+                        </div>
+                        <ul class="category-links">
+                            <li><a href="#" class="nav-item sub-item">🏢 Local Businesses</a></li>
+                            <li><a href="#" class="nav-item sub-item">📻 Radio Broadcast</a></li>
+                            <li><a href="#" class="nav-item sub-item">📺 TV Channels</a></li>
+                            <li><a href="#" class="nav-item sub-item">🗞️ Print Media</a></li>
+                            <li><a href="#" class="nav-item sub-item">🎪 Events & Promotions</a></li>
+                        </ul>
+                    </li>
+                    
+                    <li><a href="analytics.html" class="nav-item">📈 Analytics</a></li>
+                    <li><a href="#" class="nav-item">👥 Audience</a></li>
+                    <li><a href="settings.html" class="nav-item">⚙️ Settings</a></li>
+                </ul>
+            </nav>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- Header -->
+            <header class="header">
+                <div class="header-left">
+                    <div class="search-bar">
+                        <span class="search-icon">🔍</span>
+                        <input type="text" class="search-input" placeholder="Search notifications...">
+                    </div>
+                </div>
+                <div class="header-right">
+                    <a href="notifications.html" class="header-link">Notifications</a>
+                    <a href="profile.html" class="header-link">Profile</a>
+                    <a href="settings.html" class="header-link">Settings</a>
+                </div>
+            </header>
+
+            <!-- Page Content -->
+            <div class="page-content">
+                <div class="page-header">
+                    <h1 class="page-title">Notifications</h1>
+                    <p class="page-subtitle">Stay updated with your latest activities and alerts</p>
+                </div>
+
+                <!-- Notifications Container -->
+                <div class="notifications-container">
+                    <div class="notifications-header">
+                        <h2 class="notifications-title">Recent Notifications</h2>
+                        <button class="mark-all-read">Mark All as Read</button>
+                    </div>
+
+                    <!-- Notification Items -->
+                    <div class="notification-item unread">
+                        <div class="notification-icon info">📢</div>
+                        <div class="notification-content">
+                            <h3 class="notification-title">New Broadcast Published</h3>
+                            <p class="notification-message">Your social media broadcast "Summer Sale Campaign" has been successfully published to all platforms.</p>
+                            <p class="notification-time">2 hours ago</p>
+                            <div class="notification-actions">
+                                <button class="btn-small">View</button>
+                                <button class="btn-small">Dismiss</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="notification-item unread">
+                        <div class="notification-icon success">✅</div>
+                        <div class="notification-content">
+                            <h3 class="notification-title">Product Sale Completed</h3>
+                            <p class="notification-message">Congratulations! Your "Premium Business Package" was purchased by a new customer.</p>
+                            <p class="notification-time">5 hours ago</p>
+                            <div class="notification-actions">
+                                <button class="btn-small">View Order</button>
+                                <button class="btn-small">Dismiss</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="notification-item">
+                        <div class="notification-icon warning">⚠️</div>
+                        <div class="notification-content">
+                            <h3 class="notification-title">Low Inventory Alert</h3>
+                            <p class="notification-message">Your "Marketing Bundle" product is running low on inventory. Only 5 units remaining.</p>
+                            <p class="notification-time">1 day ago</p>
+                            <div class="notification-actions">
+                                <button class="btn-small">Restock</button>
+                                <button class="btn-small">Dismiss</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="notification-item">
+                        <div class="notification-icon error">❌</div>
+                        <div class="notification-content">
+                            <h3 class="notification-title">Payment Method Expired</h3>
+                            <p class="notification-message">Your payment method on file will expire in 7 days. Please update your billing information.</p>
+                            <p class="notification-time">2 days ago</p>
+                            <div class="notification-actions">
+                                <button class="btn-small">Update Now</button>
+                                <button class="btn-small">Dismiss</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="notification-item">
+                        <div class="notification-icon info">📊</div>
+                        <div class="notification-content">
+                            <h3 class="notification-title">Weekly Analytics Report</h3>
+                            <p class="notification-message">Your weekly performance report is now available. View insights about your broadcast engagement and sales.</p>
+                            <p class="notification-time">3 days ago</p>
+                            <div class="notification-actions">
+                                <button class="btn-small">View Report</button>
+                                <button class="btn-small">Dismiss</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script>
+        // Category toggle functionality
+        document.querySelectorAll('.category-header').forEach(header => {
+            header.addEventListener('click', function() {
+                const categoryLinks = this.nextElementSibling;
+                const toggle = this.querySelector('.category-toggle');
+                
+                // Toggle category expansion
+                categoryLinks.classList.toggle('expanded');
+                
+                // Rotate toggle icon
+                if (categoryLinks.classList.contains('expanded')) {
+                    toggle.textContent = '▲';
+                } else {
+                    toggle.textContent = '▼';
+                }
+            });
+        });
+
+        // Active navigation state
+        document.querySelectorAll('.nav-item').forEach(item => {
+            item.addEventListener('click', function(e) {
+                e.preventDefault();
+                document.querySelectorAll('.nav-item').forEach(nav => nav.classList.remove('active'));
+                this.classList.add('active');
+            });
+        });
+
+        // Mark all as read
+        document.querySelector('.mark-all-read').addEventListener('click', function() {
+            document.querySelectorAll('.notification-item').forEach(item => {
+                item.classList.remove('unread');
+            });
+        });
+
+        // Notification actions
+        document.querySelectorAll('.btn-small').forEach(btn => {
+            btn.addEventListener('click', function() {
+                console.log('Notification action clicked:', this.textContent);
+                // In a real application, this would handle the specific action
+            });
+        });
+    </script>
+</body>
+</html>
